@@ -1,0 +1,410 @@
+\documentclass{article}
+\usepackage[italian]{babel}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+\tikzset{
+    ->, % makes the edges directed
+    >=stealth', % makes the arrow heads bold
+    node distance=5cm, % specifies the minimum distance between two nodes. Change if necessary.
+    every state/.style={thick, fill=gray!10, minimum size=2.5cm}, % sets the properties for each ’state’ node
+    initial text=$ $, % sets the text that appears on the start arrow
+}
+
+\title{Automazione di test di accettazione per dispositivi IoT embedded integrati nel cloud}
+\author{Alessandro Righi}
+\date{\today}
+
+\begin{document}
+\maketitle
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\section{Introduzione}
+\subsection{contesto "IOTINGA"}
+
+IOTINGA s.r.l. è una giovane realtà informatica veronese. Fra i vari settori in cui
+opera ricopre particolare rilevanza quello dell'IoT e dei prodotti connessi al cloud.
+
+IRSAP s.p.a. è invece una grossa azienda rodigina leader nel settore del comfort termico.
+Storicamente produttrice di radiatori si distingue oggi per prodotti dal design altamente
+ricercato (i ``termoarredi''), non che dall'elevato contenuto tecnologico, quali
+impianti VMC, radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscaldamento.
+
+IOTINGA ha aiutato IRSAP nella realizzazione proprio di queste ultime categorie di
+prodotti, grazie alla realizzazione della piattaforma ``IRSAP NOW'', un cloud
+al quale è possibile connettere tutti i prodotti smart del catalogo IRSAP così da controllarli
+da remoto mediante un'applicazione mobile iOS/Android, sempre sviluppata da IOTINGA,
+nonché tramite assistenti vocali quali Alexa o Google Home.
+
+All'interno di questa piattaforma si innesta il prodotto oggetto di questa tesi,
+ovvero sia la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
+decine di prodotti, uno su tutti il ``Polygon'', vincitore del ``CES Best of Innovation 2022'',
+nonché di numerosi altri premi a livello internazionale, grazie al suo design
+altamente ricercato ed al suo contenuto tecnologico, a cui noi di IOTINGA abbiamo contribuito.
+
+Tale dispositivo è dotato internamente di elettronica in grado di connettersi mediante
+Wi-Fi direttamente al cloud ``IRSAP NOW'', ed integra oltre alla funzione scaldante
+anche un'illuminazione ambientale mediante led RGBW.
+
+Come IOTINGA abbiamo seguito direttamente lo sviluppo del firmware eseguito sul
+dispositivo stesso, oltre che l'integrazione nel cloud e nell'applicazione mobile esistente.
+
+\subsection{Motivazioni (diffcolta' testing IoT/cloud)}
+
+Uno dei problemi principali da evitare specialmente in questa tipologia di prodotti
+sono i problemi che si hanno dall'utente finale, per una serie di motivi:
+
+\begin{itemize}
+\item la prima impressione sul cliente è quella che conta, se il cliente si ritrova
+    un prodotto che funziona male ne parlerà male e creerà un danno d'immagine all'azienda
+\item quando il problema si verifica dal cliente è difficile da diagnosticare. I clienti,
+    e spesso anche gli installatori stessi, non hanno competenze tecniche e pertanto l'assistenza è difficile
+\item se il problema non è risolvibile mediante un aggiornamento firmware è necessario
+    effettuare un reso, che ha dei costi molto elevati per il produttore, in quanto
+    durante il trasporto molto spesso il prodotto viene danneggiato e quindi deve essere rimpiazzato con un nuovo
+\item il prodotto svolge comunque una funzione critica per l'utente, in quanto un suo
+    malfunzionamento potrebbe voler dire rimanere senza riscaldamento, con tutti i disagi
+    ed i danni che questo può comportare
+\end{itemize}
+
+Viene quindi da se che è di fondamentale importanza assicurarsi di far sì che quanti
+più problemi possibili vengano identificati prima che il software arrivi nelle mani
+dell'utente finale.
+
+Inoltre, visto che la produzione di software esente completamente da bug
+è matematicamente impossibile, è fondamentale garantire che i prodotti una volta
+installati possano sempre essere aggiornati, in modo da poter rilasciare correzioni agli
+inevitabili (e sperabilmente pochi) problemi segnalati dagli utenti.
+
+Tuttavia l'invio di aggiornamenti dovrebbe essere limitata allo stretto indispensabile:
+per quante misure di protezione si possano prendere l'operazione di aggiornamento è sempre
+molto delicata, in quanto vi sono numerose cose che possono andare storte, ad esempio
+può venire a mancare l'alimentazione durante una fase critica dell'aggiornamento,
+comportando una corruzione della meoria flash che rende il dispositivo inutilizzabile.
+
+\subsection{Prassi attuale testing (problemi aperti)}
+
+Quando detto al capitolo precedente fa capire quanto sia fondamentale testare in maniera
+ancora più approfondita (rispetto a quanto viene attualmente fatto per l'applicazione
+mobile ed il cloud) il firmware di questi radiatori.
+
+Attualmente vi sono tre fasi di test:
+\begin{enumerate}
+    \item test da parte dello sviluppatore
+    \item test di accettazione interna (in IOTINGA)
+    \item test di accettazione del cliente finale (IRSAP)
+\end{enumerate}
+
+\subsubsection{Test di sviluppatore}
+
+Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
+bug all'interno del firmware prima di considerare l'attività conclusa ed integrare il
+proprio lavoro nel ramo di sviluppo principale ed effettua i propri test.
+
+Questi si occupano sia di verificare che quanto è stato implementato è conforme
+alla specifica approvata dal cliente (nel caso di nuove funzionalità) oppure che
+il bug sia stato risolto, sia che non siano stato modificato il funzionamento del sistema
+nelle parti che sono state impattate dalla modifica.
+
+Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice sa
+quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
+provati.
+
+\subsubsection{Test di accettazione interna}
+
+Questi test sono effettuati prima di ogni rilascio di un nuovo artefatto verso il cliente.
+
+Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso critici,
+senza i quali il sistema stesso non sarebbe utilizzabile e quindi ulteriormente testabile.
+Solo se una versione del software passa tutti questi test può essere consegnata al cliente.
+
+Essi si pongono dal punto di vista dell'utente finale, pertanto sono effettuati su un
+hardware completo, isolato però dal resto del sistema, ovvero dalla componente cloud
+e dall'applicazione mobile. Questo per evitare che vi sia il dubbio che il bug sia
+nel cloud o nella app anziché nel dispositivo stesso.
+
+Attualmente vengono effettuati seguendo un documento contenente una serie di passi, ognuno
+idicante:
+
+\begin{itemize}
+    \item azione: un'operazione da effettuare sul sistema mediante l'interazione fisica
+        con il dispositivo (pressione di pulsanti) oppure mediante cloud (tramite un'apposito
+        strumento che consente di simulare i messaggi inviati dal cloud e dalla app)
+    \item risultato atteso: postcondizioni da verificare dopo aver effettuato l'azione, ad
+        esempio ``i led sono rossi'' oppure ``entro 5 secondi viene inviato al cloud un messaggio''.
+        Nel caso la postcondizione sia verificata è possibile procedere al passo successivo, altrimenti
+        il test viene interrotto con esito negativo, e deve essere segnalato ad uno sviluppatore il problema.
+\end{itemize}
+
+Preferibilmetne questa procedura viene fatta eseguire da chi non ha preso parte allo
+sviluppo del sistema stesso. Questo per evitare che chi esegue la procedura, conoscendo
+le logiche interne del software, possa essere portato a saltare o ignorare determinati
+passaggi in quanto ``ovvi'', mentre chi non conosce il sistema è più propenso a seguire
+i passaggi alla lettera e segnalare ogni singolo comportamento discordante con quanto
+atteso.
+
+L'eseguire la procedura citata sopra tuttavia non è esente da problematiche:
+
+\begin{itemize}
+    \item tempo: la procedura richiede del tempo (all'incirca un ora) per essere eseguita.
+        Nel caso il test non abbiano successo e si trovi un bug dopo averlo risolto è necessario
+        rieseguire i test da capo.
+    \item possibilità di errori: essendo una procedura meccanica e ripetitiva è fafile
+        introdurre un errore umano nel proprio svolgimento.
+\end{itemize}
+
+Oer ovviare a questi problemi andremo a vedere come è stato sviluppato un sistema in
+grado di eseguire queste operazioni automaticamente ed in maniera integrata nel flusso
+di CI (Continuos Integration) attualmente già presente in azienda.
+
+\subsubsection{Test di accettazione del cliente finale}
+
+Sul cliente finale ricade la responsabilità (anche a livello legale) del prodotto
+che viene immesso sul mercato con il proprio nome sopra, e questo include anche
+il software. Questo comporta il fatto che a sua volta deve svolgere dei test per
+assicurarsi che il software sia conforme a quanto atteso, e nel caso segnalare i
+problemi riscontrati in maniera tale che vengano corretti.
+
+Questi test sono volti a testare tutte le funzionalità del prodotto in tutte le loro
+possibili configurazioni, anche mediante l'ausilio di strumentazione altamente
+specializzata quali camere climatiche per valutarne l'efficacia di termoregolazione.
+
+Nel caso questi test abbiano successo l'artefatto testato passa da stato di candidato
+al rilacio a produzione, e viene quindi installato in fabbrica su tutti i nuovi radiatori
+prodotti, nonché viene lanciato un aggiornamento OTA su tutti i dispositivi già installati
+presso i clienti finali.
+
+Questi test, essendo svolti dal cliente finale, sono fuori dai nostri scopi di analisi.
+
+\section{Related work}
+\subsection{Tool commerciali/open-source}
+
+\section{Approccio}
+\subsection{Panoramica}
+
+Andiamo a vedere come è realizzato il dispositivo in oggetto di questa tesi.
+
+L'elettronica viene prodotta in due modelli differenti:
+\begin{itemize}
+    \item luxury: versione basilare della scheda elettronica, installata tipicamente
+        sui prodotti da bagno (scaldasalviette)
+    \item design: elettronica riservata ai prodotti di fascia più alta. Offre in
+        aggiunta a tutto quanto offerto dalla precedente elettronica un sensore VOC
+        (qualità dell'aria) aggiuntivo e la possibilità di collegare una striscia a
+        led RGBW per l'illuminazione ambientale. Inoltre è progettata in maniera da
+        integrarsi direttamente all'interno del radiatore, di modo che non sia direttamente
+        visibile.
+\end{itemize}
+
+Inoltre, un radiatore a parità di elettronica può o meno avere a disposizione le
+seguenti funzionalità:
+\begin{itemize}
+    \item Fil Pilote: uno standard francese per l'interconnessione dei radiatori ad una
+        centralina di controllo mediante un secondo ingresso di segnale a 230V
+    \item led RGBW: disponibili solo su radiatore con scheda design, consente di
+        illuminare l'ambiente circostante al radiatore per creare atmosfera
+\end{itemize}
+
+Tutte le versioni di scheda elettronica eseguono la stessa versione del firmware,
+che ha una fase iniziale in cui identifica la tipologia di scheda e le funzionalità
+opzionali abilitate, e di conseguenza configura le periferiche del microcontrollore di conseguenza.
+
+Tuttavia per essere esaustivi è necessario svolgere i test di accettazione su entrambe
+le versioni di scheda elettronica, in quanto possono esservi comportamenti differenti.
+
+\subsection{Caratteristiche hardware}
+
+La piattaforma hardware ruota attorno ad un unico microcontrollore Wi-Fi della Telit, il GS2200M.
+Le caratteristiche di questo chip sono notevoli:
+
+\begin{itemize}
+    \item processore dual core ARM Cortex M3 fino a 120Mhz, di cui un core dedicato
+        alla gestione del Wi-Fi ed uno all'esecuzione dell'applicativo
+    \item 1Mb di RAM in totale, di cui all'incirca 500kB utilizzabile dall’applicazione,
+        il resto dedicata all'uso della parte Wi-Fi
+    \item 4Mb di memoria flash interna, in parte dedicata al codice del firmware ed
+        in parte come filesystem interno in cui memorizzare i dati dell'applicazione
+    \item interfaccia Wi-Fi b/g/n a 2.4Ghz in grado di operare sia in modalità station
+        (client) sia che access-point (AP) a cui connettersi direttamente
+    \item 19 input/output digitali
+    \item 3 output PWM
+    \item 2 ingressi analogici mediante ADC, uno a 10 ed uno a 12 bit
+    \item un interfaccia I2C hardware
+    \item un interfaccia SPI hardware
+    \item due interfacce seriali UART
+    \item modulo RTC interno
+\end{itemize}
+
+Tale microcontrollore si interfaccia con le seguenti periferiche hardware presenti
+sull'elettronica:
+
+\begin{itemize}
+    \item una resistenza (cartuccia) a 230V che provvede a riscaldare il fluido
+        termoconduttivo presente all'interno del radiatore
+    \item una sonda di temperatura NTC usata per rilevare la temperatura ambiente
+    \item una pulsantiera dotata di due pulsanti capacitivi e dei led RGB di illuminazione
+        come feedback verso l'utente
+    \item un buzzer utilizzato per dare un feedback uditivo all'utente
+    \item solo per le schede ``design'' un sensore di qualità dell'aria in grado di
+        misurare i livelli VOC e CO2
+    \item solo per i modelli che lo prevedono un ingresso per il segnale ``Fil Pilote''
+    \item solo per i modelli che li prevedono una striscia a led RGBW di illuminazione ambientale
+    \item sempre solo per alcuni modelli una seconda sonda di temperatura in grado di
+        misurare la temperatura del corpo riscaldante, in maniera tale da migliorare
+        l'accuratezza degli algoritmi di termoregolazione
+\end{itemize}
+
+\subsection{Caratteristiche software}
+
+Il firmware che gira sul dispositivo è scritto in linguaggio C99. La piattaforma
+Telit mette a disposizione un ambiente di sviluppo basato sul compilatore IAR C
+compiler.
+
+L'SDK fornito dal produttore include il RTOS ThreadX e la relativa
+implementazione dello stack di rete NetX, oltre che una serie di librerie per:
+
+\begin{itemize}
+    \item connessione e configurazione del Wi-Fi
+    \item filesystem interno simil-FAT
+    \item connessioni TLS
+    \item server e client HTTP
+    \item aggiornamento OTA con doppia partizione
+\end{itemize}
+
+Il firmware è essenzialmente suddiviso in 3 moduli:
+
+\begin{itemize}
+    \item gestione della termoregolazione, che si occupa di tutto quel che è necessario
+        per regolare la temperatura ambiente secondo le modalità di funzionamento del dispositivo
+    \item gestione della comunicazione cloud, si occupa di mantenere sincronizzato lo stato
+        interno del dispositivo con il server ``IRSAP NOW'' mediante protocollo MQTT
+    \item gestione dell'interfaccia utente, si occupa di rispondere agli input dell'utente
+        sulla pulsantiera e di darne relativo feedback mediante l'uso dei LED RGB e del buzzer
+\end{itemize}
+
+\subsection{Stati interni del dispositivo}
+
+Il dispositivo ad alto livello può trovarsi in 3 stati distinti:
+
+\begin{itemize}
+    \item non abbinato: in attesa di un primo abbinamento da app. Ogni funzione del
+        dispositivo è esclusa finché l'utente non lo collega mediante l'applicazione
+    \item non connesso: il dispositivo è stato in passato abbinato ma al momento non è
+        connesso al cloud, perché ad esempio la connessione Wi-Fi non è momentaneamente disponibile
+    \item connesso: il dispositivo è connesso e sincronizzato con il cloud
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \node[state] (unbounded) {Non abbinato};
+        \node[state, below left of=unbounded, below=1cm] (offline) {Non connesso};
+        \node[state, right of=offline] (online) {Connesso};
+        \draw (unbounded) edge[bend left, align=left, right] node{abbinato\\con successo} (online)
+        (offline) edge[bend left, above] node{connessione} (online)
+        (offline) edge[bend left, left, align=right] node{ripristino\\di fabbrica} (unbounded)
+        (online) edge[bend left, below] node{disconnessione} (offline)
+        (online) edge[bend left, align=right, right] node{ripristino\\di fabbrica} (unbounded);
+    \end{tikzpicture}
+    \caption{Stati del radiatore}
+    \label{stati}
+\end{figure}
+
+\subsection{Termoregolazione}
+
+La componente di termoregolazione si occupa di regolare la temperatura ambiente portandola
+il più vicino possibile a quanto desiderato dall'utente (set-point) mediante
+il controllo dell'accensione (on/off) dell'elemento riscaldante. Il feedback sulla
+temperatura ambiente è ottenuto mediante la sonda di temperatura NTC.
+
+Il dispositivo ha diversi modi di funzionamento:
+\begin{itemize}
+    \item standby: dispositivo completamente spento, sia per quanto riguarda il riscaldamento
+        che per l'illuminazione LED
+    \item antigelo: il dispositivo mantiene una temperatura di sicurezza (impostata dall'utente)
+        per prevenire danni dati da una tempratura ambiente troppo bassa (ad es. congelamento delle tubature)
+    \item vacanza: all'interno di un intervallo temporale impotato dall'utente funziona
+        in modalità antigelo
+    \item away: imposta un set-point ridotto (ECO) in quanto l'utente non è in casa
+    \item programmato: segue una programmazione settimanale che consente per ogni
+        giorno della settimana di creare fino ad 8 fasce orarie
+    \item manuale temporaneo: segue un set-point manuale per un determinato tempo
+    \item manuale: segue il set-point utente che è fisso e non varia mai
+        configurato dall'utente, quindi torna a funzionare nella modalità precedente
+    \item fil pilote: il dispositivo è controllato (ove disponibile) da un segnale
+        esterno in ingresso sul cavo fil pilote
+\end{itemize}
+
+È possibile mediante interfaccia utente muoversi fra le varie modalità come dettagliato
+in figura \ref{modi}.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \node[state] (programmato) {Programmato};
+        \node[state, right of=programmato, align=center] (manuale-tempo) {Manuale\\temporaneo};
+        \node[state, right of=manuale-tempo] (manuale) {Manuale};
+        \draw (manuale) edge[loop above] node{modifica set-point} (manuale)
+            (programmato) edge[bend left, above] node{modifica set-point} (manuale-tempo)
+            (manuale-tempo) edge[bend left, above] node{modifica set-point} (manuale);
+    \end{tikzpicture}
+    \caption{Modi del radiatore}
+    \label{modi}
+\end{figure}
+
+\subsection{Comunicazione cloud}
+
+La componente cloud è implementata su AWS. La connessione avviene grazie al protocollo
+MQTT usando il servizio broker di AWS IoT Core.
+
+La connessione è cifrata mediante TLS ed autenticata mediante certificato TLS client
+specifico per il singolo dispositivo, generato e programmato nel dispositivo in fase
+di produzione della scheda elettronica da una CA intermedia a sua volta firmata dalla
+CA root di AWS come in figura \ref{tls-chain}.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \node[rectangle, draw, minimum height=1cm] (root) {root CA AWS};
+        \node[rectangle, draw, right of=root, align=center, minimum height=1cm] (intermedia) {CA intermedia\\ produttore};
+        \node[rectangle, draw, right of=intermedia, minimum height=1cm] (dispositivo) {certificato dispositivo};
+        \draw (root) edge[above] node{firma} (intermedia)
+            (intermedia) edge[above] node{firma} (dispositivo);
+    \end{tikzpicture}
+    \caption{Catena TLS}
+    \label{tls-chain}
+\end{figure}
+
+Per quanto concerne il protocollo di comunicazione abbiamo scelto di adottare un
+protocollo binario, in quanto l'utilizzo del JSON poneva sia delle problematiche
+di gestione di memoria all'interno del dispositivo, sia andava ad appesantire il
+payload trasferito andando a generare potenziali costi su cloud altrimenti evitabili.
+
+Il protocollo è stateless, nel senso che viene usato per trasferire stati completi
+del dispositivo fra server e client. Vengono definite 3 operazioni fondamentali
+che è possibile compiere con il protocollo:
+
+\begin{itemize}
+    \item GET: richiesta dello stato corrente
+    \item PUT: aggiornamento dello stato corrente
+    \item DELETE: eliminazione dello stato corrente
+\end{itemize}
+
+
+
+\section{Implementazione}
+\subsection{Interfacce}
+\subsection{Implementazione hardware}
+\subsection{Implemnetazione software}
+\subsection{Integrazione (continuous integration)}
+
+\section{Validazione sperimentale}
+\subsection{scenari da testare}
+\subsection{tempi di esecuzione (confronto automatico/manuale)}
+
+\section{Comclusioni}
+\subsection{Considarzioni}
+\subsection{Passi futuri}
+
+\end{document}
