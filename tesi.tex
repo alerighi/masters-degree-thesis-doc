@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage[italian]{babel}
+\usepackage{hyperref}
 \usepackage{tikz}
+
 \usetikzlibrary{automata, positioning, arrows}
 \tikzset{
     ->, % makes the edges directed
@@ -376,22 +378,82 @@ CA root di AWS come in figura \ref{tls-chain}.
     \label{tls-chain}
 \end{figure}
 
-Per quanto concerne il protocollo di comunicazione abbiamo scelto di adottare un
-protocollo binario, in quanto l'utilizzo del JSON poneva sia delle problematiche
-di gestione di memoria all'interno del dispositivo, sia andava ad appesantire il
-payload trasferito andando a generare potenziali costi su cloud altrimenti evitabili.
-
-Il protocollo è stateless, nel senso che viene usato per trasferire stati completi
-del dispositivo fra server e client. Vengono definite 3 operazioni fondamentali
-che è possibile compiere con il protocollo:
+Per quanto concerne il protocollo di comunicazione in origine abbiamo valutato il 
+protocollo Device Shadowing\footnote{\url{https://docs.aws.amazon.com/it\_it/iot/latest/developerguide/iot-device-shadows.html}} supportato nativamente da AWS IoT Core. Tuttavia, tale 
+protocollo aveva delle limitazioni che non ne consentivano l'utilizzo nella nostra 
+applicazione, in particolare:
 
 \begin{itemize}
-    \item GET: richiesta dello stato corrente
-    \item PUT: aggiornamento dello stato corrente
-    \item DELETE: eliminazione dello stato corrente
+    \item il pacchetto viene codificato in JSON, il che presenta un overhead di memoria 
+        e CPU notevole per il microcontrollore scelto. Inoltre la codifica JSON può 
+        introdurre dei bug di encoding
+    \item vi è un hard-limit di 8Kb di dimensione massima di un documento di stato (shadow). 
+        Questo, seppur poteva essere sufficiente nelle prime versioni del prodotto, andava 
+        a limitare possibilità di espansione futura del prodotto
+    \item il protocollo di comunicazione trasferisce dei delta, che sebbene riducano la 
+        dimensione di un pacchetto di dati rendono più complessa la sincronizzazione degli 
+        stati del sistema
 \end{itemize}
 
+Per tutte queste ragioni abbiamo scelto di adottare un protocollo binario proprietario, 
+tramite il quale andiamo a trasferire stati completi del dispositivo. 
 
+Abbiamo deciso di mantenere comunque i concetti di alto livello dati dal protocollo AWS 
+Device Shadowing, per tanto identifichiamo come:
+\begin{itemize}
+    \item \textit{state desired} come lo stato in cui si vuole portare il dispositivo, ovvero le 
+        impostazioni che l'utente può modificare agendo dalla app, quali ad esempio la modalità di funzionamento,
+        la programmazione oraria, la configurazione dei LED RGB, etc.
+    \item \textit{state reported} lo stato attuale del dispositivo. È un superset dello stato 
+        desired, in quanto oltre a tutti i campi di quest'ultimo include anche tutti quei valori
+        in sola lettura (ovvero che solo il dispositivo può modificare), ovvero i parametri 
+        statistici e di monitoraggio quali la temperatura ambiente, il livello di qualità dell'aria (VOC),
+        gli allarmi del dispositivo, la qualità della connessione Wi-Fi, etc.
+\end{itemize}
+
+Il protocollo è quindi stateless, e consente di effettuare 3 azioni:
+
+\begin{itemize}
+    \item \textbf{GET}: disponibile fra dispositivo e cloud, consente la richiesta dello stato \textit{desired} corrente
+    \item \textbf{UPDATE}: disponibile sia fra dispositivo e cloud che fra cloud e dispositivo consente di scambiari lo steso, 
+        rispettivamente stato \textit{reported} e stato \textit{desired}
+    \item \textbf{DELETE}: eliminazione dello stato corrente presente su cloud
+\end{itemize}
+
+Il tipo di messaggio dipende dal topic MQTT sul quale i pacchetti sono pubblicati. Ad 
+un messaggio pubblicato dal dispositivo verso il server il server risponde in base allo 
+stato della richiesta sullo stesso topic con aggiunto un suffisso:
+\begin{itemize}
+    \item /accepted: la richiesta è stata accettate
+    \item /rejected: la richiesta è stata respinta dal server 
+\end{itemize}
+
+Il client può identificare a quale richiesta fa riferimento ad una risposta attraverso un 
+token (clientToken) che il client setta su ogni richiesta inviata e che il server aggiunge 
+ad ogni risposta che invia al client. 
+
+Di base ogni messaggio prevede un header fisso che include i seguenti campi:
+
+\begin{center}
+\begin{tabular}{| c | c | c |}
+    \hline
+    campo & byte & descrizione \\
+    \hline 
+    timestamp & 4 & timestamp di invio del messaggio \\
+    \hline 
+    clientToken & 4 & stringa random scelta dal client \\
+    \hline 
+    version & 4 & versione del messaggio \\ 
+    \hline
+    length & 2 & lunghezza totale del messaggio (header incluso) \\ 
+    \hline 
+    type & 1 & tipo di messaggio, identifica il payload presente \\
+    \hline
+\end{tabular}
+\end{center}
+
+A seguito di questo vi è presente un payload che include tutti i parametri di stato del dispositivo.
+A seconda del campo type è possibile capire come decodificare il payload stesso del messaggio. 
 
 \section{Implementazione}
 \subsection{Interfacce}
