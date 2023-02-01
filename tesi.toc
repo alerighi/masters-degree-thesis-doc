@@ -17,33 +17,33 @@
 \contentsline {subsubsection}{\numberline {3.2.2}Termoregolazione}{10}{subsubsection.3.2.2}%
 \contentsline {subsubsection}{\numberline {3.2.3}Comunicazione cloud}{11}{subsubsection.3.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.4}API di configurazione locale}{13}{subsubsection.3.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.5}HMI}{13}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.5}HMI}{14}{subsubsection.3.2.5}%
 \contentsline {subsection}{\numberline {3.3}Intefacciamento con il sistema di test}{14}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Interazione con il dispositivo fisico}{14}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.1}Interazione con il dispositivo fisico}{15}{subsubsection.3.3.1}%
 \contentsline {subsubsection}{\numberline {3.3.2}Interazione con la sola elettronica}{15}{subsubsection.3.3.2}%
 \contentsline {subsubsection}{\numberline {3.3.3}Esecuzione del firmware in un emulatore}{15}{subsubsection.3.3.3}%
 \contentsline {section}{\numberline {4}Implementazione}{16}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Interfacce}{16}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Implementazione hardware}{16}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Implementazione software}{16}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}Interfacciamento con l'I/O}{16}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.1}Interfacciamento con l'I/O}{17}{subsubsection.4.3.1}%
 \contentsline {subsubsection}{\numberline {4.3.2}Interfacciamento con il cloud}{17}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Interfacciamento con il Wi-Fi}{17}{subsubsection.4.3.3}%
-\contentsline {subsection}{\numberline {4.4}Integrazione (continuous integration)}{18}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Validazione sperimentale}{18}{section.5}%
-\contentsline {subsection}{\numberline {5.1}scenari da testare}{18}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Downgrade del firmware mediante API REST locale}{18}{subsubsection.5.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.2}Abbinamento del dispositivo ad un impianto}{18}{subsubsection.5.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.3}Aggiornamento di un dispositivo mediante OTA AWS}{19}{subsubsection.5.1.3}%
-\contentsline {subsubsection}{\numberline {5.1.4}Ripristino di fabbrica di un dispositivo connesso}{19}{subsubsection.5.1.4}%
-\contentsline {subsubsection}{\numberline {5.1.5}Ripristino di fabbrica di un dispositivo disconnesso}{20}{subsubsection.5.1.5}%
-\contentsline {subsubsection}{\numberline {5.1.6}Termoregolazione di base}{20}{subsubsection.5.1.6}%
-\contentsline {subsubsection}{\numberline {5.1.7}Attivazione modalità stand-by mediante pulsantiera del radiatore}{20}{subsubsection.5.1.7}%
-\contentsline {subsubsection}{\numberline {5.1.8}Funzionamento disconnesso}{21}{subsubsection.5.1.8}%
-\contentsline {subsection}{\numberline {5.2}tempi di esecuzione (confronto automatico/manuale)}{21}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Comclusioni}{21}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Considarzioni}{21}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Passi futuri}{21}{subsection.6.2}%
-\contentsline {subsubsection}{\numberline {6.2.1}Futuri radiatori elettrici}{22}{subsubsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2}Test di gateway RF}{22}{subsubsection.6.2.2}%
-\contentsline {subsubsection}{\numberline {6.2.3}Test di un termostato OpenTherm}{23}{subsubsection.6.2.3}%
+\contentsline {subsubsection}{\numberline {4.3.3}Interfacciamento con il Wi-Fi}{18}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}Integrazione continua}{19}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Validazione sperimentale}{19}{section.5}%
+\contentsline {subsection}{\numberline {5.1}scenari da testare}{19}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Downgrade del firmware mediante API REST locale}{19}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Abbinamento del dispositivo ad un impianto}{19}{subsubsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.3}Aggiornamento di un dispositivo mediante OTA AWS}{20}{subsubsection.5.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.4}Ripristino di fabbrica di un dispositivo connesso}{20}{subsubsection.5.1.4}%
+\contentsline {subsubsection}{\numberline {5.1.5}Ripristino di fabbrica di un dispositivo disconnesso}{21}{subsubsection.5.1.5}%
+\contentsline {subsubsection}{\numberline {5.1.6}Termoregolazione di base}{21}{subsubsection.5.1.6}%
+\contentsline {subsubsection}{\numberline {5.1.7}Attivazione modalità stand-by mediante pulsantiera del radiatore}{21}{subsubsection.5.1.7}%
+\contentsline {subsubsection}{\numberline {5.1.8}Funzionamento disconnesso}{22}{subsubsection.5.1.8}%
+\contentsline {subsection}{\numberline {5.2}tempi di esecuzione (confronto automatico/manuale)}{22}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Comclusioni}{22}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Considarzioni}{22}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Passi futuri}{22}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Futuri radiatori elettrici}{23}{subsubsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.2}Test di gateway RF}{23}{subsubsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.3}Test di un termostato OpenTherm}{24}{subsubsection.6.2.3}%

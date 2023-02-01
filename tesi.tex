@@ -11,7 +11,7 @@
     ->, % makes the edges directed
     >=stealth', % makes the arrow heads bold
     node distance=5cm, % specifies the minimum distance between two nodes. Change if necessary.
-    every state/.style={thick, fill=gray!10, minimum size=2.5cm}, % sets the properties for each ’state’ node
+    % every state/.style={thick, fill=gray!10, minimum size=2.5cm}, % sets the properties for each ’state’ node
     initial text=$ $, % sets the text that appears on the start arrow
 }
 
@@ -30,7 +30,6 @@
     \Candidato[VR432403]{Alessandro Righi}
     \Relatore{Mariano Ceccato}
 \end{frontespizio}
-
 \tableofcontents
 \pagebreak
 
@@ -487,13 +486,16 @@ Device Shadowing, per tanto identifichiamo come:
         gli allarmi del dispositivo, la qualità della connessione Wi-Fi, etc.
 \end{itemize}
 
-Il protocollo è quindi stateless, e consente di effettuare 3 azioni:
+Il protocollo è quindi stateless, e consente di effettuare 4 messaggi, più relative risposte,
+(come visibile in figura \ref{comunicazione_cloud}):
 
 \begin{itemize}
-    \item \textbf{GET}: disponibile fra dispositivo e cloud, consente la richiesta dello stato \textit{desired} corrente
-    \item \textbf{UPDATE}: disponibile sia fra dispositivo e cloud che fra cloud e dispositivo consente di scambiari lo steso,
-        rispettivamente stato \textit{reported} e stato \textit{desired}
-    \item \textbf{DELETE}: eliminazione dello stato corrente presente su cloud
+    \item \textit{get}: disponibile fra dispositivo e cloud, consente la richiesta dello stato \textit{desired} corrente
+    \item \textit{reported-update}: disponibile fra dispositivo e cloud, trasmette lo stato
+        completo del dispositivo al server
+    \item \textit{delete}: eliminazione dello stato corrente presente su cloud
+    \item \textit{desired-udpate}: unico messaggio inviato dal cloud al dispositivo,
+        trasmette lo stato completo desired
 \end{itemize}
 
 Il tipo di messaggio dipende dal topic MQTT sul quale i pacchetti sono pubblicati. Ad
@@ -503,6 +505,20 @@ stato della richiesta sullo stesso topic con aggiunto un suffisso:
     \item /accepted: la richiesta è stata accettate
     \item /rejected: la richiesta è stata respinta dal server
 \end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \node[rectangle, minimum height=1cm, draw] (dispositivo) {Radiatore Elettrico};
+        \node[rectangle, minimum height=1cm, draw, right of=dispositivo] (cloud) {Cloud AWS};
+        \draw (dispositivo) edge[bend left=40, above] node{\textit{get}} (cloud)
+            (dispositivo) edge[bend left=10, above] node{\textit{reported-update}} (cloud)
+            (dispositivo) edge[bend right=10, below] node{\textit{delete}} (cloud)
+            (cloud) edge[bend left=40, below] node{\textit{desired-update}} (dispositivo);
+    \end{tikzpicture}
+    \caption{Schema di comunicazione dispositivo/cloud}
+    \label{comunicazione_cloud}
+\end{figure}
 
 Il client può identificare a quale richiesta fa riferimento ad una risposta attraverso un
 token (clientToken) che il client setta su ogni richiesta inviata e che il server aggiunge
@@ -544,16 +560,12 @@ Mette a dispozizione le seguenti API REST:
 
 \begin{center}
 \begin{tabular}{| l | c | l |}
-    \hline
-    \textbf{endpoint} & \textbf{metodo} & \textbf{descrizione} \\
-    \hline
-    /irsap/state & GET & ottiene lo stato corrente del dispositivo \\
-    \hline
-    /irsap/provision & POST & invia al dispositivo la configurazione \\
-    \hline
-    /irsap/test & POST & attiva la modalità collaudo del dispositivo \\
-    \hline
-    /gainspan/system/fwup & POST & invia un aggiornamento firmware al dispositivo \\
+    \hline \textbf{endpoint} & \textbf{metodo} & \textbf{descrizione} \\
+    \hline /irsap/state & GET & ottiene lo stato corrente del dispositivo \\
+    \hline /irsap/wifi/scan & GET & ottiene l'elenco di reti Wi-Fi visibili dal dispositivo \\
+    \hline /irsap/provision & POST & invia al dispositivo la configurazione \\
+    \hline /irsap/test & POST & attiva la modalità collaudo del dispositivo \\
+    \hline /gainspan/system/fwup & POST & invia un aggiornamento firmware al dispositivo \\
     \hline
 \end{tabular}
 \end{center}
@@ -746,7 +758,36 @@ radiatore.
 
 \subsubsection{Interfacciamento con il cloud}
 
-Per
+In quanto il dispositivo si collega al cooud di AWS IoT mediante autenticazione
+TLS con certificato client non è semplice far sì che si possa collegare ad altri
+broker MQTT.
+
+Pertanto la cosa più semplice per effettuare il test è utilizzare proprio il broker
+AWS, isolando però la comunicazione del broker con il resto del sistema per il dispositivo
+sotto test.
+
+A questo punto è semplice fare collegare il software di test ad IoT Core mediante
+la libreria ufficiale di AWS, \textit{awsiotsdk}. Per quanto riguarda la gestione
+dei job, che vengono usati principalmente per gli aggiornamenti OTA, si può utilizzare
+la libreria \textit{boto3}.
+
+Più complessa invece è la parte di implementazione di codifica/decodifica del protocollo
+binario custom. Per fare ciò ho costruito un semplice encoder basandomi sul modulo
+nativo \textit{struct} di python, andando a definire il come è formata la struttura
+e quindi dei metodi per codificare e decodificare un messaggio da dizionario a binario,
+e viceersa, data la definizione del pacchetto.
+
+La parte cloud fa quindi la connessione ad AWS IoT quando viene instanziata, utilizzando
+una connessione websockets così da poter usare un'API key per l'autenticazione (anziché
+essere costretti a generare dei certificati), quindi si sottoscrive ai topic per gli
+aggiornamenti di quel dispositivo, ed ad ogni messagio che viene ricevuto viene decodificato
+ed aggiunto ad una coda.
+
+Viene quindi fornito un metodo per inviare un messaggio, che viene codificato ed
+inviato sull'opportuno topic, e per ricevere un messaggio, che non fa altro che scodare
+l'ultimo messaggio ricevuto.
+
+%% TODO: schema comunicazione con il cloud
 
 \subsubsection{Interfacciamento con il Wi-Fi}
 
@@ -808,11 +849,29 @@ può voler dire accorgersi subito di problemi che altrimenti sarebbero difficili
 se non impossibili da individuare in utenza.
 
 
-\subsection{Integrazione (continuous integration)}
+\subsection{Integrazione continua}
+
+Attualmente per i progetti aziendali utilizziamo un'infrastruttura di CI basata
+su Github Actions. Un server interno all'azienda esegue container e macchine virtuali
+sulle quali gira il software client di GitHub Actions.
+
+Ad ogni commit (tipicamente merge) sul ramo principale (\textit{master}) del repository
+git del progetto viene automaticamente lanciato un job che ha come scopo quello
+di compilare tutti gli artefatti, che poi vengono archiviati su un bucket AWS S3
+dedicato.
+
+L'esito di ogni processo di CI viene anche tracciato in un database CouchDB,
+così come ogni installazione di un artefatto in un ambiente (quale può essere
+\textit{produzione}, \textit{staging}, etc.).
+
+Il test di integrazione automatizzato si integra quindi perfettamente all'interno
+del flusso esistente: a setuito di un processo di compilazione finito con successo,
+e quindi la produzione di un nuovo firmware, viene avviato il flusso di test discusso
+fin ora. Esso viene eseguito su un runner GitHub Actions installato direttamente
+sul Raspberry in questione, che quindi esegue i job e, nel caso questi abbiano
+esito positivo, conferma la creazione di una nuova release.
 
 \section{Validazione sperimentale}
-
-
 
 \subsection{scenari da testare}
 
