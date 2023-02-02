@@ -3,7 +3,7 @@
 \contentsline {section}{\numberline {1}Introduzione}{3}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Il progetto IRSAP radiatore elettrico}{3}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Motivazioni (diffcolta' testing IoT/cloud)}{3}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}Prassi attuale testing (problemi aperti)}{6}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.3}Prassi attuale testing}{6}{subsection.1.3}%
 \contentsline {subsubsection}{\numberline {1.3.1}Test di sviluppatore}{6}{subsubsection.1.3.1}%
 \contentsline {subsubsection}{\numberline {1.3.2}Test di accettazione interna}{6}{subsubsection.1.3.2}%
 \contentsline {subsubsection}{\numberline {1.3.3}Test di accettazione del cliente finale}{7}{subsubsection.1.3.3}%
@@ -45,5 +45,5 @@
 \contentsline {subsection}{\numberline {6.1}Considarzioni}{23}{subsection.6.1}%
 \contentsline {subsection}{\numberline {6.2}Passi futuri}{23}{subsection.6.2}%
 \contentsline {subsubsection}{\numberline {6.2.1}Futuri radiatori elettrici}{24}{subsubsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2}Test di gateway RF}{24}{subsubsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.2}Test di dispositivi RF}{24}{subsubsection.6.2.2}%
 \contentsline {subsubsection}{\numberline {6.2.3}Test di un termostato OpenTherm}{25}{subsubsection.6.2.3}%

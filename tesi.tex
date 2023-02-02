@@ -5,15 +5,13 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{frontespizio}
+\usepackage[acronym]{glossaries}
 
 \usetikzlibrary{automata, positioning, arrows}
-\tikzset{
-    ->, % makes the edges directed
-    >=stealth', % makes the arrow heads bold
-    node distance=5cm, % specifies the minimum distance between two nodes. Change if necessary.
-    % every state/.style={thick, fill=gray!10, minimum size=2.5cm}, % sets the properties for each ’state’ node
-    initial text=$ $, % sets the text that appears on the start arrow
-}
+\tikzset{->, >=stealth', node distance=5cm,  initial text=$ $}
+
+\newacronym{iot}{IoT}{Internet Of Things}
+\newacronym{label}{abbrv}{long}
 
 \title{Automazione di test di accettazione per dispositivi IoT embedded integrati nel cloud}
 \author{Alessandro Righi}
@@ -68,8 +66,8 @@ radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscal
 
 All'interno di questa piattaforma si innesta il prodotto in esame,
 ovvero la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
-decine di prodotti, uno su tutti il ``Polygon''\ref{polygon}, vincitore del 
-``CES Best of Innovation 2022''\ref{ces} nella categoria Home Appliances,
+decine di prodotti, uno su tutti il ``Polygon''(figura \ref{polygon}), vincitore del 
+``CES Best of Innovation 2022'' (figura \ref{ces}) nella categoria Home Appliances,
 nonché di altri prestigiosi premi a livello internazionale, quali ``Red Dot Design'',
 ``German Design'', ``AIFA'' % TODO,
 grazie al suo design innovativo ed al suo contenuto tecnologico, 
@@ -173,13 +171,10 @@ Infine l'altro punto cardine è l'eseguire test metodologici prima che il firmwa
 rilasciato al pubblico, sia tramite aggiornamento OTA che tramite installazione in fabbrica 
 su di un nuovo prodotto.  
 
-\subsection{Prassi attuale testing (problemi aperti)}
+\subsection{Prassi attuale testing}
 
-Quando detto al capitolo precedente fa capire quanto sia fondamentale testare in maniera
-ancora più approfondita (rispetto a quanto viene attualmente fatto per l'applicazione
-mobile ed il cloud) il firmware di questi radiatori.
+Allo stato attuale abbiamo 3 momenti di validazione:
 
-Attualmente vi sono tre fasi di test:
 \begin{enumerate}
     \item test da parte dello sviluppatore
     \item test di accettazione interna (in IOTINGA)
@@ -189,7 +184,7 @@ Attualmente vi sono tre fasi di test:
 \subsubsection{Test di sviluppatore}
 
 Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
-bug all'interno del firmware prima di considerare l'attività conclusa ed integrare il
+bug  prima di considerare l'attività conclusa ed integrare il
 proprio lavoro nel ramo di sviluppo principale ed effettua i propri test.
 
 Questi si occupano sia di verificare che quanto è stato implementato è conforme
@@ -201,12 +196,14 @@ Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice
 quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
 provati.
 
+Questi test possono essere automatizzati facilmente mediante la creazione di unit-test. 
+
 \subsubsection{Test di accettazione interna}
 
 Questi test sono effettuati prima di ogni rilascio di un nuovo artefatto verso il cliente.
 
 Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso critici,
-senza i quali il sistema stesso non sarebbe utilizzabile e quindi ulteriormente testabile.
+senza i quali il sistema non sarebbe utilizzabile.
 Solo se una versione del software passa tutti questi test può essere consegnata al cliente.
 
 Essi si pongono dal punto di vista dell'utente finale, pertanto sono effettuati su un
@@ -1080,22 +1077,27 @@ Di seguito vedremo alcuni esempi di progetti esistenti e futuri dove questa meto
 potrà essere applicata, e le relative sfide per implementarla.
 
 \subsubsection{Futuri radiatori elettrici}
-Riguardo il progetto radiatore elettrico visto fin ora stiamo realizzando una nuova
-revisione della scheda elettronica, pur mantenendo lo stesso microcontrollore e
-di conseguenza lo stesso firmware. Un primo obiettivo sarebbe quindi andare a testare
-il firmware simulando questa nuova elettronica, oltre alla vecchia.
 
-Infine a breve partirà lo sviluppo di un radiatore completamente nuovo, bastato su
-microcontrollore Espressif, sul quale sarebbe interessante sviluppare un progetto
-simile a questo.
+Attualmente è in cantiere un nuovo modello di radiatore elettrico, 
+che mira ad unificare l'elettronica in tutta la gamma di radiatori elettrici 
+IRSAP, andando a coprire anche la fascia entry-level. 
 
-\subsubsection{Test di gateway RF}
+Per questi nuovi prodotti si è deciso di andare su microcontrollore Espressif 
+ESP-32, che non solo è più economico rispetto al Telit ma ha delle caratteristiche
+hardware superiori, ed integra oltre al Wi-Fi anche un interfaccia Bluetooth Low Energy (BLE). 
 
-Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``NOW'',
+Questo nuovo progetto mira tramite un'unica scheda madre a supportare poi 
+prodotti dalle caratteristiche sia hardware che software distinti, che poi vanno 
+testati singolarmente. L'automazione diventa ancora più cruciale in quanto il 
+numero di scenari da validare cresce rapidamente ad ogni prodotto nuovo creato. 
+
+\subsubsection{Test di dispositivi RF}
+
+Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``IRSAP NOW'',
 ossia un sistema di controllo di impianti idraulici composto da teste termostatiche,
 termostati ambiente ed un modulo di interfacciamento verso la caldaia. Tutti questi
-dispositivi\ref{dispositivi_now} comunicano con una centralina di controllo (CU) tramite un protocollo RF
-a 868MHz.
+dispositivi\ref{dispositivi_now} comunicano con una unità centrlae di controllo 
+(CU), che è il cuore del sistema, tramite un protocollo RF a 868MHz.
 
 \begin{figure}[h]
     \centering
@@ -1104,14 +1106,33 @@ a 868MHz.
     \label{dispositivi_now}
 \end{figure}
 
-Un progetto futuro potrebbe essere quello dell'andare a testare sia i dispositivi finali
-sia l'unità di controllo in maniera indipendente mediante la simulazione tramite
-un trasmettitore RF degli altri dispositivi.
+Una delle difficoltà attuali è l'impossibilità di andare a testare in maniera isolata i 
+dispositivi di questo ecosistema e l'unità centrale. 
 
-In questo modo sarebbe possibile testare configurazioni di impianto anche molto
-grosse (il sistema supporta fino a 25 zone e 48 dispositivi RF) in maniera tale da
-individuare bug nel firmware che altrimenti difficilmente emergerebbero. Infatti per
-questioni di tempo test del genere non vengono mai effettuati.
+Ad esempio per validare una nuova versoine firmware della CU è necessario avere a disposizione tanti dispositivi quanti 
+ne supporta al massimo il sistema, ovvero 48, un numero che rende molto complessa anche a 
+livello logistico l'operazione (si pensi ad es. solo al fatto che questi dispositivi funzoinano a 
+batterie che dovrebbero essere continuamente mantenute cariche). 
+
+Si potrebbe quindi, mediante un'interfaccia radio opportunamente tarata sulle frequenze usate 
+dal sistema, andare a simulare i dispositivi lato software, consentendo con un'unica interfaccia 
+radio di simulare tutti i 48 dispositivi senza fisicamente averli in ufficio. 
+
+Oltre a ciò in questo progetto si può porsi anche ad un livello più basso: l'unità
+centrale contiene due microcontrollori (e di conseguenza due firmware) che comunicano fra di 
+loro mediante un protocollo seriale (su interfaccia UART). Uno integra il ricetrasmettitore
+a radiofrequenza ed è deputato a gestire la comunicazione con i dispositivi 
+finali, l'altro invece implementa tutte le logiche di funzionamento incluso l'interfacciamento 
+con il cloud, che avviene tramite porta ethernet. 
+
+Si potrebbe quindi andare a testare i due firmware in maniera isolata l'uno dall'altro, 
+andando a simulare sempre tramite software la controparte mancante. Questo evita di dover 
+testare tutto i sistema, in particolare la parte RF, quando uno solo dei due software viene 
+aggiornato. Infatti la parte radio viene aggiornata decisamente più di rado rispetto alla 
+gestione delle logiche di funzionamento, ma è la più dispendiosa in termini di tempo da testare 
+(anche perché gestendo a livello fisico la comunicazione RF, in linea teorica, ogni volta andrebbero 
+rieseguiti i test di laboratorio per assicurarsi che i parametri radio restino nei limiti 
+imposti dalla normativa vigente).
 
 \subsubsection{Test di un termostato OpenTherm}
 
