@@ -5,19 +5,17 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{frontespizio}
+\usepackage[acronym]{glossaries}
 \usepackage{listings}
 \usepackage[Lenny]{fncychap}
 
 \linespread{1.2}
 
 \usetikzlibrary{automata, positioning, arrows}
-\tikzset{
-    ->, % makes the edges directed
-    >=stealth', % makes the arrow heads bold
-    node distance=5cm, % specifies the minimum distance between two nodes. Change if necessary.
-    % every state/.style={thick, fill=gray!10, minimum size=2.5cm}, % sets the properties for each ’state’ node
-    initial text=$ $, % sets the text that appears on the start arrow
-}
+\tikzset{->, >=stealth', node distance=5cm,  initial text=$ $}
+
+\newacronym{iot}{IoT}{Internet Of Things}
+\newacronym{label}{abbrv}{long}
 
 \title{Automazione di test di accettazione per dispositivi IoT embedded integrati nel cloud}
 \author{Alessandro Righi}
@@ -45,94 +43,148 @@
 
 \chapter{Introduzione}
 
-IOTINGA s.r.l. è una giovane realtà informatica veronese. Fra i vari settori in cui
-opera ricopre particolare rilevanza quello dell'IoT e dei prodotti connessi al cloud.
+Oggigiorno nelle nostre case ci sono sempre più prodotti connessi,
+dalle lavatrici, ai televisori, fino agli impianti domotici che
+consentono di controllare la nostra casa mediante un comando vocale
+anche quando ci si trova dall'altra parte del pianeta.
 
-IRSAP s.p.a. è invece una grossa azienda rodigina leader nel settore del comfort termico.
-Storicamente produttrice di radiatori si distingue oggi per prodotti dal design altamente
-ricercato (i ``termoarredi''), non che dall'elevato contenuto tecnologico, quali
-impianti VMC, radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscaldamento.
+Questi dispositivi svolgono anche funzioni critiche per il nostro
+benessere domestico, quale ad esempio il controllo della temperatura
+ambientale, che è oggetto del mio lavoro in IOTINGA.
 
-IOTINGA ha aiutato IRSAP nella realizzazione proprio di queste ultime categorie di
-prodotti, grazie alla realizzazione della piattaforma ``IRSAP NOW'', un cloud
-al quale è possibile connettere tutti i prodotti smart del catalogo IRSAP così da controllarli
-da remoto mediante un'applicazione mobile iOS/Android, sempre sviluppata da IOTINGA,
-nonché tramite assistenti vocali quali Alexa o Google Home.
+IOTINGA s.r.l. nasce con lo scopo di aiutare altre aziende nel realizzare e
+commercializzare i disposiivi IoT. IOTINGA si distingue dagli altri
+concorrenti per un'attenzione particolare alla componente software,
+in tutte le sue sfaccettature, dall'interazione fisica con le perferiche
+hardware, alla gestione del dato mediante un'infrastruttura realizzata
+con tecnologie cloud serverless, fino alla sua presentazione ai consumatori,
+mediante realizzazione di applicazioni Android/iOS.
+
+La mia esperienza in IOTINGA inizia nel Febbraio 2020. In questi 3 anni
+ho avuto l'occasione di vedere cresce l'azienda, e fornire il mio conributo
+nello sviluppo del progetto ``IRSAP NOW'', che ho avuto modo di seguire
+in prima persona fin dalla sua fase embrionale.
+
+IRSAP NOW è l'ecosistema domotico che integra al proprio interno tutti
+i prodotti connessi di IRSAP s.p.a., una grande impresa rodigina leader
+nel settore del comfort termico. Storicamente produttrice di radiatori,
+inventrice del termoarredo, si distingue oggi per prodotti dal design altamente
+ricercato, non che dall'elevato contenuto tecnologico, quali impianti VMC,
+radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscaldamento.
 
 \section{Il progetto IRSAP radiatore elettrico}
 
-All'interno di questa piattaforma si innesta il prodotto oggetto di questa tesi,
-ovvero sia la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
-decine di prodotti, uno su tutti il ``Polygon''\ref{polygon}, vincitore del ``CES Best of Innovation 2022''\ref{ces},
-nonché di numerosi altri premi a livello internazionale, grazie al suo design
-altamente ricercato ed al suo contenuto tecnologico, a cui noi di IOTINGA abbiamo contribuito.
+All'interno di questa piattaforma si innesta il prodotto in esame,
+ovvero la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
+decine di prodotti, uno su tutti il ``Polygon''(figura \ref{polygon}), vincitore del
+``CES Best of Innovation 2022'' (figura \ref{ces}) nella categoria Home Appliances,
+nonché di altri prestigiosi premi a livello internazionale, quali ``Red Dot Design'',
+``German Design'', ``AIFA'' % TODO,
+grazie al suo design innovativo ed al suo contenuto tecnologico,
+a cui noi di IOTINGA abbiamo contribuito.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=12cm]{img/polygon.jpeg}
     \caption{Polygon}
     \label{polygon}
 \end{figure}
 
-Tale dispositivo è dotato internamente di elettronica in grado di connettersi mediante
+``Polygon'' è dotato internamente di elettronica in grado di connettersi mediante
 Wi-Fi direttamente al cloud ``IRSAP NOW'', ed integra oltre alla funzione scaldante
-anche un'illuminazione ambientale mediante led RGBW.
+anche un'illuminazione ambientale LED colorati.
 
-Come IOTINGA abbiamo seguito direttamente lo sviluppo del firmware eseguito sul
-dispositivo stesso, oltre che l'integrazione nel cloud e nell'applicazione mobile esistente.
+Mi sono occupato in prima persona dello sviluppo del firmware del dispositivo nella
+sua interezza, mentre alcuni colleghi hanno seguito la parte di progettazione hardware
+e di integrazione all'interno dell'ecosistema cloud e della app.
 
-In particolare io mi sono occupato in prima persona dello sviluppo del firmware
-del dispositivo nella sua interezza, mentre alcuni colleghi hanno seguito la parte
-di progettazione hardware e di integrazione all'interno dell'ecosistema cloud e della app.
-
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=12cm]{img/ces.jpeg}
     \caption{IRSAP ed IOTINGA al CES 2022}
     \label{ces}
 \end{figure}
 
-
 \section{Motivazioni (diffcolta' testing IoT/cloud)}
 
-Uno dei problemi principali da evitare specialmente in questa tipologia di prodotti
-sono i problemi che si hanno dall'utente finale, per una serie di motivi:
+La caratteristica fondamentale per questi prodotti è l'affidabilità.
+Infatti nessun utente installerebbe in casa propria un dispositivo che
+non è in grado di svolgere la funzione per la quale è stato acquistato.
+
+A maggior ragione i danni derivanti dal malfunzionamento di un impianto
+di riscaldamento possono coinvolgere non solo cose ma anche estendersi
+a persone ed animali domestici.
+
+È tassativo prestare attenzione alle problematiche che si possono verificare
+in utenza, le quali non sono solo un danno per il cliente stesso ma anche
+per l'azienda produttrice:
 
 \begin{itemize}
 \item la prima impressione sul cliente è quella che conta, se il cliente si ritrova
-    un prodotto che funziona male ne parlerà male e creerà un danno d'immagine all'azienda
-\item quando il problema si verifica dal cliente è difficile da diagnosticare. I clienti,
-    e spesso anche gli installatori stessi, non hanno competenze tecniche e pertanto l'assistenza è difficile
+    un prodotto che funziona male o addira non svolge la funzione prevista ne parlerà
+    male, anche mediante recensioni negative online, e creerà un danno d'immagine all'azienda
+    difficilissimo da sanare
+\item quando il problema si verifica dal cliente è complicata la diagnostica. I clienti,
+    e spesso anche gli installatori stessi, non hanno competenze tecniche o il
+    tempo da dedicare nel supportare il produttore nella ricerca del problema
 \item se il problema non è risolvibile mediante un aggiornamento firmware è necessario
     effettuare un reso, che ha dei costi molto elevati per il produttore, in quanto
-    durante il trasporto molto spesso il prodotto viene danneggiato e quindi deve essere rimpiazzato con un nuovo
-\item il prodotto svolge comunque una funzione critica per l'utente, in quanto un suo
-    malfunzionamento potrebbe voler dire rimanere senza riscaldamento, con tutti i disagi
-    ed i danni che questo può comportare
+    durante il trasporto molto spesso il prodotto viene danneggiato e quindi deve
+    essere rimpiazzato con un nuovo
 \end{itemize}
 
-Viene quindi da se che è di fondamentale importanza assicurarsi di far sì che quanti
-più problemi possibili vengano identificati prima che il software arrivi nelle mani
-dell'utente finale.
+È di fondamentale importanza assicurarsi di identificare il prima possibile quanti
+più problemi possibili prima che il prodotto arrivi nelle mani dell'utente finale.
 
-Inoltre, visto che la produzione di software esente completamente da bug
-è matematicamente impossibile, è fondamentale garantire che i prodotti una volta
-installati possano sempre essere aggiornati, in modo da poter rilasciare correzioni agli
-inevitabili (e sperabilmente pochi) problemi segnalati dagli utenti.
+In tutto questo il software ricopre un ruolo sempre più da protagonista, in quanto
+per garantire la connettività al cloud è necessario gestire una complessità elevata.
 
-Tuttavia l'invio di aggiornamenti dovrebbe essere limitata allo stretto indispensabile:
-per quante misure di protezione si possano prendere l'operazione di aggiornamento è sempre
-molto delicata, in quanto vi sono numerose cose che possono andare storte, ad esempio
-può venire a mancare l'alimentazione durante una fase critica dell'aggiornamento,
-comportando una corruzione della meoria flash che rende il dispositivo inutilizzabile.
+I prodotti della precedente generazione utilizzavano il software per una mera gestione
+delle periferiche fisiche del prodotto, senza la necessità di interfacciarsi con sistemi
+terzi. Al contrario i prodotti della attuale per svolgere tutte le funzioni di
+integrazione cloud in maniera sicura richiedono un livello aggiuntivo di astrazione,
+ovvero quello di un RTOS (sistema operativo real-time).
 
-\section{Prassi attuale testing (problemi aperti)}
+Anche l'hardware stesso è più evoluto, infatti si passa dalle piattorme ad 8 bit ai
+microcontrollori a 32, con funzionalità sempre più assimilabili a quelle di un sistema
+general purpose, quali ad esempio una gestione di programmazione concorrente, uno
+stack di rete TCP/IP, ed una gestione della memoria virtual con MMU.
 
-Quando detto al capitolo precedente fa capire quanto sia fondamentale testare in maniera
-ancora più approfondita (rispetto a quanto viene attualmente fatto per l'applicazione
-mobile ed il cloud) il firmware di questi radiatori.
+Un'altra differenza rispetto al passato è la possibilità di aggiornare il software dopo
+che il prodotto lascia la fabbrica, mediante aggiornamenti di tipo ``Over The Air'' (OTA).
+Questo si rende necessario non solo per la mera introuduzione di nuove funzionalità in
+un prodotto esistente, ma anche per mantenere il software al passo con l'evoluzione degli
+altri sistemi a cui esso si collega, quale ad esempio modifiche nei protocolli di rete
+dettate dall'arrivo di nuovi standard.
 
-Attualmente vi sono tre fasi di test:
+Sebbene l'aggiornamento consenta di risolvere problemi dopo che il dispositivo ha lasciato la
+fabbrica esso comporta anche una criticità, in quanto vi è il rischio di introdurre altri problemi
+in prodotti che fino a quel momento non li avevano, andando a creare un disservizio.
+
+Bisogna infine tener conto che un prodotto di questo tipo segue un ciclo di vita molto lungo
+rispetto ad esempio a PC o smartphone, che può tranquillmente superare i 10 anni dalla data di
+immissione nel mercato, e l'utente si aspetta che in tutti questi anni possa continuare ad
+utilizzarlo come il giorno in cui lo ha acquistato.
+
+Conseguentemente diventa prioritario garantire i massimi livelli di qualità possibile
+sul software rilasciato. Questo non si limita alla semplice assenza di bug, in quanto
+questa è una garanzia che matematicamente è impossibile offrire, ma anche all'adottare
+delle procedure procedure tali che consentano, dal momento che un bug si
+presenta, di individuarlo e sistemarlo nel minor tempo possibile.
+
+Tracciabilità e mantenibilità del codice sono quindi parole chiave, la prima garantisce che
+sia sempre possibile risalire all'esatta versione del codice per il quale viene segnalato un
+problema di modo da poterlo riprodurre, la seconda invece assicura che la soluzione al problema
+sia implementabile nel minor tempo possibile e senza il rischio di regressioni.
+
+Infine l'altro punto cardine è l'eseguire test metodologici prima che il firmware venga
+rilasciato al pubblico, sia tramite aggiornamento OTA che tramite installazione in fabbrica
+su di un nuovo prodotto.
+
+\subsection{Prassi attuale testing}
+
+Allo stato attuale abbiamo 3 momenti di validazione:
+
 \begin{enumerate}
     \item test da parte dello sviluppatore
     \item test di accettazione interna (in IOTINGA)
@@ -142,7 +194,7 @@ Attualmente vi sono tre fasi di test:
 \subsection{Test di sviluppatore}
 
 Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
-bug all'interno del firmware prima di considerare l'attività conclusa ed integrare il
+bug  prima di considerare l'attività conclusa ed integrare il
 proprio lavoro nel ramo di sviluppo principale ed effettua i propri test.
 
 Questi si occupano sia di verificare che quanto è stato implementato è conforme
@@ -154,12 +206,14 @@ Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice
 quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
 provati.
 
+Questi test possono essere automatizzati facilmente mediante la creazione di unit-test.
+
 \subsection{Test di accettazione interna}
 
 Questi test sono effettuati prima di ogni rilascio di un nuovo artefatto verso il cliente.
 
 Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso critici,
-senza i quali il sistema stesso non sarebbe utilizzabile e quindi ulteriormente testabile.
+senza i quali il sistema non sarebbe utilizzabile.
 Solo se una versione del software passa tutti questi test può essere consegnata al cliente.
 
 Essi si pongono dal punto di vista dell'utente finale, pertanto sono effettuati su un
@@ -1032,23 +1086,28 @@ anche ad altri progetti sia di IRSAP sia che IOTINGA ha per altri clienti.
 Di seguito vedremo alcuni esempi di progetti esistenti e futuri dove questa metodologia
 potrà essere applicata, e le relative sfide per implementarla.
 
-\subsection{Futuri radiatori elettrici}
-Riguardo il progetto radiatore elettrico visto fin ora stiamo realizzando una nuova
-revisione della scheda elettronica, pur mantenendo lo stesso microcontrollore e
-di conseguenza lo stesso firmware. Un primo obiettivo sarebbe quindi andare a testare
-il firmware simulando questa nuova elettronica, oltre alla vecchia.
+\subsubsection{Futuri radiatori elettrici}
 
-Infine a breve partirà lo sviluppo di un radiatore completamente nuovo, bastato su
-microcontrollore Espressif, sul quale sarebbe interessante sviluppare un progetto
-simile a questo.
+Attualmente è in cantiere un nuovo modello di radiatore elettrico,
+che mira ad unificare l'elettronica in tutta la gamma di radiatori elettrici
+IRSAP, andando a coprire anche la fascia entry-level.
 
-\subsection{Test di gateway RF}
+Per questi nuovi prodotti si è deciso di andare su microcontrollore Espressif
+ESP-32, che non solo è più economico rispetto al Telit ma ha delle caratteristiche
+hardware superiori, ed integra oltre al Wi-Fi anche un interfaccia Bluetooth Low Energy (BLE).
 
-Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``NOW'',
+Questo nuovo progetto mira tramite un'unica scheda madre a supportare poi
+prodotti dalle caratteristiche sia hardware che software distinti, che poi vanno
+testati singolarmente. L'automazione diventa ancora più cruciale in quanto il
+numero di scenari da validare cresce rapidamente ad ogni prodotto nuovo creato.
+
+\subsubsection{Test di dispositivi RF}
+
+Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``IRSAP NOW'',
 ossia un sistema di controllo di impianti idraulici composto da teste termostatiche,
 termostati ambiente ed un modulo di interfacciamento verso la caldaia. Tutti questi
-dispositivi\ref{dispositivi_now} comunicano con una centralina di controllo (CU) tramite un protocollo RF
-a 868MHz.
+dispositivi\ref{dispositivi_now} comunicano con una unità centrlae di controllo
+(CU), che è il cuore del sistema, tramite un protocollo RF a 868MHz.
 
 \begin{figure}[h]
     \centering
@@ -1057,14 +1116,33 @@ a 868MHz.
     \label{dispositivi_now}
 \end{figure}
 
-Un progetto futuro potrebbe essere quello dell'andare a testare sia i dispositivi finali
-sia l'unità di controllo in maniera indipendente mediante la simulazione tramite
-un trasmettitore RF degli altri dispositivi.
+Una delle difficoltà attuali è l'impossibilità di andare a testare in maniera isolata i
+dispositivi di questo ecosistema e l'unità centrale.
 
-In questo modo sarebbe possibile testare configurazioni di impianto anche molto
-grosse (il sistema supporta fino a 25 zone e 48 dispositivi RF) in maniera tale da
-individuare bug nel firmware che altrimenti difficilmente emergerebbero. Infatti per
-questioni di tempo test del genere non vengono mai effettuati.
+Ad esempio per validare una nuova versoine firmware della CU è necessario avere a disposizione tanti dispositivi quanti
+ne supporta al massimo il sistema, ovvero 48, un numero che rende molto complessa anche a
+livello logistico l'operazione (si pensi ad es. solo al fatto che questi dispositivi funzoinano a
+batterie che dovrebbero essere continuamente mantenute cariche).
+
+Si potrebbe quindi, mediante un'interfaccia radio opportunamente tarata sulle frequenze usate
+dal sistema, andare a simulare i dispositivi lato software, consentendo con un'unica interfaccia
+radio di simulare tutti i 48 dispositivi senza fisicamente averli in ufficio.
+
+Oltre a ciò in questo progetto si può porsi anche ad un livello più basso: l'unità
+centrale contiene due microcontrollori (e di conseguenza due firmware) che comunicano fra di
+loro mediante un protocollo seriale (su interfaccia UART). Uno integra il ricetrasmettitore
+a radiofrequenza ed è deputato a gestire la comunicazione con i dispositivi
+finali, l'altro invece implementa tutte le logiche di funzionamento incluso l'interfacciamento
+con il cloud, che avviene tramite porta ethernet.
+
+Si potrebbe quindi andare a testare i due firmware in maniera isolata l'uno dall'altro,
+andando a simulare sempre tramite software la controparte mancante. Questo evita di dover
+testare tutto i sistema, in particolare la parte RF, quando uno solo dei due software viene
+aggiornato. Infatti la parte radio viene aggiornata decisamente più di rado rispetto alla
+gestione delle logiche di funzionamento, ma è la più dispendiosa in termini di tempo da testare
+(anche perché gestendo a livello fisico la comunicazione RF, in linea teorica, ogni volta andrebbero
+rieseguiti i test di laboratorio per assicurarsi che i parametri radio restino nei limiti
+imposti dalla normativa vigente).
 
 \subsection{Test di un termostato OpenTherm}
 
