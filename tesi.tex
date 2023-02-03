@@ -1,10 +1,14 @@
-\documentclass[a4paper,titlepage]{article}
+\documentclass[12pt,a4paper,twoside,titlepage]{book}
 
 \usepackage[italian]{babel}
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{frontespizio}
+\usepackage{listings}
+\usepackage[Lenny]{fncychap}
+
+\linespread{1.2}
 
 \usetikzlibrary{automata, positioning, arrows}
 \tikzset{
@@ -30,10 +34,16 @@
     \Candidato[VR432403]{Alessandro Righi}
     \Relatore{Mariano Ceccato}
 \end{frontespizio}
-\tableofcontents
-\pagebreak
 
-\section{Introduzione}
+\frontmatter
+
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+\mainmatter
+
+\chapter{Introduzione}
 
 IOTINGA s.r.l. è una giovane realtà informatica veronese. Fra i vari settori in cui
 opera ricopre particolare rilevanza quello dell'IoT e dei prodotti connessi al cloud.
@@ -49,7 +59,7 @@ al quale è possibile connettere tutti i prodotti smart del catalogo IRSAP così
 da remoto mediante un'applicazione mobile iOS/Android, sempre sviluppata da IOTINGA,
 nonché tramite assistenti vocali quali Alexa o Google Home.
 
-\subsection{Il progetto IRSAP radiatore elettrico}
+\section{Il progetto IRSAP radiatore elettrico}
 
 All'interno di questa piattaforma si innesta il prodotto oggetto di questa tesi,
 ovvero sia la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
@@ -83,7 +93,7 @@ di progettazione hardware e di integrazione all'interno dell'ecosistema cloud e 
 \end{figure}
 
 
-\subsection{Motivazioni (diffcolta' testing IoT/cloud)}
+\section{Motivazioni (diffcolta' testing IoT/cloud)}
 
 Uno dei problemi principali da evitare specialmente in questa tipologia di prodotti
 sono i problemi che si hanno dall'utente finale, per una serie di motivi:
@@ -116,7 +126,7 @@ molto delicata, in quanto vi sono numerose cose che possono andare storte, ad es
 può venire a mancare l'alimentazione durante una fase critica dell'aggiornamento,
 comportando una corruzione della meoria flash che rende il dispositivo inutilizzabile.
 
-\subsection{Prassi attuale testing (problemi aperti)}
+\section{Prassi attuale testing (problemi aperti)}
 
 Quando detto al capitolo precedente fa capire quanto sia fondamentale testare in maniera
 ancora più approfondita (rispetto a quanto viene attualmente fatto per l'applicazione
@@ -129,7 +139,7 @@ Attualmente vi sono tre fasi di test:
     \item test di accettazione del cliente finale (IRSAP)
 \end{enumerate}
 
-\subsubsection{Test di sviluppatore}
+\subsection{Test di sviluppatore}
 
 Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
 bug all'interno del firmware prima di considerare l'attività conclusa ed integrare il
@@ -144,7 +154,7 @@ Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice
 quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
 provati.
 
-\subsubsection{Test di accettazione interna}
+\subsection{Test di accettazione interna}
 
 Questi test sono effettuati prima di ogni rilascio di un nuovo artefatto verso il cliente.
 
@@ -177,7 +187,7 @@ passaggi in quanto ``ovvi'', mentre chi non conosce il sistema è più propenso 
 i passaggi alla lettera e segnalare ogni singolo comportamento discordante con quanto
 atteso.
 
-\subsubsection{Test di accettazione del cliente finale}
+\subsection{Test di accettazione del cliente finale}
 
 Sul cliente finale ricade la responsabilità (anche a livello legale) del prodotto
 che viene immesso sul mercato con il proprio nome sopra, e questo include anche
@@ -194,7 +204,7 @@ al rilacio a produzione, e viene quindi installato in fabbrica su tutti i nuovi 
 prodotti, nonché viene lanciato un aggiornamento OTA su tutti i dispositivi già installati
 presso i clienti finali.
 
-\subsection{Possibilità di automatizzare il testing}
+\section{Possibilità di automatizzare il testing}
 
 Dopo questa panoramica sulle tre attuali fasi di test ci concentreremo sui test
 descritto al secondo punto, ovvero i test di acettazione fatti internamente a IOTINGA.
@@ -228,18 +238,18 @@ testando più scenari si riduce la probabilità che un bug sfugga e finisca nell
 del cliente finale. Inoltre questo ultimo punto evita anche danni all'immagine dell'azienda
 causati dal rilascio di un software che presenta non conformità.
 
-\section{Related work}
-\subsection{Tool commerciali/open-source}
+\chapter{Related work}
+\section{Tool commerciali/open-source}
 
 %% TODO: here
 
-\section{Approccio}
+\chapter{Approccio}
 
 Prima di descrivere come si è scelto di implementare l'automatizzazione della fase
 di validazione del software è necessario fare un breve excursus per descrivere nei
 dettagli il sistema che vogliamo testare.
 
-\subsection{Caratteristiche hardware}
+\section{Caratteristiche hardware}
 
 Il radiatore elettrico contiene al suo interno una scheda elettronica, che viene
 attualmente prodotta in due modelli differenti:
@@ -310,7 +320,7 @@ sulla scheda madre:
         l'accuratezza degli algoritmi di termoregolazione
 \end{itemize}
 
-\subsection{Caratteristiche software}
+\section{Caratteristiche software}
 
 Il firmware eseguito sul dispositivo è scritto in linguaggio C.
 
@@ -343,7 +353,7 @@ Il firmware è essenzialmente suddiviso in 4 moduli (task):
         per la fase di provisioning.
 \end{itemize}
 
-\subsubsection{Stati interni del dispositivo}
+\subsection{Stati interni del dispositivo}
 
 Il dispositivo ad alto livello può trovarsi in 3 stati distinti:
 
@@ -388,7 +398,7 @@ componenti software del dispositivo:
 \end{tabular}
 \end{center}
 
-\subsubsection{Termoregolazione}
+\subsection{Termoregolazione}
 
 La componente di termoregolazione si occupa di regolare la temperatura ambiente portandola
 il più vicino possibile a quanto desiderato dall'utente (set-point) mediante
@@ -430,7 +440,7 @@ in figura \ref{modi}.
     \label{modi}
 \end{figure}
 
-\subsubsection{Comunicazione cloud}
+\subsection{Comunicazione cloud}
 
 La componente cloud è implementata su AWS. La connessione avviene grazie al protocollo
 MQTT usando il servizio broker di AWS IoT Core.
@@ -546,7 +556,7 @@ Di base ogni messaggio prevede un header fisso che include i seguenti campi:
 
 A seguire nel messaggio è presente il payload.
 
-\subsubsection{API di configurazione locale}
+\subsection{API di configurazione locale}
 
 Quando il dispositivo viene acceso per la prima volta è necessario fornirgli la
 configurazione della rete Wi-Fi e l'identificativo (UUID) dell'impianto al quale
@@ -570,7 +580,7 @@ Mette a dispozizione le seguenti API REST:
 \end{tabular}
 \end{center}
 
-\subsubsection{HMI}
+\subsection{HMI}
 
 L'interfaccia untente del dispositivo si compone di due pulsanti, \textbf{+} e \textbf{-},
 i LED RGB di illuminazione della pulsantiera ed il buzzer.
@@ -593,7 +603,7 @@ I LED invece sono utilizzati per segnalare la temperatura impostata dall'utente
 indicare condizioni particolari quali radiatore non abbinato (LED rossi), connessione
 in corso (viola lampeggiante), modo \textit{stand-by} (viola fisso) o \textit{antigelo} (bianco).
 
-\subsection{Intefacciamento con il sistema di test}
+\section{Intefacciamento con il sistema di test}
 
 Il radiatore abbiamo quindi visto che si interfaccia con il mondo esterno attraverso
 3 possibili interfacce:
@@ -617,7 +627,7 @@ Per farlo abbiamo a disposizione tre modi:
     \item esecuzione del firmware in un emulatore
 \end{itemize}
 
-\subsubsection{Interazione con il dispositivo fisico}
+\subsection{Interazione con il dispositivo fisico}
 
 Una prima possibilità che si pensa potrebbe essere quella di piazzare il radiatore in una camera
 climatica e mediante sensori ed attuatori interagire sul dispositivo stesso come farebbe
@@ -637,7 +647,7 @@ Questo rende ovviamente il test molto lungo, anche svariate ore per eseguire ogn
 caso di test, considerando che l'ambiente andrebbe ripristinato a pari condizioni prima
 di poterne eseguire uno nuovo.
 
-\subsubsection{Interazione con la sola elettronica}
+\subsection{Interazione con la sola elettronica}
 
 Viene da pensare che si possa quindi eliminare il resto del sistema (il radiatore
 stesso) e concentrarsi quindi sul test della sola scheda elettronica, andando a
@@ -663,7 +673,7 @@ così che potremo andare a simulare tutte le periferiche hardware più agevolmen
 
 Questa è la soluzione che alla fine ho scelto.
 
-\subsubsection{Esecuzione del firmware in un emulatore}
+\subsection{Esecuzione del firmware in un emulatore}
 
 Infine un'ultima possibilità è quella di eseguire il firmware non sull'hardware
 reale ma su un sistema emulato.
@@ -682,11 +692,11 @@ Ho quindi deciso di escludere questa strada, che invece è percorribile su altre
 piattaforme hardware quali l'ESP-32, in quanto utilizza un SDK completamente open-source,
 e mette già a disposizione la possibilità di emulare un hardware con il software \textit{qemu}.
 
-\section{Implementazione}
+\chapter{Implementazione}
 
-\subsection{Interfacce}
+\section{Interfacce}
 
-\subsection{Implementazione hardware}
+\section{Implementazione hardware}
 
 Come già detto in precedenza ho scelto di interfacciarmi direttamente con un kit
 di sviluppo del microcontrollore scelto, come si può vedere in figura \ref{quadretto}.
@@ -718,7 +728,7 @@ avere tutto quanto server per il testing del dispositivo in un'unico comodo disp
     \label{quadretto}
 \end{figure}
 
-\subsection{Implementazione software}
+\section{Implementazione software}
 
 Per la componente software ho deciso di utilizzare il linguaggio di programmazione
 Python. Questa scelta è motivata sia dalla versatilità che offre nell'interazione anche
@@ -737,7 +747,7 @@ principali, ovvero:
     \item interfaccia Wi-Fi
 \end{itemize}
 
-\subsubsection{Interfacciamento con l'I/O}
+\subsection{Interfacciamento con l'I/O}
 
 Per l'interfacciamento con l'I/O ho deciso di utilizzare la libreria di riferimento
 per comunicare con i GPIO del Raspberry Pi.
@@ -756,7 +766,7 @@ pulsante sulla pulsantiera, riavviare il dispositivo, etc.
 Inoltre sono creati dei wrapper per i comandi seriali più comuni da mandare al
 radiatore.
 
-\subsubsection{Interfacciamento con il cloud}
+\subsection{Interfacciamento con il cloud}
 
 In quanto il dispositivo si collega al cooud di AWS IoT mediante autenticazione
 TLS con certificato client non è semplice far sì che si possa collegare ad altri
@@ -789,7 +799,7 @@ l'ultimo messaggio ricevuto.
 
 %% TODO: schema comunicazione con il cloud
 
-\subsubsection{Interfacciamento con il Wi-Fi}
+\subsection{Interfacciamento con il Wi-Fi}
 
 Il Wi-Fi del Raspberry può essere configurato dal test case in esecuzione per
 funzionare in due modalità:
@@ -849,7 +859,7 @@ può voler dire accorgersi subito di problemi che altrimenti sarebbero difficili
 se non impossibili da individuare in utenza.
 
 
-\subsection{Integrazione continua}
+\section{Integrazione continua}
 
 Attualmente per i progetti aziendali utilizziamo un'infrastruttura di CI basata
 su Github Actions. Un server interno all'azienda esegue container e macchine virtuali
@@ -871,9 +881,9 @@ fin ora. Esso viene eseguito su un runner GitHub Actions installato direttamente
 sul Raspberry in questione, che quindi esegue i job e, nel caso questi abbiano
 esito positivo, conferma la creazione di una nuova release.
 
-\section{Validazione sperimentale}
+\chapter{Validazione sperimentale}
 
-\subsection{scenari da testare}
+\section{scenari da testare}
 
 Per iniziare ho deciso di andare a scrivere un test per ognuno degli scenari attualmente
 testati manualmente nei test di accettazione di IOTINGA.
@@ -882,7 +892,7 @@ Questi corrispondono ai casi d'uso considerati critici in quanto un malfunzionam
 di essi pregiudica ogni tipo di funzionalità del dispositivo o non ne permette l'aggiornamento
 a successive versioni.
 
-\subsubsection{Downgrade del firmware mediante API REST locale}
+\subsection{Downgrade del firmware mediante API REST locale}
 Il dispositivo deve essere sempre aggiornabile mediante API REST locale quando questo
 è in stato \textit{non abbinato}. Garantisce che in caso di problemi la app possa sempre
 installare sul dispositivo un firmware sicuramente funzionante, nonché il firmware
@@ -897,7 +907,7 @@ possa essere aggiornato all’ultima versione fabbrica durante la procedura di c
 \end{tabular}
 \end{center}
 
-\subsubsection{Abbinamento del dispositivo ad un impianto}
+\subsection{Abbinamento del dispositivo ad un impianto}
 
 Viene testata la capacità di abbinare mediante app il dispositivo ad un impianto.
 Il dispositivo deve correttamente abbinarsi all’impianto ed inviare al cloud la versione
@@ -915,7 +925,7 @@ del firmware corretta.
 \end{tabular}
 \end{center}
 
-\subsubsection{Aggiornamento di un dispositivo mediante OTA AWS}
+\subsection{Aggiornamento di un dispositivo mediante OTA AWS}
 
 Un dispositivo abbinato ad una app e connesso ad internet deve poter ricevere gli
 aggiornamenti OTA mediante Job di AWS.
@@ -929,7 +939,7 @@ aggiornamenti OTA mediante Job di AWS.
 \end{tabular}
 \end{center}
 
-\subsubsection{Ripristino di fabbrica di un dispositivo connesso}
+\subsection{Ripristino di fabbrica di un dispositivo connesso}
 Deve essere sempre garantito che un dispositivo possa essere riportato alle impostazioni di fabbrica.
 
 Effettuare quindi la procedura hard-reset. Entro 5 secondi il dispositivo invia al cloud una richiesta “DELETE”, ricevuta la risposta “ACCEPTED” o comunque passato un timeout di 5 secondi si riavvia e torna in stato “UNBOUNDED”.
@@ -943,7 +953,7 @@ Effettuare quindi la procedura hard-reset. Entro 5 secondi il dispositivo invia 
 \end{tabular}
 \end{center}
 
-\subsubsection{Ripristino di fabbrica di un dispositivo disconnesso}
+\subsection{Ripristino di fabbrica di un dispositivo disconnesso}
 
 Deve essere possibile resettare un dispositivo anche quando questo non è connesso
 alla rete, in quanto l'utente potrebbe volerlo riabbinare da app in quanto ha sostituito
@@ -960,7 +970,7 @@ o cambiato la configurazione del proprio access-point Wi-Fi.
 \end{center}
 
 
-\subsubsection{Termoregolazione di base}
+\subsection{Termoregolazione di base}
 
 Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente seguendo un set-point manuale.
 
@@ -974,7 +984,7 @@ Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente segu
 \end{tabular}
 \end{center}
 
-\subsubsection{Attivazione modalità stand-by mediante pulsantiera del radiatore}
+\subsection{Attivazione modalità stand-by mediante pulsantiera del radiatore}
 
 Scopo di questo test è la verifica che la funzionalità di stand-by funzioni correttamente.
 È molto importante in quanto una normativa europea impone che ogni prodotto abbia una
@@ -992,7 +1002,7 @@ modalità stand-by imponendo anche un limite massimo di consumo in questa modali
 \end{tabular}
 \end{center}
 
-\subsubsection{Funzionamento disconnesso}
+\subsection{Funzionamento disconnesso}
 
 Lo scopo di questo test è verificare che in assenza di connessione ad internet il
 dispositivo continui a funzionare per quanto previsto dalla modalità \textit{degradata}.
@@ -1008,13 +1018,13 @@ dispositivo continui a funzionare per quanto previsto dalla modalità \textit{de
 \end{tabular}
 \end{center}
 
-\subsection{tempi di esecuzione (confronto automatico/manuale)}
+\section{tempi di esecuzione (confronto automatico/manuale)}
 
-\section{Comclusioni}
+\chapter{Comclusioni}
 
-\subsection{Considarzioni}
+\section{Considarzioni}
 
-\subsection{Passi futuri}
+\section{Passi futuri}
 
 Visti i risultati ottenuti è possibile pensare di espandere il sistema sviluppato
 anche ad altri progetti sia di IRSAP sia che IOTINGA ha per altri clienti.
@@ -1022,7 +1032,7 @@ anche ad altri progetti sia di IRSAP sia che IOTINGA ha per altri clienti.
 Di seguito vedremo alcuni esempi di progetti esistenti e futuri dove questa metodologia
 potrà essere applicata, e le relative sfide per implementarla.
 
-\subsubsection{Futuri radiatori elettrici}
+\subsection{Futuri radiatori elettrici}
 Riguardo il progetto radiatore elettrico visto fin ora stiamo realizzando una nuova
 revisione della scheda elettronica, pur mantenendo lo stesso microcontrollore e
 di conseguenza lo stesso firmware. Un primo obiettivo sarebbe quindi andare a testare
@@ -1032,7 +1042,7 @@ Infine a breve partirà lo sviluppo di un radiatore completamente nuovo, bastato
 microcontrollore Espressif, sul quale sarebbe interessante sviluppare un progetto
 simile a questo.
 
-\subsubsection{Test di gateway RF}
+\subsection{Test di gateway RF}
 
 Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``NOW'',
 ossia un sistema di controllo di impianti idraulici composto da teste termostatiche,
@@ -1056,7 +1066,7 @@ grosse (il sistema supporta fino a 25 zone e 48 dispositivi RF) in maniera tale 
 individuare bug nel firmware che altrimenti difficilmente emergerebbero. Infatti per
 questioni di tempo test del genere non vengono mai effettuati.
 
-\subsubsection{Test di un termostato OpenTherm}
+\subsection{Test di un termostato OpenTherm}
 
 In IOTINGA infine abbiamo altri progetti firmware più complessi su cui questa metodologia
 di test potrebbe essere applicata. Uno su tutti il progetto YAT (Yet Another Thermostat),
