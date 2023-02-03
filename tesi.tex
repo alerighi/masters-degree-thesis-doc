@@ -5,21 +5,13 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{frontespizio}
-\usepackage[acronym]{glossaries}
 \usepackage{listings}
 \usepackage[Lenny]{fncychap}
 
 \linespread{1.2}
 
 \usetikzlibrary{automata, positioning, arrows}
-\tikzset{->, >=stealth', node distance=5cm,  initial text=$ $}
-
-\newacronym{iot}{IoT}{Internet Of Things}
-\newacronym{label}{abbrv}{long}
-
-\title{Automazione di test di accettazione per dispositivi IoT embedded integrati nel cloud}
-\author{Alessandro Righi}
-\date{\today}
+\tikzset{->, >=stealth', node distance=5cm, initial text=$ $}
 
 \begin{document}
 \begin{frontespizio}
@@ -36,8 +28,6 @@
 \frontmatter
 
 \tableofcontents
-% \listoffigures
-% \listoftables
 
 \mainmatter
 
@@ -53,7 +43,7 @@ benessere domestico, quale ad esempio il controllo della temperatura
 ambientale, che è oggetto del mio lavoro in IOTINGA.
 
 IOTINGA s.r.l. nasce con lo scopo di aiutare altre aziende nel realizzare e
-commercializzare i disposiivi IoT. IOTINGA si distingue dagli altri
+commercializzare disposivi IoT. IOTINGA si distingue dagli altri
 concorrenti per un'attenzione particolare alla componente software,
 in tutte le sue sfaccettature, dall'interazione fisica con le perferiche
 hardware, alla gestione del dato mediante un'infrastruttura realizzata
@@ -76,8 +66,8 @@ radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscal
 
 All'interno di questa piattaforma si innesta il prodotto in esame,
 ovvero la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
-decine di prodotti, uno su tutti il ``Polygon''(figura \ref{polygon}), vincitore del
-``CES Best of Innovation 2022'' (figura \ref{ces}) nella categoria Home Appliances,
+decine di prodotti, uno su tutti il ``Polygon''(\autoref{fig:polygon}), vincitore del
+``CES Best of Innovation 2022'' (\autoref{fig:ces}) nella categoria Home Appliances,
 nonché di altri prestigiosi premi a livello internazionale, quali ``Red Dot Design'',
 ``German Design'', ``AIFA'' % TODO,
 grazie al suo design innovativo ed al suo contenuto tecnologico,
@@ -87,7 +77,7 @@ a cui noi di IOTINGA abbiamo contribuito.
     \centering
     \includegraphics[width=12cm]{img/polygon.jpeg}
     \caption{Polygon}
-    \label{polygon}
+    \label{fig:fig:polygon}
 \end{figure}
 
 ``Polygon'' è dotato internamente di elettronica in grado di connettersi mediante
@@ -102,7 +92,7 @@ e di integrazione all'interno dell'ecosistema cloud e della app.
     \centering
     \includegraphics[width=12cm]{img/ces.jpeg}
     \caption{IRSAP ed IOTINGA al CES 2022}
-    \label{ces}
+    \label{fig:fig:ces}
 \end{figure}
 
 \section{Motivazioni (diffcolta' testing IoT/cloud)}
@@ -432,7 +422,7 @@ Il dispositivo ad alto livello può trovarsi in 3 stati distinti:
         (online) edge[bend left, align=right, right] node{ripristino\\di fabbrica} (unbounded);
     \end{tikzpicture}
     \caption{Stati del radiatore}
-    \label{stati}
+    \label{fig:stati}
 \end{figure}
 
 Ad ogni stato del dispositivo corrisponde l'attivazione/disattivazione di uno o più
@@ -478,7 +468,7 @@ Il dispositivo ha diversi modi di funzionamento:
 \end{itemize}
 
 È possibile mediante interfaccia utente muoversi fra le varie modalità come dettagliato
-in figura \ref{modi}.
+in \autoref{fig:modi}.
 
 \begin{figure}[ht]
     \centering
@@ -491,18 +481,18 @@ in figura \ref{modi}.
             (manuale-tempo) edge[bend left, above] node{modifica set-point} (manuale);
     \end{tikzpicture}
     \caption{Modi del radiatore}
-    \label{modi}
+    \label{fig:modi}
 \end{figure}
 
 \subsection{Comunicazione cloud}
 
 La componente cloud è implementata su AWS. La connessione avviene grazie al protocollo
-MQTT usando il servizio broker di AWS IoT Core.
+MQTT usando il servizio broker di AWS, IoT Core.
 
 La connessione è cifrata mediante TLS ed autenticata mediante certificato TLS client
 specifico per il singolo dispositivo, generato e programmato nel dispositivo in fase
 di produzione della scheda elettronica da una CA intermedia a sua volta firmata dalla
-CA root di AWS come in figura \ref{tls-chain}.
+CA root di AWS come in \autoref{fig:tls-chain}.
 
 \begin{figure}[ht]
     \centering
@@ -514,7 +504,7 @@ CA root di AWS come in figura \ref{tls-chain}.
             (intermedia) edge[above] node{firma} (dispositivo);
     \end{tikzpicture}
     \caption{Catena TLS}
-    \label{tls-chain}
+    \label{fig:tls-chain}
 \end{figure}
 
 Per quanto concerne il protocollo di comunicazione in origine abbiamo valutato il
@@ -551,7 +541,7 @@ Device Shadowing, per tanto identifichiamo come:
 \end{itemize}
 
 Il protocollo è quindi stateless, e consente di effettuare 4 messaggi, più relative risposte,
-(come visibile in figura \ref{comunicazione_cloud}):
+(come visibile in \autoref{fig:comunicazione_cloud}):
 
 \begin{itemize}
     \item \textit{get}: disponibile fra dispositivo e cloud, consente la richiesta dello stato \textit{desired} corrente
@@ -581,7 +571,7 @@ stato della richiesta sullo stesso topic con aggiunto un suffisso:
             (cloud) edge[bend left=40, below] node{\textit{desired-update}} (dispositivo);
     \end{tikzpicture}
     \caption{Schema di comunicazione dispositivo/cloud}
-    \label{comunicazione_cloud}
+    \label{fig:comunicazione_cloud}
 \end{figure}
 
 Il client può identificare a quale richiesta fa riferimento ad una risposta attraverso un
@@ -753,7 +743,7 @@ e mette già a disposizione la possibilità di emulare un hardware con il softwa
 \section{Implementazione hardware}
 
 Come già detto in precedenza ho scelto di interfacciarmi direttamente con un kit
-di sviluppo del microcontrollore scelto, come si può vedere in figura \ref{quadretto}.
+di sviluppo del microcontrollore scelto, come si può vedere in \autoref{fig:quadretto}.
 
 Il kit di sviluppo mette a disposizione tutti i pin connessi al microcontrollore
 su comodi pin header. Integra inoltre un convertitore UART (seriale) - USB per
@@ -779,7 +769,7 @@ avere tutto quanto server per il testing del dispositivo in un'unico comodo disp
 \begin{figure}
 %% TODO: Inserire immagine quadretto realizzato
     \caption{Hardware di test realizzato}
-    \label{quadretto}
+    \label{fig:quadretto}
 \end{figure}
 
 \section{Implementazione software}
@@ -1106,14 +1096,14 @@ numero di scenari da validare cresce rapidamente ad ogni prodotto nuovo creato.
 Sempre il cliente IRSAP infine dispone di un altro progetto nell'ecosistema ``IRSAP NOW'',
 ossia un sistema di controllo di impianti idraulici composto da teste termostatiche,
 termostati ambiente ed un modulo di interfacciamento verso la caldaia. Tutti questi
-dispositivi\ref{dispositivi_now} comunicano con una unità centrlae di controllo
+dispositivi (\autoref{fig:dispositivi_now}) comunicano con una unità centrlae di controllo
 (CU), che è il cuore del sistema, tramite un protocollo RF a 868MHz.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=11cm]{img/now.jpeg}
     \caption{Sistema IRSAP NOW per impianti idraulici}
-    \label{dispositivi_now}
+    \label{fig:dispositivi_now}
 \end{figure}
 
 Una delle difficoltà attuali è l'impossibilità di andare a testare in maniera isolata i
@@ -1156,7 +1146,5 @@ il funzionamento di un singolo esemplare andando a simulare gli altri dispositiv
 che compongono la rete, oltre che simulare l'interazione con la caldaia OpenTherm
 (esiste già uno strumento di test ufficiale prodotto dal consorzio che si potrebbe
 integrare).
-
-
 
 \end{document}
