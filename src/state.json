@@ -1,0 +1,70 @@
+{
+    "timestamp": 12345678, // orario corrente
+    "version": 1, // versione (descritta sopra)
+    "connected": 1, // 1 se il dispositivo è online, altrimenti 0
+    "firmwareVersion": [0, 6], // versione firmware (major, minor)
+    "hardwareVersion": 1, // versione hardware
+    "macAddress": [32, 10, 13, 161, 0, 1], // MAC address (ID dispositivo)
+    "systemStatus": 0,    // stato del Sistema (bitmask)
+    "filPiloteStatus": 0, // stato ingress Fil Pilote
+    "alarm": 0,           // allarmi (bitmask)
+    "heatingStatus": 0,   // stato riscaldamento (bitmask)
+    "rssi": 0,            // Potenza Wi-Fi
+    "noise": 0,           // Rumore Wi-Fi
+    "currentSetPoint": 200, // set point corrente (in decimi di grado)
+    "currentSetPointEnd": 4294967295, // scadenza set-point corrente
+    "vocValue": 0,  // valore VOC (qualità dell’aria)
+    "co2Value": 0,  // valore CO2 (qualità dell’aria)
+    "temperature": 220, // temperature ambiente (in decimi di grado)
+    "setPointOff": 50,  // set point di OFF (in decimi di grado)
+    "setPointEco": 80,  // set point di ECO (in decimi di grado)
+    "manualSetPoint": 100, // set point manual (in decimi di grado)
+    "temporaryManualSetPoint": 100, // set point manual temporaneo (in decimi di grado)
+    "temporaryManualEnd": 0, // fine manuale temporaneo (timestamp)
+    "hysteresis": 0, // isteresi (+/- decimi di grado)
+    "temperatureSensorOffset": 0, // correzione sensore di temperature (in decimi di grado)
+    "loadTemperature": 0, // temperature carico (in decimi di grado)
+    "loadOnSeconds": 0, // cumulativo in secondi di accensione del carico
+    "holidayStart": 0,  // timestamp inizio vacanza
+    "holidayEnd": 0,    // timestamp fine vacanza
+    "metricInterval": 10, // intervallo invio metriche periodiche
+    "systemId": "7fccd29c-56b6-481c-ac95-aba7eebafe2d", // ID impianto
+    "timezone": 60, // offset timezone rispetto ad orario UTC
+    "systemConfiguration": 0, // configurazione di sistema (bitmask)
+    "ipAddress": "192.168.1.1", // indirizzo IP Wi-Fi
+    "openWindowOffTime": 120, // tempo di spegnimento in caso rilevamento finestra aperta
+    "ledH": 65535, // colore LED hue (HSV)
+    "ledS": 255,   // colore LED saturation (HSV)
+    "ledV": 255,   // colore LED value (HSV)
+    "schedule": [  // programmazione riscaldamento
+      { // programmazione lunedì
+        "s0sp": 0, // set point fascia 0
+        "s1st": 0, // inizio fascia 1 (minuti da mezzanotte)
+        "s1sp": 0, // set point fascia 1
+        // …
+        "s7st": 0, // inizio fascia 7
+        "s7sp": 0  // set point fascia 7
+      },
+      // … ripetere per altri 6 giorni
+      }
+    ],
+    "ledSchedule": [
+      // programmazione LED (stesso formato di prima)
+    ],
+    "ledEnabled": 1, // LED ambiente on/off
+    "ledMode": 1, // modalità led ambiente (manuale/programmato)
+    "ledColor": [],// preset colori LED ambiente per uso in fasce orarie
+    "temporaryManualLedSetPoint": 0, // set point LED manuale a tempo
+    "temporaryManualLedSetPointEnd": 100, // fine manuale a tempo LED
+    "estimatedTemperature": 100, // temperatura ambiente (scritta da cloud per uso con altri sensori)
+    "externalTemperature": 200, // umidità esterna (scritta da cloud)
+    "estimatedHumidity": 99, // umidità ambiente (scritta da cloud)
+    "externalHumidity": 100, // umidità esterna (scritta da cloud)
+    "currentLedSetPoint": 56, // set point LED corrente
+    "currentLedSetPointEnd": 0, // fine fascia oraria LED corrente
+    "cartridgePowerWatts": 108, // potenza della cartuccia
+    "cumulatedConsumptionWattHour": 145, // consumo cumulato in tutta la vita del radiatore
+    "cumulatedConsumptionWattHourSnapshotValue": 100, // valore all’ultimo snapshot di constumo
+    "cumulatedConsumptionWattHourSnapshotTime": 10, // consumo all’ultimo snapshot
+    "modelName": "xyzTT" // nome modello del radiatore
+  }
