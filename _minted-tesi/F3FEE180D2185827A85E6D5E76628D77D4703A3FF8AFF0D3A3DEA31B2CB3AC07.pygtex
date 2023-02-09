@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{test\PYGZus{}thermoregulation}\PYG{p}{(}\PYG{n}{ctx}\PYG{p}{:} \PYG{n}{Context}\PYG{p}{):}
+    \PYG{k}{pass}
+\end{Verbatim}
