@@ -8,10 +8,11 @@
 \usepackage{listings}
 \usepackage[Lenny]{fncychap}
 \usepackage{longtable}
+\usepackage{minted}
 
 \linespread{1.2}
 
-\usetikzlibrary{automata, positioning, arrows}
+\usetikzlibrary{automata, positioning, arrows, shapes}
 \tikzset{->, >=stealth', node distance=5cm, initial text=$ $}
 
 \lstdefinestyle{custompy}{
@@ -79,7 +80,13 @@ radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscal
 \section{Il progetto IRSAP radiatore elettrico}
 
 All'interno di questa piattaforma si innesta il prodotto in esame,
-ovvero la gamma di radiatori elettrici connessi IRSAP. Il catalogo si compone di
+ovvero la gamma di radiatori elettrici connessi IRSAP. 
+
+Questi dispositivi sono dei corpi scaldanti del tutto simili ai normali radiatori 
+idraulici in cui il riscaldamento viene però fornito da una resistenza elettrica 
+alimentata dalla rete. 
+
+Il catalogo si compone di 
 decine di prodotti, uno su tutti il ``Polygon''(\autoref{fig:polygon}), vincitore del
 ``CES Best of Innovation 2022'' (\autoref{fig:ces}) nella categoria Home Appliances,
 nonché di altri prestigiosi premi a livello internazionale, quali ``Red Dot Design'',
@@ -96,11 +103,16 @@ a cui noi di IOTINGA abbiamo contribuito.
 
 ``Polygon'' è dotato internamente di elettronica in grado di connettersi mediante
 Wi-Fi direttamente al cloud ``IRSAP NOW'', ed integra oltre alla funzione scaldante
-anche un'illuminazione ambientale LED colorati.
+anche un'illuminazione ambientale LED colorati per un'illuminazione ambientale.
+
+Al momento della scrittura di questo documento (Febbraio 2023) e ad un anno dal lancio 
+del prodotto sul mercato sono stati installati ed sono utilizzati attivamente dai clienti 
+circa 3000 radiatori elettrici smart IRSAP. 
 
 Mi sono occupato in prima persona dello sviluppo del firmware del dispositivo nella
 sua interezza, mentre alcuni colleghi hanno seguito la parte di progettazione hardware
-e di integrazione all'interno dell'ecosistema cloud e della app.
+(che comunque è stata affidata da un'azienda esterna) e di integrazione all'interno
+dell'ecosistema cloud e della app.
 
 \begin{figure}[ht]
     \centering
@@ -109,7 +121,7 @@ e di integrazione all'interno dell'ecosistema cloud e della app.
     \label{fig:ces}
 \end{figure}
 
-\section{Motivazioni (diffcolta' testing IoT/cloud)}
+\section{Necessità di test di un dispositivo IoT}
 
 La caratteristica fondamentale per questi prodotti è l'affidabilità.
 Infatti nessun utente installerebbe in casa propria un dispositivo che
@@ -187,7 +199,7 @@ su di un nuovo prodotto.
 
 \subsection{Prassi attuale testing}
 
-Allo stato attuale abbiamo 3 momenti di validazione:
+Allo stato attuale abbiamo 3 momenti di validazione di un rilascio:
 
 \begin{enumerate}
     \item test da parte dello sviluppatore
@@ -210,30 +222,32 @@ Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice
 quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
 provati.
 
-Questi test possono essere automatizzati facilmente mediante la creazione di unit-test.
+Questi test possono essere automatizzati facilmente mediante la creazione di unit-test, 
+che possono essere usati per validare sia le parti nuove che assicurarsi che non vi siano 
+regressioni che fanno smettere di funzionare quanto prima andava. 
 
 \subsection{Test di accettazione interna}
 
-Questi test sono effettuati prima di ogni rilascio di un nuovo artefatto verso il cliente.
+Questi test sono effettuati prima di ogni rilascio verso il cliente IRSAP.
 
-Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso critici,
-senza i quali il sistema non sarebbe utilizzabile.
+Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso
+definiti critici, senza i quali il prodotto non sarebbe utilizzabile.
 Solo se una versione del software passa tutti questi test può essere consegnata al cliente.
 
 Essi si pongono dal punto di vista dell'utente finale, pertanto sono effettuati su un
 hardware completo, isolato però dal resto del sistema, ovvero dalla componente cloud
-e dall'applicazione mobile. Questo per evitare che vi sia il dubbio che il bug sia
+e dall'applicazione mobile. Questo per evitare che ci sia il dubbio che il bug sia
 nel cloud o nella app anziché nel dispositivo stesso.
 
-Attualmente vengono effettuati seguendo un documento contenente una serie di passi, ognuno
-idicante:
+Attualmente vengono effettuati seguendo un documento contenente una serie di scenari da testare. 
+Ognuno di questi è diviso in passi, e per ognuno dei quali viene indicato:
 
 \begin{itemize}
-    \item azione: un'operazione da effettuare sul sistema mediante l'interazione fisica
-        con il dispositivo (pressione di pulsanti) oppure mediante cloud (tramite un'apposito
+    \item azione da compiere: un'operazione da effettuare sul sistema mediante l'interazione fisica
+        con il dispositivo (pressione di pulsanti) oppure mediante cloud (tramite un apposito
         strumento che consente di simulare i messaggi inviati dal cloud e dalla app)
-    \item risultato atteso: postcondizioni da verificare dopo aver effettuato l'azione, ad
-        esempio ``i led sono rossi'' oppure ``entro 5 secondi viene inviato al cloud un messaggio''.
+    \item risultato atteso: postcondizioni da verificare dopo aver effettuato l'azione, espresso in 
+        linguaggio non formale, ad esempio ``i led sono rossi'' oppure ``entro 5 secondi viene inviato al cloud un messaggio''.
         Nel caso la postcondizione sia verificata è possibile procedere al passo successivo, altrimenti
         il test viene interrotto con esito negativo, e deve essere segnalato ad uno sviluppatore il problema.
 \end{itemize}
@@ -262,61 +276,126 @@ al rilacio a produzione, e viene quindi installato in fabbrica su tutti i nuovi 
 prodotti, nonché viene lanciato un aggiornamento OTA su tutti i dispositivi già installati
 presso i clienti finali.
 
-\section{Possibilità di automatizzare il testing}
-
-Dopo questa panoramica sulle tre attuali fasi di test ci concentreremo sui test
-descritto al secondo punto, ovvero i test di acettazione fatti internamente a IOTINGA.
-
-La scelta è ricaduta su di essi in quanto:
-\begin{itemize}
-    \item i test svolti dal singolo sviluppatore sono a propria discrezione, e quantomeno
-        per la regressione sono facilmente automatizzabili in modi classici quali gli unit test
-    \item i test svolti da IRSAP sono fuori dal nostro controllo, in quanto il cliente
-        li svolge a propria discrezione
-\end{itemize}
+\section{Problemi aperti dell'approccio attuale di test di accettazione}
 
 L'approccio attuale, basato sul documento di test con fasi da seguire, presenta
 alcune problematiche:
 \begin{itemize}
     \item la procedura è ripetitiva, e questo può facilmente introdurre
         l'operatore che esegue i test a commettere errori, con dolo o meno
-    \item il fatto che la procedura è eseguita manulmente è un costo in termini di
-        tempo per l'azienda
-    \item il fatto che sia un costo porta la procedura ad essere per forza di cose
-        limitata sia nel numero di scenari che sono effettivamente testati sia nel
-        numero di build testate (il che limita il numero di rilasci che vengono
-        fatti verso il cliente finale, preferendo di accorpare più modifiche in un
-        singolo rilascio per effettuare un solo ciclo di test)
+    \item l'esecuzione dei test porta via tempo, che altrimenti potrebbe essere dedicato 
+        a svolgere altre mansioni
+    \item i test sono scritti in linguaggio naturale, non formale, e questo lascia spazio 
+        a libera interpretazione dalla persona che esegue i test
+    \item il fatto che sia un costo eseguire la procedura fa sì che questa sia
+        limitata nel numero di scenari che sono effettivamente testati
+    \item per quanto detto al punto precedente il numero di build effettivamente testate 
+        è un sottoinsieme di quelle che vengono effettivamente effettuate, il che significa che 
+        i rilasci verso il cliente avvengono con meno frequenza, e si tende ad accorpare 
+        più funzionalità in maniera tale da effettuare un unico ciclo di test. 
 \end{itemize}
 
-Vediamo quindi che automatizzare questa parte con un meccanismo di testing automatico
-può essere un risultato interessante per gli scopi dell'azienda, in grado di far
-risparmiare del tempo, sia perché i test non sono più svolti manualmente, sia perché
-testando più scenari si riduce la probabilità che un bug sfugga e finisca nelle mani
-del cliente finale. Inoltre questo ultimo punto evita anche danni all'immagine dell'azienda
-causati dal rilascio di un software che presenta non conformità.
+A questo si aggiunge il fatto che man mano che i prodotti vengono venduti il cliente ci 
+chiede sempre più test ad ogni release, in quanto un potenziale bug va ad impattare un numero 
+sempre maggiore di utenti (e quindi il danno potenziale per il produttore è sempre più grande). 
 
-\chapter{Related work}
-\section{Tool commerciali/open-source}
+Viene quindi da chiedersi se, vista la ripetitività e schematicità di queste operazioni,
+sia possibile farle eseguire ad un computer, senza perdite di generalità rispetto all'esecuzione 
+manuale.
 
-%% TODO: here
+\section{Requisiti di un sistema di esecuzione di test di accettazione automatici}
+
+Abbiamo quindi stabilito i seguenti requisiti per un sistema di automatizzazione dei test di 
+accettazione:
+
+\begin{itemize}
+    \item il sistema deve testare esattamente il binario che poi viene rilasciato agli utenti finali. 
+        Questo perché ogni alterazione, come potrebbe essere una ricompilazione del codice, può andare 
+        ad aggiungere errori e quindi invalidare i test effettuati
+    \item l'ambiente di esecuzione (runtime environment) sul quale il test viene eseguito deve essere quanto 
+        più vicino possibile all'ambiente reale. Idealmente il test viene effettuato sullo stesso hardware, 
+        di modo da divanare ogni possibile dubbio che il firmware una volta installato sull'hardware abbia 
+        comportamenti differenti
+    \item l'ambiente deve poter eseguire il firmware in differenti configurazioni di hardware che esso supporta
+        (attualmente supporta due tipologie di hardware, e ne verranno aggiunte altrettante due a breve)
+    \item il sistema deve avere abbastanza flessibilità per poter validare almeno le funzionalità che oggi 
+        sono teste manualmente
+    \item deve essere sufficientemente semplice andare ad aggiungere nuovi scenari e configurazioni da provare al sistema
+    \item deve essere possibile integrare lo strumento all'interno del flusso di CI/CD attualmente in 
+        uso in azienda, di modo che ogni release del firmware prodotta venga testata senza necessità di 
+        un intervento manuale
+\end{itemize}
+
+\chapter{Lavori correlati}
+
+Vediamo ora cosa è disponibile in commercio per fare quanto descrito al capitolo precedente. 
+
+\section{Strumenti di unit test}
+
+Una prima soluzione è quella di utilizzare gli strumenti di 
+unit-test anche per effettuare i test di accettazione. 
+È possibile infatti andare ad effettuare il mock di tutte le interfacce utilizzate dall'SDK
+al fine di poter eseguire singoli test-case all'interno del binario. 
+
+Questa soluzione presenta il vantaggio di poter testare in maniera veloce ed agevole 
+ogni nuova release del firmware, ma al contempo presenta alcuni svantaggi che la rendono
+inadatta allo scopo di approvare un nuovo firmware per la produzione. 
+
+Il problema principale è che viene testato il codice facendolo girare in un ambiente simulato,
+che per quanto simile all'ambiente reale non sarà mai completamente uguale. Soprattutto 
+quando ci si interfaccia con periferiche complesse, come il Wi-Fi, è fondamentale che 
+l'ambiente sul quale vengono eseguiti i test sia quanto più uguale possibile al runtime effettivo. 
+
+In questo caso la soluzione migliore è effettuare i test facendo eseguire il firmware direttamente 
+all'hardware sul quale dovrà girare. 
+
+\section{Strumenti commerciali di test elettronici}
+
+In commercio esistono vari strumenti che consentono di testare un dispositivo elettronico andando 
+a comandare i vari input/output con i quali si interfaccia verso il mondo esterno. 
+
+Uno di questi software è TestStand della National Instrument\footnote{https://www.ni.com/it-it/shop/software/products/teststand.html}. 
+Questo software è infatti pensato per l'interfacciamento con apparecchiature di misura prodotte 
+dalla medesima azienda, quali ad esempio oscilloscopi, multimetri da banco, generatori di frequenza, ecc. 
+e consente di automatizzare le operazioni di test e misura. 
+
+Come questo esistono altri software, principalmente proprietari e sviluppati internamente dalle singole 
+aziende elettroniche, che svolgono la medesima funziona. Questi software tipicamente si interfacciano 
+con la scheda hardware attraverso una fixture, composta da un letto di aghi conduttivi che vanno a 
+fare contatto con dei test-point sulla scheda da testare. 
+
+Questi sistemi possono benissimo essere utilizzati anche per testare il firwmare. Tuttavia non è 
+il loro scopo primario, essendo pensati per identificare in primo luogo diffetti nella produzione 
+fisica delle schede. In particolare non offrono routine per testare componenti complesse come Wi-Fi o comunicazione con il 
+cloud, ma si limitano a fare verifiche fra gli input e gli output. 
+
+Inoltre l'hardware di questi dispositivi è molto costoso, essendo pensato per effettuare misurazioni 
+precise a livello fisico, cosa che è fondamentale per identificare diffetti sull'hardware, ma lo è 
+meno per testare la release del firwmare (dove si assume che l'hardware sul quale viene lanciato il test 
+sia correttamente funzionante). 
+
+\section{Conclusioni}
+
+In generale abbiamo visto che il software che rispondeva ai nsotri requisiti non esisteva già sul mercato, 
+sia come software commerciale che come software open-source. 
 
 \chapter{Approccio}
 
-Prima di descrivere come si è scelto di implementare l'automatizzazione della fase
-di validazione del software è necessario fare un breve excursus per descrivere nei
-dettagli il sistema che vogliamo testare.
+Prima di descrivere l'implementazione è necessario fare un passo indietro ed andare 
+ad analizzare con più attenzione il dispositivo radiatore elettrico preso in esame. 
 
 \section{Caratteristiche hardware}
 
-Il radiatore elettrico contiene al suo interno una scheda elettronica, che viene
-attualmente prodotta in due modelli differenti:
+Tutta la linea di radiatori elettrici smart IRSAP (che attualmente si compone di 17 prodotti distinti,
+in continua espansione) utilizza al suo interno la stessa elettronica, che attualmente viene 
+prodotta in due varianti:
+
 \begin{itemize}
-    \item \textit{luxury}: è la versione più basilare che consente di gestire le
-        funzionalità base del radiatore, ossia la regolazione della temperatura ambiente
-    \item \textit{design}: è la versione riservata ai prodotti di alta gamma. Offre, in
-        aggiunta a tutto quanto offerto dalla \textit{luxury}, un sensore di qualità
-        dell'aria (in grado di rilevare i valori di VOC e CO2) e la possibilità di
+    \item \textit{luxury}: è la versione più basilare, che viene utilizzata sulla linea di 
+        radiatori da bagno (gli scaldasalviette). 
+    \item \textit{design}: è la versione riservata ai prodotti design. È la versione più completa, 
+        ed offre, in aggiunta a tutto quanto offerto dalla \textit{luxury}, un sensore di qualità
+        dell'aria (in grado di rilevare i valori di VOC e CO\textsubscript{2}) e la possibilità di
         controllare una striscia LED RGBW, utilizzata in alcuni radiatori per questioni
         di illuminazione estatica.
 \end{itemize}
@@ -358,9 +437,9 @@ in fase di collaudo, e di conseguenza configura le periferiche del microcontroll
 Tuttavia per essere esaustivi è necessario svolgere i test di accettazione su entrambe
 le versioni di scheda elettronica, in quanto possono esservi comportamenti differenti.
 
-\subsection{Modulo Wi-Fi}
+\subsection{Modulo Telit}
 
-Come cuore del sistema abbiamo il modulo GS2200M. Questo microcontrollore inizialmente
+Come cuore del sistema abbiamo il GS2200M. Questo microcontrollore inizialmente
 prototto da Gainspan, successivamente acquisita da Telit, presenta le seguenti
 caratteristiche hardware:
 
@@ -437,7 +516,7 @@ difficoltoso lo sviluppo.
 
 \section{Caratteristiche software}
 
-Il firmware è essenzialmente suddiviso in moduli (task):
+Il firmware è suddiviso in moduli (task):
 
 \begin{itemize}
     \item \textit{core}, si occupa della gestione della macchina a stati principale
@@ -552,17 +631,17 @@ La componente cloud è implementata su AWS. La connessione avviene grazie al pro
 MQTT usando il servizio broker di AWS, IoT Core.
 
 \subsubsection{Autenticazione}
-La connessione è cifrata mediante TLS ed autenticata mediante certificato TLS client
-specifico per il singolo dispositivo, generato e programmato nel dispositivo in fase
-di produzione della scheda elettronica da una CA intermedia a sua volta firmata dalla
-CA root di AWS come in \autoref{fig:tls-chain}.
+La connessione è cifrata mediante TLS 1.2 ed autenticata mediante certificato del client. 
+
+Tale certificato è generato per ogni singolo dispositivo durante le fasi di produzione, 
+e viene firmato da una CA intermedia del produttore hardware, come nel seguente schema: 
 
 \begin{figure}[ht]
     \centering
     \begin{tikzpicture}
-        \node[rectangle, draw, minimum height=1cm] (root) {root CA AWS};
-        \node[rectangle, draw, right of=root, align=center, minimum height=1cm] (intermedia) {CA intermedia\\ produttore};
-        \node[rectangle, draw, right of=intermedia, minimum height=1cm] (dispositivo) {certificato dispositivo};
+        \node[rectangle, draw, align=center, inner sep=8pt] (root) {root CA \\AWS};
+        \node[rectangle, draw, right of=root, align=center, inner sep=8pt] (intermedia) {CA intermedia\\ produttore};
+        \node[rectangle, draw, right of=intermedia, align=center, inner sep=8pt] (dispositivo) {certificato TLS\\ dispositivo};
         \draw (root) edge[above] node{firma} (intermedia)
             (intermedia) edge[above] node{firma} (dispositivo);
     \end{tikzpicture}
@@ -570,10 +649,32 @@ CA root di AWS come in \autoref{fig:tls-chain}.
     \label{fig:tls-chain}
 \end{figure}
 
+La CA autority intermedia è generata e firmata dalla CA generale di AWS IoT Core. In questo 
+modo è possibile generare in fase di programmazione offline un certificato per ogni 
+dispositivo che deve essere prodotto. Alla prima connessione del dispositivo al cloud questo 
+automaticamente si registrerà all'interno di IoT Core senza ulteriori necessità di interventi manuali. 
+
+IoT Core permette di associare ad ogni certificato una policy, che può andare a garantire al 
+client dei permissi per quanto riguarda MQTT:
+\begin{itemize}
+    \item \textit{connect}: autorizza il client a connettersi ad IoT Core utilizzando un particolare 
+        \textit{clientId}
+    \item \textit{publish}: consente al cilent di pubblicare su determinati topic MQTT
+    \item \textit{subscribe}: consente al dispositivo di effettuare una subscription su determinati topic 
+        al fine di ricevere aggiornamenti in tempo reale dal cloud
+\end{itemize}
+
+La policy predefinita restringe i permessi ai soli topic dedicati per il client con il determinato certificato 
+che si connette al cloud. Per fare questo all'interno del topic viene inserito il seriale dello specifico 
+dispositivo, che è lo stesso contenuto all'interno del certificato. 
+
 \subsubsection{Protocollo stateless di comunicazione}
-Per quanto concerne il protocollo di comunicazione in origine abbiamo valutato il
-protocollo Device Shadowing\footnote{\url{https://docs.aws.amazon.com/it\_it/iot/latest/developerguide/iot-device-shadows.html}} supportato nativamente da AWS IoT Core. Tuttavia, tale
-protocollo aveva delle limitazioni che non ne consentivano l'utilizzo nella nostra
+
+Per quanto concerne il protocollo di comunicazione in origine abbiamo valutato inizialmente 
+l'uso del protocollo Device Shadowing\footnote{\url{https://docs.aws.amazon.com/it\_it/iot/latest/developerguide/iot-device-shadows.html}} 
+supportato nativamente da AWS IoT Core. 
+
+Tuttavia, tale protocollo aveva delle limitazioni che non ne consentivano l'utilizzo nella nostra
 applicazione, in particolare:
 
 \begin{itemize}
@@ -592,7 +693,8 @@ Per tutte queste ragioni abbiamo scelto di adottare un protocollo binario propri
 tramite il quale andiamo a trasferire stati completi del dispositivo.
 
 Abbiamo deciso di mantenere comunque i concetti di alto livello dati dal protocollo AWS
-Device Shadowing, per tanto identifichiamo come:
+Device Shadowing, in particolare la nomenclatura \textit{shadow} per indicare uno stato del 
+dispositivo, che è suddiviso in:
 \begin{itemize}
     \item \textit{state desired} come lo stato in cui si vuole portare il dispositivo, ovvero le
         impostazioni che l'utente può modificare agendo dalla app, quali ad esempio la modalità di funzionamento,
@@ -620,8 +722,9 @@ Il tipo di messaggio dipende dal topic MQTT sul quale i pacchetti sono pubblicat
 un messaggio pubblicato dal dispositivo verso il server il server risponde in base allo
 stato della richiesta sullo stesso topic con aggiunto un suffisso:
 \begin{itemize}
-    \item /accepted: la richiesta è stata accettate
-    \item /rejected: la richiesta è stata respinta dal server
+    \item \texttt{/accepted}: la richiesta è stata accettata dal server
+    \item \texttt{/rejected}: la richiesta è stata respinta dal server in quanto è 
+        avvenuto un errore
 \end{itemize}
 
 \begin{figure}[ht]
@@ -644,23 +747,18 @@ ad ogni risposta che invia al client.
 
 \subsubsection{Formato messaggi cloud}
 
-Di base ogni messaggio prevede un header fisso che include i seguenti campi:
+Ogni messaggio su cloud include un header fisso, che comprende i seguenti campi
 
 \begin{center}
 \begin{longtable}{| p{5cm} | c | p{8cm} |}
     \hline
-    \textbf{campo} & \textbf{tipo} & \textbf{descrizione} \\
-    \hline
-    timestamp & u32 & timestamp di invio del messaggio \\
-    \hline
-    clientToken & u32 & stringa random scelta dal client \\
-    \hline
-    version & u32 & versione del messaggio \\
-    \hline
-    length & u16 & lunghezza totale del messaggio (header incluso) \\
-    \hline
-    type & u8 & tipo di messaggio, identifica il payload presente \\
-    \hline
+    \textbf{campo} & \textbf{tipo} & \textbf{descrizione} \\ \hline
+    timestamp & u32 & timestamp di invio del messaggio \\ \hline
+    clientToken & u32 & un ID della richiesta che il client aggiunge ad ogni messaggio
+        per poter correlare le risposte alle richieste effettuate \\ \hline
+    version & u32 & versione del messaggio \\\hline
+    length & u16 & lunghezza totale del messaggio (header incluso) \\ \hline
+    type & u8 & tipo di messaggio, identifica il payload presente \\ \hline
 \end{longtable}
 \end{center}
 
@@ -893,7 +991,8 @@ Il raspberry dispone inoltre di un'interfaccia Wi-Fi a 2.4Ghz che consente quind
 avere tutto quanto server per il testing del dispositivo in un'unico comodo dispositivo.
 
 \begin{figure}
-%% TODO: Inserire immagine quadretto realizzato
+    \centering
+    \includegraphics[width=\textwidth]{img/devkit.png}
     \caption{Hardware di test realizzato}
     \label{fig:quadretto}
 \end{figure}
@@ -954,42 +1053,83 @@ radiatore.
 
 \subsection{Interfacciamento con il cloud}
 
-In quanto il dispositivo si collega al cooud di AWS IoT mediante autenticazione
-TLS con certificato client non è semplice far sì che si possa collegare ad altri
-broker MQTT.
+Come visto in precedenza il dispositivo si collega al cloud AWS IoT Core mediante 
+autenticazione con certificato client. Essendo il meccanismo di autenticazione con il 
+server oggetto stesso del test, ed essendo che il broker AWS IoT Core non è installabile 
+su un normale computer essendo una componente proprietaria, è impossibile testare il 
+dispositivo facendolo collegare ad un MQTT broker differente (come può essere mosquitto). 
 
-Pertanto la cosa più semplice per effettuare il test è utilizzare proprio il broker
-AWS, isolando però la comunicazione del broker con il resto del sistema per il dispositivo
-sotto test.
+Inoltre IoT Core mette a disposizine alcune funzionalità che non sono disponibili in 
+altri broker. In particolare la funzionalità dei job, ossia dei processi batch che è 
+possibile schedulare e fare eseguire ai dispositivi, che consentono di distribuire l'esecuzione 
+di operazioni. Noi utilizziamo principalmente i job per la distribuzione degli aggiornamenti OTA,
+ma anche per altre operazioni di servizio (come l'aggiornamento di alcuni dati statistici). 
 
-A questo punto è semplice fare collegare il software di test ad IoT Core mediante
-la libreria ufficiale di AWS, \textit{awsiotsdk}. Per quanto riguarda la gestione
-dei job, che vengono usati principalmente per gli aggiornamenti OTA, si può utilizzare
-la libreria \textit{boto3}.
+Per questo motivo la cosa più semplice è utilizzare IoT Core stesso, ma isolare il collegamento 
+fra il broker ed il resto del sistema per il dispositivo sotto test. Il che si traduce nel 
+fatto che le regole che azionerebbero il resto del sistema ad un evento di pubblicazione 
+sui topic usati dal cloud sono disabilitate per il seriale del dispositivo in test. 
 
-Più complessa invece è la parte di implementazione di codifica/decodifica del protocollo
-binario custom. Per fare ciò ho costruito un semplice encoder basandomi sul modulo
-nativo \textit{struct} di python, andando a definire il come è formata la struttura
-e quindi dei metodi per codificare e decodificare un messaggio da dizionario a binario,
-e viceersa, data la definizione del pacchetto.
+Il raspberry di test si interfaccia quindi con IoT Core come client MQTT che può 
+andare a pubblicare/sottoscriversi ai topic su cui il dispositivo comunica, come vediamo in \autoref{fig:cloud}. 
+Dato che il broker non ha un ruolo attivo nel sistema (si occupa solo di inoltrare i messaggi ma non 
+applica alcuna logica di protocollo) la sua presenza all'interno dello scenario di test non 
+è problematica, in quanto viene trattato come un qualsiasi dispositivo di infrastruttura 
+(come ad esempio può essere un router su internet). 
 
-La parte cloud fa quindi la connessione ad AWS IoT quando viene instanziata, utilizzando
-una connessione websockets così da poter usare un'API key per l'autenticazione (anziché
-essere costretti a generare dei certificati), quindi si sottoscrive ai topic per gli
-aggiornamenti di quel dispositivo, ed ad ogni messagio che viene ricevuto viene decodificato
-ed aggiunto ad una coda.
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \node[cloud, draw,cloud puffs=10,cloud puff arc=120, aspect=2, inner ysep=1em] (cloud) {AWS IoT};    
+        \node[below of=cloud, left of=cloud, node distance=3cm, rectangle, draw, inner sep=8pt] (dispositivo) {Radiatore elettrico};
+        \node[below of=cloud, right of=cloud, node distance=3cm, rectangle, draw, inner sep=8pt] (raspberry) {Raspberry Pi};
+        \draw (dispositivo) edge[bend left, left, align=center] node[left=0.5cm]{MQTT\\certificato} (cloud)
+            (raspberry) edge[bend right, right, align=center] node[right=0.5cm]{MQTT su Websocket\\autenticazione IAM} (cloud);
+    \end{tikzpicture}
+    \caption{interfacciamento fra raspberry e cloud}
+    \label{fig:cloud}
+\end{figure}
 
-Viene quindi fornito un metodo per inviare un messaggio, che viene codificato ed
-inviato sull'opportuno topic, e per ricevere un messaggio, che non fa altro che scodare
-l'ultimo messaggio ricevuto.
 
-%% TODO: schema comunicazione con il cloud
+A livello implementativo uso per collegare il software ad IoT Core
+la libreria ufficiale di AWS, \textit{awsiotsdk}. Questa libreria, a differenza dei 
+normali client MQTT, consente infatti di autenticarsi grazie a credenziali IAM, non 
+richiedendo quindi la generazione di certificati per il tool di test. 
+
+Il modulo cloud del sistema di test, oltre a gestire a basso livello la connessione 
+al server MQTT, aggiunge un layer di astrazione che automatizza la conversione fra 
+binario e oggetti Python, e vice versa, dei messaggi secondo il protocollo custom 
+implementato. 
+
+È fornito un metodo \texttt{publish(msg)} per inviare un messaggio, che viene codificato ed
+inviato sul topic opportuno (scelto in base al tipo di messaggio secondo la specifica 
+del protocollo). Ad ogni messaggio ricevuto sui topic a cui il dispositivo fa la 
+subscription viene decodificato e salvato in una coda. Viene fornito un metodo \texttt{receive(timeout)}
+per ricevere un messaggio, ossia scodare l'ultimo messaggio dalla coda, o attendere 
+fino ad un dato timeout che arrivi un messaggio dal dispositivo. 
+
+Per quanto converne la gestione degli AWS IoT Core Jobs, che come detto prima vengono 
+utilizzati per distribuire sui dispositivi operazioni batch da eseguire, viene 
+utilizzata la libreria ufficiale Python di AWS \textit{boto3}. Vengono fornite 
+3 interfacce:
+\begin{itemize}
+    \item \texttt{job\_create(document)}: che crea un job con il documento JSON specificato
+    \item \texttt{job\_state(job\_id)} che consente di verificare lo stato di un job con determinato id
+    \item \texttt{job\_delete(job\_id)} che consente di cancellare un job avviato (tipicamente 
+        questo viene effettuato alla fine del test per cancellare eventuali job pendenti che 
+        erano stati creati, evitando che vengano eseguiti alla prossima iterazione dei test). 
+\end{itemize}
 
 \subsection{Interfacciamento con il Wi-Fi}
 
-Il Wi-Fi del Raspberry può essere configurato dal test case in esecuzione per
-funzionare in due modalità:
+Il Wi-Fi del Raspberry deve asservire a due compiti:
+\begin{itemize}
+    \item collegarsi all'access point del radiatore per poter utilizzare l'API REST locale di configurazione
+    \item consentire al radiatore di collegarsi al cloud mediante Wi-Fi client
+\end{itemize}
 
+Pertanto, vengono supportate due modalità di funzionamento, che non possono essere 
+attive entrambe: 
 \begin{itemize}
     \item \textit{client}, in questo caso il Raspberry si collega all'interfaccia
         access-point del radiatore elettrico
@@ -997,6 +1137,13 @@ funzionare in due modalità:
         a cui il dispositivo radiatore elettrico si può connettere per raggiungere il
         cloud.
 \end{itemize}
+
+Il vincolo che non possano essere attive entrambe è una semplificazione che viene ma che 
+non riduce generalità, in quanto il radiatore in un momento può trovarsi a sua volta o in 
+modalità \textit{AP} o in modalità \textit{client}. Il Raspberry dovrà quindi in maniera 
+speculare andare ad attivare l'altra modalità. Facendo fede sul fatto che il Raspberry è 
+più veloce a cambiare modalità del radiatore (cosa vera in quanto il dispositivo per poter 
+cambiare modalità deve essere riavviato) la limitazione non toglie possibilità di test. 
 
 Per la modalità client è sufficiente configurare l'interfaccia di rete per connettersi
 al radiatore. La rete del radiatore ha un SSID ben definito, che viene caricato dal
@@ -1084,8 +1231,9 @@ Viene testata la capacità di abbinare mediante app il dispositivo ad un impiant
 Il dispositivo deve correttamente abbinarsi all’impianto ed inviare al cloud la versione
 del firmware corretta.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{7cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo in stato \textit{non abbinato} & \\
     \hline connettersi alla rete Wi-Fi del radiatore elettrico in test & la connessione ha successo. È possibile pingare il radiatore all'indirizzo 192.168.240.1 \\
@@ -1096,9 +1244,8 @@ del firmware corretta.
 \end{tabular}
 \end{center}
 
-Vediamo ora il codice di test di questo scenario:
-
-\lstinputlisting[language=Python,style=custompy]{src/test_pairing.py}
+\subsubsection{Implementazione}
+\inputminted[]{python3}{src/test_pairing.py}
 
 \subsection{Downgrade del firmware mediante API REST locale}
 Il dispositivo deve essere sempre aggiornabile mediante API REST locale quando questo
@@ -1106,8 +1253,9 @@ Il dispositivo deve essere sempre aggiornabile mediante API REST locale quando q
 installare sul dispositivo un firmware sicuramente funzionante, nonché il firmware
 possa essere aggiornato all’ultima versione fabbrica durante la procedura di collaudo.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo appena inizializzato alle impostazioni di fabbrica & il dispositivo si trova in stato \textit{non abbinato} \\
     \hline inviare al dispositivo una versione del firmware precedente a quella installata & il dispositivo entro 30 secondi si riavvia e presenta nel suo stato la versione firmware inviatagli \\
@@ -1115,33 +1263,43 @@ possa essere aggiornato all’ultima versione fabbrica durante la procedura di c
 \end{tabular}
 \end{center}
 
+\subsubsection{Implementazione}
+\inputminted[]{python3}{src/test_downgrade.py}
+
 \subsection{Aggiornamento di un dispositivo mediante OTA AWS}
 
 Un dispositivo abbinato ad una app e connesso ad internet deve poter ricevere gli
 aggiornamenti OTA mediante Job di AWS.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & \\
+    \hline portare un dispositivo in stato \textit{connesso} & i LED della pulsantiera sono spenti \\
     \hline inviare mediante AWS Job la versione firmware precedente & il job passa in stato \textit{in corso} sulla console di AWS. Entro un minuto il dispositivo si riavvia con il nuovo firmware ed il job passa in stato \textit{successo}. Su cloud è inviato un messaggio riportante la versione del firmware inviatagli. \\
     \hline
 \end{tabular}
 \end{center}
 
+\subsubsection{Implementazione}
+\inputminted{python3}{src/test_ota.py}
+
 \subsection{Ripristino di fabbrica di un dispositivo connesso}
 Deve essere sempre garantito che un dispositivo possa essere riportato alle impostazioni di fabbrica.
 
-Effettuare quindi la procedura hard-reset. Entro 5 secondi il dispositivo invia al cloud una richiesta “DELETE”, ricevuta la risposta “ACCEPTED” o comunque passato un timeout di 5 secondi si riavvia e torna in stato “UNBOUNDED”.
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & \\
+    \hline portare un dispositivo in stato \textit{connesso} & i LED della pulsantiera sono spenti \\
     \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i LED rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
     \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{DELETE} \\
     \hline
 \end{tabular}
 \end{center}
+
+\subsubsection{Implementazione}
+\inputminted{python3}{src/test_factory_reset.py}
 
 \subsection{Ripristino di fabbrica di un dispositivo disconnesso}
 
@@ -1149,30 +1307,37 @@ Deve essere possibile resettare un dispositivo anche quando questo non è connes
 alla rete, in quanto l'utente potrebbe volerlo riabbinare da app in quanto ha sostituito
 o cambiato la configurazione del proprio access-point Wi-Fi.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{disconnesso} & \\
+    \hline portare un dispositivo in stato \textit{disconnesso} & i LED della pulsantiera sono gialli \\
     \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i LED rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
     \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso \\
     \hline
 \end{tabular}
 \end{center}
 
+\subsubsection{Implementazione}
+\inputminted{python3}{src/test_factory_reset_unbounded.py}
 
 \subsection{Termoregolazione di base}
 
 Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente seguendo un set-point manuale.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
-    \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline prendere un radiatore abbinato in modo \textit{manuale} & \\
-    \hline incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i LED della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\
-    \hline decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i LED della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline
+    \textbf{azione} & \textbf{risultato atteso} \\ \hline
+    abbinare un radiatore e portarlo in modo funzionamento \textit{manuale} con set-point inferiore alla temperatura ambiente & il radiatore non è in riscaldamento \\ \hline
+    incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i LED della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\ \hline 
+    decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i LED della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\ \hline
 \end{tabular}
 \end{center}
+
+\subsubsection{Implementazione}
+\inputminted{python3}{src/test_thermoregulation.py}
 
 \subsection{Attivazione modalità stand-by mediante pulsantiera del radiatore}
 
@@ -1181,8 +1346,9 @@ Scopo di questo test è la verifica che la funzionalità di stand-by funzioni co
 modalità stand-by imponendo anche un limite massimo di consumo in questa modalità di 1W
 (e più di recente 0.5W).
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un radiatore dotato di LED RGBW \textit{connesso} ed in modo \textit{manuale} che sta chiamando e con i LED accesi & \\
     \hline tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore smette di riscaldare ed i LED RGBW si spengono \\
@@ -1192,13 +1358,17 @@ modalità stand-by imponendo anche un limite massimo di consumo in questa modali
 \end{tabular}
 \end{center}
 
+\subsubsection{Implementazione}
+\inputminted{python3}{src/test_standby.py}
+
 \subsection{Funzionamento disconnesso}
 
 Lo scopo di questo test è verificare che in assenza di connessione ad internet il
 dispositivo continui a funzionare per quanto previsto dalla modalità \textit{degradata}.
 
+\subsubsection{Caso di test}
 \begin{center}
-\begin{tabular}{| p{5cm} | p{5cm} |}
+\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo abbinato ad un impianto in modo \textit{programmato} spento & \\
     \hline spegnere l'access point Wi-Fi configurato nel dispositivo & \\
@@ -1208,7 +1378,21 @@ dispositivo continui a funzionare per quanto previsto dalla modalità \textit{de
 \end{tabular}
 \end{center}
 
-\section{tempi di esecuzione (confronto automatico/manuale)}
+\subsubsection{Implementazione}
+\inputminted{python3}{src/offline_working.py}
+
+\section{Tempi di esecuzione}
+
+Vediamo ora la differenza in termini di tempo fra l'esecuzione del test in maniera automatica 
+e l'esecuzione manuale:
+
+\begin{center}
+\begin{tabular}{| c | c | c |}
+    \hline
+    \textbf{test} & \textbf{manuale} & \textbf{automatico} \\ \hline
+    paring & ??min & ??min \\ \hline 
+\end{tabular}
+\end{center}
 
 \chapter{Comclusioni}
 

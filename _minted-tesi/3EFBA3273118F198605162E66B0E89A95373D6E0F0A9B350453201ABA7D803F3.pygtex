@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{test\PYGZus{}downgrade}\PYG{p}{(}\PYG{n}{ctx}\PYG{p}{:} \PYG{n}{Context}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} quando il dispositivo è resettato i LED devono essere rossi}
+    \PYG{k}{assert} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{io}\PYG{o}{.}\PYG{n}{get\PYGZus{}led\PYGZus{}color}\PYG{p}{()} \PYG{o}{==} \PYG{n}{LedColor}\PYG{o}{.}\PYG{n}{RED}
+
+    \PYG{c+c1}{\PYGZsh{} connette il Raspberry all\PYGZsq{}AP del radiatore elettrico}
+    \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{client\PYGZus{}connect}\PYG{p}{()}
+
+    \PYG{c+c1}{\PYGZsh{} invio aun aggiornamento firmware locale}
+    \PYG{n}{response} \PYG{o}{=} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{local\PYGZus{}send\PYGZus{}firmware\PYGZus{}update}\PYG{p}{(}\PYG{n}{ctx}\PYG{o}{.}\PYG{n}{config}\PYG{o}{.}\PYG{n}{prev\PYGZus{}firmware\PYGZus{}path}\PYG{p}{)}
+
+    \PYG{k}{assert} \PYG{n}{response} \PYG{o}{==} \PYG{l+m+mi}{200}
+
+    \PYG{c+c1}{\PYGZsh{} attendo che il dispositivo si riavvii}
+    \PYG{n}{sleep}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} mi ricollego al radiatore     }
+    \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{client\PYGZus{}connect}\PYG{p}{()}
+
+    \PYG{n}{response} \PYG{o}{=} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{local\PYGZus{}get\PYGZus{}status}\PYG{p}{()}
+
+    \PYG{c+c1}{\PYGZsh{} controllo che la versione firmware sia quella inviata}
+    \PYG{k}{assert} \PYG{n}{response}\PYG{o}{.}\PYG{n}{json}\PYG{p}{()[}\PYG{l+s+s1}{\PYGZsq{}system\PYGZsq{}}\PYG{p}{][}\PYG{l+s+s1}{\PYGZsq{}fwVer\PYGZsq{}}\PYG{p}{]} \PYG{o}{==} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{config}\PYG{o}{.}\PYG{n}{prev\PYGZus{}firmware\PYGZus{}version}
+
+\end{Verbatim}
