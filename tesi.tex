@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper,twoside,titlepage]{book}
 
+% inclusione librerie
 \usepackage[italian]{babel}
 \usepackage{hyperref}
 \usepackage{tikz}
@@ -9,13 +10,147 @@
 \usepackage{longtable}
 \usepackage{minted}
 \usepackage{pgf-umlsd}
+\usepackage[acronyms]{glossaries}
 
+% impostazione interlinea
 \linespread{1.2}
 
+% configurazione tikz
 \usetikzlibrary{automata, positioning, arrows, shapes}
 \tikzset{->, >=stealth', node distance=5cm, initial text=$ $}
 
+% necessario per far funzionare il pacchetto per glossari/acronimi
+\makeglossaries
+
+% acronimi
+\newacronym{iot}{IoT}{Internet of Things}
+\newacronym{aws}{AWS}{Amazon Web Services}
+\newacronym[\glslongpluralkey={Radiatori Elettrici}, \glsshortpluralkey=RE]{re}{RE}{Radiatore Elettrico}
+\newacronym{gpio}{GPIO}{General Purpose Input Output}
+\newacronym{adc}{ADC}{Analog to Digital Converter}
+\newacronym{mcu}{MCU}{Micro Controller Unit}
+\newacronym{uart}{UART}{Universal Asyncronous Receive and Transmit}
+\newacronym{tls}{TLS}{Transport Layer Security}
+\newacronym{usb}{USB}{Universal Serial Bus}
+\newacronym{rf}{RF}{Radio Frequency}
+\newacronym{ota}{OTA}{Over The Air update}
+\newacronym{hmi}{HMI}{Human Machine Interface}
+\newacronym{ble}{BLE}{Bluetooth Low Energy}
+\newacronym{http}{HTTP}{Hyper Text Transfer Protocol}
+\newacronym{spi}{SPI}{Serial Peripherial Interface}
+\newacronym{ci}{CI}{Continuos Integration}
+\newacronym{vmc}{VMC}{Ventilazione Meccanica Controllata}
+\newacronym{rgbw}{RGBW}{Red Green Blue White}
+\newacronym{ntc}{NTC}{Negative Temperature Coefficient}
+\newacronym{led}{LED}{Light Emitting Diode}
+\newacronym{rtos}{RTOS}{Real Time Operating System}
+\newacronym{rtc}{RTC}{Real Time Clock}
+\newacronym{ap}{AP}{Access Point}
+\newacronym{sta}{STA}{Station}
+\newacronym{pwm}{PWM}{Pulse Width Modulation}
+\newacronym{sdk}{SDK}{Software Development Kit}
+
+% glossario
+\newglossaryentry{mqtt}{
+    name=MQTT,
+    description={Protocollo di scambio di messaggi di tipo publish/subscribe pensato 
+        per l'utilizzo su dispositivi con scarse risorse hardware, quali ad esempio 
+        i dispositivi \acrshort{iot}}
+}
+
+\newglossaryentry{micro}{
+    name=microcontrollore,
+    description={Componente elettronico che integra in un unico chip processore, memoria
+        RAM, memoria flash, gestione delle periferiche di input/output. Tipicamente offre 
+        prestazioni molto limitate ma bassi costi e bassi consumi energetici}
+}
+
+\newglossaryentry{firmware}{
+    name=firmware,
+    description={La componente software che viene eseguita su un dispositivo embedded}
+}
+
+\newglossaryentry{wifi}{
+    name=Wi-Fi,
+    description={Protocollo radio che consente la comunicazione su rete TCP/IP senza cavi}
+}
+
+\newglossaryentry{gateway}{
+    name=gateway,
+    description={Dispositivo hardware che mette in comunicazione due reti di tipologie differenti,
+        ad esempio una rete TCP/IP e dispositivi \acrshort{rf}}
+}
+
+\newglossaryentry{cloud}{
+    name=cloud,
+    description={Insieme di tecnolgoie che permettono di archiviare ed elaborare i dati in rete, anziché 
+        su un dispositivo locale}
+}
+
+\newglossaryentry{serverless}{
+    name=serverless,
+    description={Modello di sviluppo \gls{cloud} che consente di creare ed eseguire 
+        applicazioni in rete senza doversi preoccupare della gestione dei server. Tipicamente il sistema 
+        scala in maniera automatica, andando a creare/eliminare risorse in base al carico del sistema}
+}
+
+\newglossaryentry{topic}{
+    name={topic MQTT},
+    description={Stringa testuale che identifica un canale di comunicazione sul quale un client \Gls{mqtt}
+        può inviare o ricevere messaggi}
+}
+
+\newglossaryentry{broker}{
+    name={broker MQTT},
+    description={Componente server del protocollo \Gls{mqtt} che si occupa di instradare i messaggi pubblicati 
+        dai client ad essi connessi ad altri client a seconda dei \gls{topic} ai quali si sono sottoscritti}
+}
+
+\newglossaryentry{awsjob}{
+    name={Job IoT Core},
+    description={Sistema di distribuzione di processi batch da eseguire sui dispositivi collegati ad \Gls{iotcore}. 
+        Ogni processo è idetnificato da un documento JSON, a libera scelta di chi lo crea, che il dispositivo interpreta 
+        per ottenere l'operazione da effettuare. Il dispositivo aggiorna lo stato di esecuzione del processo batch 
+        in AWS IoT Core, ed AWS IoT Core permette di settare delle logiche di distribuzione graduali del processo 
+        (ad esempio annulla se il job fallisce in più del 5\% dei dispositivi, ecc). }
+}
+
+\newglossaryentry{iotcore}{
+    name={IoT Core},
+    description={Servizio \gls{serverless} di \gls{broker} gestito da \Gls{aws}}
+}
+
+\newglossaryentry{git}{
+    name={Git},
+    description={Sistema di versionamento del codice sorgente gestito distribuito. Creato inizialmente da Linus 
+        Torvalds per l'uso in Linux, è ad oggi il sistema più utilizzato ed evoluto sul mercato}
+}
+
+\newglossaryentry{now}{
+    name={``IRSAP NOW''},
+    description={Piattaforma di termoregolazione cloud dell'azienda IRSAP s.p.a. Consente di gestire attraverso 
+        un'unica app iOS/Android tutti i dispositivi di termoregolazione connessi del catalogo IRSAP, quali 
+        radiatori elettrici, impianti idraulici e sistemi \acrshort{vmc}}
+}
+
+\newglossaryentry{i2c}{
+    name=i2c,
+    description={Protocollo di comunicazione seriale su due segnali elettrici (SDA ed SCL) per la comunicazione 
+        fra chip embedded, quali microcontrollori e sensori}
+}
+
+% macro
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\nameref*{#1} (\ref*{#1})}}
+
+% fine preambolo
+
 \begin{document}
+
+% inizio parte iniziale (numeri romani)
+% nota che deve essere prima del frontespizio per far funzionare correttamente i link!
+\frontmatter
+
+% pagina del titolo
 \begin{frontespizio}
     \Universita{Verona}
     \Dipartimento{Scienze e ingegneria}
@@ -27,11 +162,13 @@
     \Relatore{Mariano Ceccato}
 \end{frontespizio}
 
-\frontmatter
-
+% indice
 \tableofcontents
 
+% inizio documento principale (numerazione ordinaria)
 \mainmatter
+
+% inizio contenuto principale documento
 
 \chapter{Introduzione}
 
@@ -45,29 +182,29 @@ benessere domestico, quale ad esempio il controllo della temperatura
 ambientale, che è oggetto del mio lavoro in IOTINGA.
 
 IOTINGA s.r.l. nasce con lo scopo di aiutare altre aziende nel realizzare e
-commercializzare disposivi IoT. IOTINGA si distingue dagli altri
+commercializzare disposivi \Gls{iot}. IOTINGA si distingue dagli altri
 concorrenti per un'attenzione particolare alla componente software,
 in tutte le sue sfaccettature, dall'interazione fisica con le perferiche
 hardware, alla gestione del dato mediante un'infrastruttura realizzata
-con tecnologie cloud serverless, fino alla sua presentazione ai consumatori,
+con tecnologie \gls{cloud} \gls{serverless}, fino alla sua presentazione ai consumatori,
 mediante realizzazione di applicazioni Android/iOS.
 
 La mia esperienza in IOTINGA inizia nel Febbraio 2020. In questi 3 anni
 ho avuto l'occasione di vedere cresce l'azienda, e fornire il mio conributo
-nello sviluppo del progetto ``IRSAP NOW'', che ho avuto modo di seguire
+nello sviluppo del progetto \Gls{now}, che ho avuto modo di seguire
 in prima persona fin dalla sua fase embrionale.
 
 IRSAP NOW è l'ecosistema domotico che integra al proprio interno tutti
 i prodotti connessi di IRSAP s.p.a., una grande impresa rodigina leader
 nel settore del comfort termico. Storicamente produttrice di radiatori,
 inventrice del termoarredo, si distingue oggi per prodotti dal design altamente
-ricercato, non che dall'elevato contenuto tecnologico, quali impianti VMC,
-radiatori elettrici connessi, e sistemi di gestione remota di impianti di riscaldamento.
+ricercato, non che dall'elevato contenuto tecnologico, quali impianti di \Gls{vmc},
+\glspl{re} connessi, e sistemi di gestione remota di impianti di riscaldamento.
 
 \section{Il progetto IRSAP radiatore elettrico}
 
 All'interno di questa piattaforma si innesta il prodotto in esame,
-ovvero la gamma di radiatori elettrici connessi IRSAP.
+ovvero la gamma di \glspl{re} connessi IRSAP.
 
 Questi dispositivi sono dei corpi scaldanti del tutto simili ai normali radiatori
 idraulici in cui il riscaldamento viene però fornito da una resistenza elettrica
@@ -89,14 +226,14 @@ a cui noi di IOTINGA abbiamo contribuito.
 \end{figure}
 
 ``Polygon'' è dotato internamente di elettronica in grado di connettersi mediante
-Wi-Fi direttamente al cloud ``IRSAP NOW'', ed integra oltre alla funzione scaldante
-anche un'illuminazione ambientale LED colorati per un'illuminazione ambientale.
+Wi-Fi direttamente al cloud \Gls{now}, ed integra oltre alla funzione scaldante
+anche un'illuminazione ambientale \acrshort{led} colorati per un'illuminazione ambientale.
 
 Al momento della scrittura di questo documento (Febbraio 2023) e ad un anno dal lancio
 del prodotto sul mercato sono stati installati ed sono utilizzati attivamente dai clienti
 circa 3000 radiatori elettrici smart IRSAP.
 
-Mi sono occupato in prima persona dello sviluppo del firmware del dispositivo nella
+Mi sono occupato in prima persona dello sviluppo del \gls{firmware} del dispositivo nella
 sua interezza, mentre alcuni colleghi hanno seguito la parte di progettazione hardware
 (che comunque è stata affidata da un'azienda esterna) e di integrazione all'interno
 dell'ecosistema cloud e della app.
@@ -130,7 +267,7 @@ per l'azienda produttrice:
 \item quando il problema si verifica dal cliente è complicata la diagnostica. I clienti,
     e spesso anche gli installatori stessi, non hanno competenze tecniche o il
     tempo da dedicare nel supportare il produttore nella ricerca del problema
-\item se il problema non è risolvibile mediante un aggiornamento firmware è necessario
+\item se il problema non è risolvibile mediante un aggiornamento \gls{firmware} è necessario
     effettuare un reso, che ha dei costi molto elevati per il produttore, in quanto
     durante il trasporto molto spesso il prodotto viene danneggiato e quindi deve
     essere rimpiazzato con un nuovo
@@ -146,7 +283,7 @@ I prodotti della precedente generazione utilizzavano il software per una mera ge
 delle periferiche fisiche del prodotto, senza la necessità di interfacciarsi con sistemi
 terzi. Al contrario i prodotti della attuale per svolgere tutte le funzioni di
 integrazione cloud in maniera sicura richiedono un livello aggiuntivo di astrazione,
-ovvero quello di un RTOS (sistema operativo real-time).
+ovvero quello di un \Gls{rtos}.
 
 Anche l'hardware stesso è più evoluto, infatti si passa dalle piattorme ad 8 bit ai
 microcontrollori a 32, con funzionalità sempre più assimilabili a quelle di un sistema
@@ -154,7 +291,7 @@ general purpose, quali ad esempio una gestione di programmazione concorrente, un
 stack di rete TCP/IP, ed una gestione della memoria virtual con MMU.
 
 Un'altra differenza rispetto al passato è la possibilità di aggiornare il software dopo
-che il prodotto lascia la fabbrica, mediante aggiornamenti di tipo ``Over The Air'' (OTA).
+che il prodotto lascia la fabbrica, mediante aggiornamenti di tipo \acrfull{ota}.
 Questo si rende necessario non solo per la mera introuduzione di nuove funzionalità in
 un prodotto esistente, ma anche per mantenere il software al passo con l'evoluzione degli
 altri sistemi a cui esso si collega, quale ad esempio modifiche nei protocolli di rete
@@ -180,8 +317,8 @@ sia sempre possibile risalire all'esatta versione del codice per il quale viene 
 problema di modo da poterlo riprodurre, la seconda invece assicura che la soluzione al problema
 sia implementabile nel minor tempo possibile e senza il rischio di regressioni.
 
-Infine l'altro punto cardine è l'eseguire test metodologici prima che il firmware venga
-rilasciato al pubblico, sia tramite aggiornamento OTA che tramite installazione in fabbrica
+Infine l'altro punto cardine è l'eseguire test metodologici prima che il \gls{firmware} venga
+rilasciato al pubblico, sia tramite aggiornamento \acrshort{ota} che tramite installazione in fabbrica
 su di un nuovo prodotto.
 
 \subsection{Prassi attuale testing}
@@ -189,12 +326,12 @@ su di un nuovo prodotto.
 Allo stato attuale abbiamo 3 momenti di validazione di un rilascio:
 
 \begin{enumerate}
-    \item test da parte dello sviluppatore
-    \item test di accettazione interna (in IOTINGA)
-    \item test di accettazione del cliente finale (IRSAP)
+    \item test durante lo sviluppo
+    \item test di accettazione interna (effettuati da IOTINGA)
+    \item test di accettazione del cliente finale (effettuati da IRSAP)
 \end{enumerate}
 
-\subsection{Test di sviluppatore}
+\subsection{Test durante lo sviluppo}
 
 Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
 bug  prima di considerare l'attività conclusa ed integrare il
@@ -234,7 +371,7 @@ Ognuno di questi è diviso in passi, e per ognuno dei quali viene indicato:
         con il dispositivo (pressione di pulsanti) oppure mediante cloud (tramite un apposito
         strumento che consente di simulare i messaggi inviati dal cloud e dalla app)
     \item risultato atteso: postcondizioni da verificare dopo aver effettuato l'azione, espresso in
-        linguaggio non formale, ad esempio ``i led sono rossi'' oppure ``entro 5 secondi viene inviato al cloud un messaggio''.
+        linguaggio non formale, ad esempio ``i \acrshort{led} sono rossi'' oppure ``entro 5 secondi viene inviato al cloud un messaggio''.
         Nel caso la postcondizione sia verificata è possibile procedere al passo successivo, altrimenti
         il test viene interrotto con esito negativo, e deve essere segnalato ad uno sviluppatore il problema.
 \end{itemize}
@@ -260,10 +397,10 @@ specializzata quali camere climatiche per valutarne l'efficacia di termoregolazi
 
 Nel caso questi test abbiano successo l'artefatto testato passa da stato di candidato
 al rilacio a produzione, e viene quindi installato in fabbrica su tutti i nuovi radiatori
-prodotti, nonché viene lanciato un aggiornamento OTA su tutti i dispositivi già installati
+prodotti, nonché viene lanciato un aggiornamento \acrshort{ota} su tutti i dispositivi già installati
 presso i clienti finali.
 
-\section{Problemi aperti dell'approccio attuale di test di accettazione}
+\section{Problemi dell'approccio attuale}
 
 L'approccio attuale, basato sul documento di test con fasi da seguire, presenta
 alcune problematiche:
@@ -290,7 +427,7 @@ Viene quindi da chiedersi se, vista la ripetitività e schematicità di queste o
 sia possibile farle eseguire ad un computer, senza perdite di generalità rispetto all'esecuzione
 manuale.
 
-\section{Requisiti di un sistema di esecuzione di test di accettazione automatici}
+\section{Requisiti software per l'automazione}
 
 Abbiamo quindi stabilito i seguenti requisiti per un sistema di automatizzazione dei test di
 accettazione:
@@ -301,15 +438,15 @@ accettazione:
         ad aggiungere errori e quindi invalidare i test effettuati
     \item l'ambiente di esecuzione (runtime environment) sul quale il test viene eseguito deve essere quanto
         più vicino possibile all'ambiente reale. Idealmente il test viene effettuato sullo stesso hardware,
-        di modo da divanare ogni possibile dubbio che il firmware una volta installato sull'hardware abbia
+        di modo da divanare ogni possibile dubbio che il \gls{firmware} una volta installato sull'hardware abbia
         comportamenti differenti
-    \item l'ambiente deve poter eseguire il firmware in differenti configurazioni di hardware che esso supporta
+    \item l'ambiente deve poter eseguire il \gls{firmware} in differenti configurazioni di hardware che esso supporta
         (attualmente supporta due tipologie di hardware, e ne verranno aggiunte altrettante due a breve)
     \item il sistema deve avere abbastanza flessibilità per poter validare almeno le funzionalità che oggi
         sono teste manualmente
     \item deve essere sufficientemente semplice andare ad aggiungere nuovi scenari e configurazioni da provare al sistema
-    \item deve essere possibile integrare lo strumento all'interno del flusso di CI/CD attualmente in
-        uso in azienda, di modo che ogni release del firmware prodotta venga testata senza necessità di
+    \item deve essere possibile integrare lo strumento all'interno del flusso di CI attualmente in
+        uso in azienda, di modo che ogni release del \gls{firmware} prodotta venga testata senza necessità di
         un intervento manuale
 \end{itemize}
 
@@ -321,19 +458,19 @@ Vediamo ora cosa è disponibile in commercio per fare quanto descrito al capitol
 
 Una prima soluzione è quella di utilizzare gli strumenti di
 unit-test anche per effettuare i test di accettazione.
-È possibile infatti andare ad effettuare il mock di tutte le interfacce utilizzate dall'SDK
+È possibile infatti andare ad effettuare il mock di tutte le interfacce utilizzate dall'\acrshort{sdk}
 al fine di poter eseguire singoli test-case all'interno del binario.
 
 Questa soluzione presenta il vantaggio di poter testare in maniera veloce ed agevole
-ogni nuova release del firmware, ma al contempo presenta alcuni svantaggi che la rendono
-inadatta allo scopo di approvare un nuovo firmware per la produzione.
+ogni nuova release del \gls{firmware}, ma al contempo presenta alcuni svantaggi che la rendono
+inadatta allo scopo di approvare un nuovo \gls{firmware} per la produzione.
 
 Il problema principale è che viene testato il codice facendolo girare in un ambiente simulato,
 che per quanto simile all'ambiente reale non sarà mai completamente uguale. Soprattutto
 quando ci si interfaccia con periferiche complesse, come il Wi-Fi, è fondamentale che
 l'ambiente sul quale vengono eseguiti i test sia quanto più uguale possibile al runtime effettivo.
 
-In questo caso la soluzione migliore è effettuare i test facendo eseguire il firmware direttamente
+In questo caso la soluzione migliore è effettuare i test facendo eseguire il \gls{firmware} direttamente
 all'hardware sul quale dovrà girare.
 
 \section{Strumenti commerciali di test elettronici}
@@ -369,54 +506,67 @@ sia come software commerciale che come software open-source.
 \chapter{Approccio}
 
 Prima di descrivere l'implementazione è necessario fare un passo indietro ed andare
-ad analizzare con più attenzione il dispositivo radiatore elettrico preso in esame.
+ad analizzare con più attenzione il dispositivo \Gls{re} preso in esame.
 
 \section{Caratteristiche hardware}
 
-Tutta la linea di radiatori elettrici smart IRSAP (che attualmente si compone di 17 prodotti distinti,
-in continua espansione) utilizza al suo interno la stessa elettronica, che attualmente viene
-prodotta in due varianti:
+Il corpo principale dei radiatori elettrici di IRSAP è del tutto identico al radiatore idraulico,
+con la differenza che il calore non viene fornito dall'acqua che circola nell'impianto ma da una 
+resistenza elettrica, installata all'interno del radiatore. Il tutto viene riempito con del glicole,
+per garantire una protezione antigelo, e viene sigillato con dei tappi al posto dei rubinetti di 
+attacco per la mandata/ritorno dell'acqua calda.  
+
+\subsection{Scheda elettronica}
+
+Attualmente la gamma di radiatori elettrici IRSAP elettrificati smart include 17 prodotti distinti, 
+ma ogni anno ne vengono aggiunti di nuovi. Per tutti questi progetti è quindi fondamentale, per 
+questioni di ottimizzazione dei costi, avere un'elettronica quanto più possibile simile. 
+
+Attualmente vi sono due tipologie di scheda logica che viene installata all'interno dei prodotti:
 
 \begin{itemize}
     \item \textit{luxury}: è la versione più basilare, che viene utilizzata sulla linea di
-        radiatori da bagno (gli scaldasalviette).
-    \item \textit{design}: è la versione riservata ai prodotti design. È la versione più completa,
-        ed offre, in aggiunta a tutto quanto offerto dalla \textit{luxury}, un sensore di qualità
+        radiatori da bagno (chiamati anche ``scaldasalviette''). Essnedo installata in ambiente 
+        particolarmente umido e con il rischio di schizzi d'acqua deve sopportare un grado IP (
+        misura standard del grado di protezione per componenti elettrici) superiore all'altro modello
+    \item \textit{design}: è la versione riservata ai prodotti design. È la più completa,
+        che offre anche modularità essendo che tutte le periferiche (pulsantiera, sensore di temperatura,
+        sensore VOC, \acrshort{led}) sono collegati alla stessa con dei cavi, il che consente di inglobare l'elettronica 
+        all'interno della carcassa in maniera da renderla invisibile, cosa molto importante per non rovinare 
+        il desing del prodotto. Offre inoltre funzionalità aggiuntive, quali un sensore di qualità
         dell'aria (in grado di rilevare i valori di VOC e CO\textsubscript{2}) e la possibilità di
-        controllare una striscia LED RGBW, utilizzata in alcuni radiatori per questioni
-        di illuminazione estatica.
+        controllare una striscia \acrshort{led} \Gls{rgbw}, utilizzata su alcuni modelli per un'illuminazione ambientale.
 \end{itemize}
 
-Inoltre a parità di elettronica un radiatore può o meno avere a disposizione le
-seguenti funzionalità:
-\begin{itemize}
-    \item Fil Pilote: uno standard francese per l'interconnessione dei radiatori ad una
-        centralina di controllo mediante un secondo ingresso di segnale a 230V
-    \item LED RGBW: disponibili solo su radiatore con scheda design, consente di
-        illuminare l'ambiente circostante al radiatore per creare atmosfera
-\end{itemize}
 
-Sulla scheda trovano spazio i seguenti componenti:
+Ogni scheda elettronica, sia essa di tipo \textit{luxury} che \textit{design}, include le seguenti 
+periferiche hardware:
 
 \begin{itemize}
     \item un modulo Wi-Fi Telit GS2200M
-    \item circuito di alimentazione a 230V AC
-    \item un circuito composto da un relè più un triac dedicato al controllo della
+    \item circuito di alimentazione a tensione di rete (230V AC)
+    \item un circuito composto da un relè combinato ad un triac dedicato al controllo della
         cartuccia, ossia l'elemento riscaldante inserito all'interno del corpo del radiatore
-    \item una sonda di temperatura NTC usata per rilevare la temperatura ambiente
-    \item una pulsantiera dotata di due pulsanti capacitivi e dei led RGB di illuminazione
+    \item una sonda di temperatura \Gls{ntc} usata per misurare la temperatura ambiente
+    \item una pulsantiera dotata di due pulsanti capacitivi e di \acrshort{led} RGB di illuminazione
         come feedback verso l'utente
-    \item un buzzer utilizzato per dare un feedback uditivo all'utente
-    \item solo per le schede \textit{design} un sensore di qualità dell'aria in grado di
+    \item un buzzer utilizzato per un feedback uditivo della pressione dei pulsanti
+    \item un circuito di lettura per il segnale ``Fil Pilote'', uno standard francese 
+        per il controllo dei \acrshort{re} mediante una centralina di controllo centrale
+\end{itemize}
+    
+Oltre a quanto descritto precedentemente la versione \textit{design} include inoltre:
+\begin{itemize}
+    \item un sensore di qualità dell'aria in grado di
         misurare i livelli VOC e CO\textsubscript{2}
-    \item un ingresso per il segnale ``Fil Pilote'' (solo per i modelli che lo prevedono)
-    \item la circuiteria di controllo per una striscia a led RGBW di illuminazione ambientale
+    \item la circuiteria di controllo per una striscia a \acrshort{led} \acrshort{rgbw} di illuminazione ambientale
+        ed il relativo alimentatore da 230V AC a 24V DC
     \item la circuiteria di controllo per una seconda sonda di temperatura in grado di
         misurare la temperatura del corpo riscaldante, in maniera tale da migliorare
         l'accuratezza degli algoritmi di termoregolazione
 \end{itemize}
-
-Tutte le versioni di scheda elettronica eseguono la stessa versione del firmware,
+    
+Entrambe le versioni di scheda elettronica eseguono la stessa versione del \gls{firmware},
 che ha una fase iniziale in cui identifica la tipologia di scheda e le funzionalità
 opzionali abilitate leggendole da un file di configurazione caricato nel dispositivo
 in fase di collaudo, e di conseguenza configura le periferiche del microcontrollore.
@@ -435,41 +585,41 @@ caratteristiche hardware:
         alla gestione del Wi-Fi ed uno all'esecuzione dell'applicativo
     \item 1Mb di RAM in totale, di cui all'incirca 500kB utilizzabile dall’applicazione,
         il resto dedicata all'uso della parte Wi-Fi
-    \item 4Mb di memoria flash interna, in parte dedicata al codice del firmware ed
+    \item 4Mb di memoria flash interna, in parte dedicata al codice del \gls{firmware} ed
         in parte come filesystem interno in cui memorizzare i dati dell'applicazione
-    \item interfaccia Wi-Fi b/g/n a 2.4Ghz in grado di operare sia in modalità station
-        (client) sia che access-point (AP) a cui connettersi direttamente
+    \item interfaccia Wi-Fi b/g/n a 2.4Ghz in grado di operare sia in modalità \Gls{sta} 
+        sia che \Gls{ap} a cui connettersi direttamente
     \item 19 input/output digitali
-    \item 3 output PWM
-    \item 2 ingressi analogici mediante ADC, uno a 10 ed uno a 12 bit
-    \item un interfaccia I2C hardware
-    \item un interfaccia SPI hardware
-    \item due interfacce seriali UART
-    \item modulo RTC interno
+    \item 3 output \Gls{pwm}
+    \item 2 ingressi analogici mediante \Gls{adc}, uno a 10 ed uno a 12 bit
+    \item un interfaccia \Gls{i2c} hardware
+    \item un interfaccia \Gls{spi} hardware
+    \item due interfacce seriali \Gls{uart}
+    \item modulo \Gls{rtc} interno
 \end{itemize}
 
 Il microcontrollore è dostato due due core ARM, di cui uno è deputato alla gestione
-della parte Wi-Fi ed esegue un firmware scritto dal produttore stesso. I due microcontrollori
+della parte Wi-Fi ed esegue un \gls{firmware} scritto dal produttore stesso. I due microcontrollori
 comunicano attraverso una memroia condivisa (dual-port) da 64Mb. Il core principale
 si occupa invece di gestire la parte applicativa.
 
-La toolchain fornita dal produttore per lo sviluppo del firmware in grado di girare
+La toolchain fornita dal produttore per lo sviluppo del \gls{firmware} in grado di girare
 sul core applicativo si basa sull'ambiente di sviluppo proprietario IAR.
 
-Viene fornito un SDK che offre:
+Viene fornito un \Gls{sdk} che offre:
 
 \begin{itemize}
-    \item un sistema operativo real-time (\textit{RTOS}) basato su ThreadX
+    \item un \Gls{rtos} basato su ThreadX
     \item uno stack di rete TCP/IP basato su NetX
-    \item implementazione software Wi-Fi sia in modalità station (STA) che access-point (AP),
+    \item implementazione software Wi-Fi sia in modalità \acrfull{sta} che \acrfull{ap},
         con relativi protocolli WEP, WPA/WPA2 sia personal che enterprise
     \item un filesystem (simile al FAT32) per la gestione della memoria flash integrata
-    \item implementazione TLS
+    \item implementazione \gls{tls}
     \item implementazione client e server del protocollo HTTP ed HTTPS
     \item implementazione client del protocollo SNTP
-    \item aggiornamento OTA con doppia partizione
-    \item hardware abstraction layer (HAL) per la gestione di tutti i GPIO,
-        lettura dei due ADC, del modulo PWM, gestione del RTC, del bus i2c ed SPI
+    \item aggiornamento \acrshort{ota} con doppia partizione
+    \item hardware abstraction layer (HAL) per la gestione di tutti i \Gls{gpio},
+        lettura dei due \Gls{adc}, del modulo PWM, gestione del RTC, del bus i2c ed SPI
 \end{itemize}
 
 I moduli Wi-Fi di questo tipo possono essere utilizzati secondo due modalità:
@@ -485,7 +635,7 @@ I moduli Wi-Fi di questo tipo possono essere utilizzati secondo due modalità:
 
 Tipicamente viene seguito il primo approccio, tuttavia noi abbiamo optato per il secondo.
 Questo comporta svariate semplificazioni, quali il non dover gestire la distribuzione
-e l'aggiornamento di due firmware, e l'avere quindi un prodotto più solido.
+e l'aggiornamento di due \gls{firmware}, e l'avere quindi un prodotto più solido.
 
 Un secondo microcontrollore comporta inoltre problemi di approvvigionamento, soprattutto di
 questi ultimi periodi in cui il mercato dei componenti elettronici è impazzito, con
@@ -503,7 +653,7 @@ difficoltoso lo sviluppo.
 
 \section{Caratteristiche software}
 
-Il firmware è suddiviso in moduli (task):
+Il \gls{firmware} è suddiviso in moduli (task):
 
 \begin{itemize}
     \item \textit{core}, si occupa della gestione della macchina a stati principale
@@ -512,12 +662,12 @@ Il firmware è suddiviso in moduli (task):
         gli eventi notevoli che arrivano dagli altri task
     \item \textit{termostato}, task che si occupa di tutto quel che è necessario
         per regolare la temperatura ambiente secondo le modalità di funzionamento del dispositivo,
-        della lettura delle sonde ambiente/VOC, non che della gestione dell'illuminazione LED
+        della lettura delle sonde ambiente/VOC, non che della gestione dell'illuminazione \acrshort{led}
         nel caso sia presente
-    \item \textit{AWS}, si occupa di mantenere la connessione MQTT verso AWS IoT Core,
-        sincronizzato lo stato interno del dispositivo con il server ``IRSAP NOW'' mediante protocollo MQTT
+    \item \textit{MQTT}, si occupa di mantenere la connessione \Gls{mqtt} verso \Gls{mqtt} IoT Core,
+        sincronizzato lo stato interno del dispositivo con il server \Gls{now} mediante protocollo \Gls{mqtt}
     \item \textit{hmi}, si occupa di rispondere agli input dell'utente
-        sulla pulsantiera e di darne relativo feedback mediante l'uso dei LED RGB e del buzzer
+        sulla pulsantiera e di darne relativo feedback mediante l'uso dei \acrshort{led} RGB e del buzzer
     \item \textit{HTTP}, si occupa di fornire mediante webserver HTTP un'API REST con
         la quale è possibile interagire direttamente con il dispositivo. È utilizzata
         per la fase di provisioning.
@@ -565,7 +715,7 @@ componenti software del dispositivo:
     \hline
     \textit{disconnesso} & client & HMI, termostato \\
     \hline
-    \textit{connesso} & client & HMI, termostato, AWS \\
+    \textit{connesso} & client & HMI, termostato, MQTT \\
     \hline
 \end{tabular}
 \end{center}
@@ -580,7 +730,7 @@ temperatura ambiente è ottenuto mediante la sonda di temperatura NTC.
 Il dispositivo ha diversi modi di funzionamento:
 \begin{itemize}
     \item standby: dispositivo completamente spento, sia per quanto riguarda il riscaldamento
-        che per l'illuminazione LED
+        che per l'illuminazione \acrshort{led}
     \item antigelo: il dispositivo mantiene una temperatura di sicurezza (impostata dall'utente)
         per prevenire danni dati da una tempratura ambiente troppo bassa (ad es. congelamento delle tubature)
     \item vacanza: all'interno di un intervallo temporale impotato dall'utente funziona
@@ -614,11 +764,11 @@ in \autoref{fig:modi}.
 
 \subsection{Comunicazione cloud}
 
-La componente cloud è implementata su AWS. La connessione avviene grazie al protocollo
-MQTT usando il servizio broker di AWS, IoT Core.
+La componente cloud è implementata su \Gls{mqtt}. La connessione avviene grazie al protocollo
+\Gls{mqtt} usando il servizio broker di \Gls{mqtt}, IoT Core.
 
 \subsubsection{Autenticazione}
-La connessione è cifrata mediante TLS 1.2 ed autenticata mediante certificato del client.
+La connessione è cifrata mediante \gls{tls} 1.2 ed autenticata mediante certificato del client.
 
 Tale certificato è generato per ogni singolo dispositivo durante le fasi di produzione,
 e viene firmato da una CA intermedia del produttore hardware, come nel seguente schema:
@@ -626,40 +776,40 @@ e viene firmato da una CA intermedia del produttore hardware, come nel seguente 
 \begin{figure}[ht]
     \centering
     \begin{tikzpicture}
-        \node[rectangle, draw, align=center, inner sep=8pt] (root) {root CA \\AWS};
+        \node[rectangle, draw, align=center, inner sep=8pt] (root) {root CA \\\Gls{mqtt}};
         \node[rectangle, draw, right of=root, align=center, inner sep=8pt] (intermedia) {CA intermedia\\ produttore};
-        \node[rectangle, draw, right of=intermedia, align=center, inner sep=8pt] (dispositivo) {certificato TLS\\ dispositivo};
+        \node[rectangle, draw, right of=intermedia, align=center, inner sep=8pt] (dispositivo) {certificato \gls{tls}\\ dispositivo};
         \draw (root) edge[above] node{firma} (intermedia)
             (intermedia) edge[above] node{firma} (dispositivo);
     \end{tikzpicture}
-    \caption{Catena TLS}
+    \caption{Catena \gls{tls}}
     \label{fig:tls-chain}
 \end{figure}
 
-La CA autority intermedia è generata e firmata dalla CA generale di AWS IoT Core. In questo
+La CA autority intermedia è generata e firmata dalla CA generale di \Gls{mqtt} IoT Core. In questo
 modo è possibile generare in fase di programmazione offline un certificato per ogni
 dispositivo che deve essere prodotto. Alla prima connessione del dispositivo al cloud questo
 automaticamente si registrerà all'interno di IoT Core senza ulteriori necessità di interventi manuali.
 
 IoT Core permette di associare ad ogni certificato una policy, che può andare a garantire al
-client dei permissi per quanto riguarda MQTT:
+client dei permissi per quanto riguarda \Gls{mqtt}:
 \begin{itemize}
     \item \textit{connect}: autorizza il client a connettersi ad IoT Core utilizzando un particolare
         \textit{clientId}
-    \item \textit{publish}: consente al cilent di pubblicare su determinati topic MQTT
-    \item \textit{subscribe}: consente al dispositivo di effettuare una subscription su determinati topic
+    \item \textit{publish}: consente al cilent di pubblicare su determinati \gls{topic} \Gls{mqtt}
+    \item \textit{subscribe}: consente al dispositivo di effettuare una subscription su determinati \gls{topic}
         al fine di ricevere aggiornamenti in tempo reale dal cloud
 \end{itemize}
 
-La policy predefinita restringe i permessi ai soli topic dedicati per il client con il determinato certificato
-che si connette al cloud. Per fare questo all'interno del topic viene inserito il seriale dello specifico
+La policy predefinita restringe i permessi ai soli \gls{topic} dedicati per il client con il determinato certificato
+che si connette al cloud. Per fare questo all'interno del \gls{topic} viene inserito il seriale dello specifico
 dispositivo, che è lo stesso contenuto all'interno del certificato.
 
 \subsubsection{Protocollo stateless di comunicazione}
 
 Per quanto concerne il protocollo di comunicazione in origine abbiamo valutato inizialmente
 l'uso del protocollo Device Shadowing\footnote{\url{https://docs.aws.amazon.com/it\_it/iot/latest/developerguide/iot-device-shadows.html}}
-supportato nativamente da AWS IoT Core.
+supportato nativamente da \Gls{mqtt} IoT Core.
 
 Tuttavia, tale protocollo aveva delle limitazioni che non ne consentivano l'utilizzo nella nostra
 applicazione, in particolare:
@@ -679,13 +829,13 @@ applicazione, in particolare:
 Per tutte queste ragioni abbiamo scelto di adottare un protocollo binario proprietario,
 tramite il quale andiamo a trasferire stati completi del dispositivo.
 
-Abbiamo deciso di mantenere comunque i concetti di alto livello dati dal protocollo AWS
+Abbiamo deciso di mantenere comunque i concetti di alto livello dati dal protocollo \Gls{mqtt}
 Device Shadowing, in particolare la nomenclatura \textit{shadow} per indicare uno stato del
 dispositivo, che è suddiviso in:
 \begin{itemize}
     \item \textit{state desired} come lo stato in cui si vuole portare il dispositivo, ovvero le
         impostazioni che l'utente può modificare agendo dalla app, quali ad esempio la modalità di funzionamento,
-        la programmazione oraria, la configurazione dei LED RGB, etc.
+        la programmazione oraria, la configurazione dei \acrshort{led} RGB, etc.
     \item \textit{state reported} lo stato attuale del dispositivo. È un superset dello stato
         desired, in quanto oltre a tutti i campi di quest'ultimo include anche tutti quei valori
         in sola lettura (ovvero che solo il dispositivo può modificare), ovvero i parametri
@@ -705,9 +855,9 @@ Il protocollo è quindi stateless, e consente di effettuare 4 messaggi, più rel
         trasmette lo stato completo desired
 \end{itemize}
 
-Il tipo di messaggio dipende dal topic MQTT sul quale i pacchetti sono pubblicati. Ad
+Il tipo di messaggio dipende dal \gls{topic} \Gls{mqtt} sul quale i pacchetti sono pubblicati. Ad
 un messaggio pubblicato dal dispositivo verso il server il server risponde in base allo
-stato della richiesta sullo stesso topic con aggiunto un suffisso:
+stato della richiesta sullo stesso \gls{topic} con aggiunto un suffisso:
 \begin{itemize}
     \item \texttt{/accepted}: la richiesta è stata accettata dal server
     \item \texttt{/rejected}: la richiesta è stata respinta dal server in quanto è
@@ -717,8 +867,8 @@ stato della richiesta sullo stesso topic con aggiunto un suffisso:
 \begin{figure}[ht]
     \centering
     \begin{tikzpicture}
-        \node[rectangle, minimum height=1cm, draw] (dispositivo) {Radiatore Elettrico};
-        \node[rectangle, minimum height=1cm, draw, right of=dispositivo] (cloud) {Cloud AWS};
+        \node[rectangle, minimum height=1cm, draw] (dispositivo) {\Gls{re}};
+        \node[rectangle, minimum height=1cm, draw, right of=dispositivo] (cloud) {Cloud \Gls{mqtt}};
         \draw (dispositivo) edge[bend left=40, above] node{\textit{get}} (cloud)
             (dispositivo) edge[bend left=10, above] node{\textit{reported-update}} (cloud)
             (dispositivo) edge[bend right=10, below] node{\textit{delete}} (cloud)
@@ -739,7 +889,7 @@ Ogni messaggio su cloud include un header fisso, che comprende i seguenti campi
 \begin{center}
 \begin{longtable}{| p{5cm} | c | p{8cm} |}
     \hline
-    \textbf{campo} & \textbf{tipo} & \textbf{descrizione} \\ \hline
+    \textbf{chiave} & \textbf{tipo} & \textbf{descrizione} \\ \hline
     timestamp & u32 & timestamp di invio del messaggio \\ \hline
     clientToken & u32 & un ID della richiesta che il client aggiunge ad ogni messaggio
         per poter correlare le risposte alle richieste effettuate \\ \hline
@@ -754,11 +904,11 @@ A seguire nel messaggio è presente il payload:
 \begin{center}
 \begin{longtable}{| p{5cm} | c | p{8cm} |}
     \hline
-    \textbf{campo} & \textbf{tipo} & \textbf{descrizione} \\ \hline
+    \textbf{chiave} & \textbf{tipo} & \textbf{descrizione} \\ \hline
     connected & u8 & 1 se il dispositivo è online, altrimenti 0 \\ \hline
     firmwareVersion & u8[2] & versione firmware (major, minor) \\ \hline
     hardwareVersion & u8 & versione hardware \\ \hline
-    macAddress & u8[6] & MAC address (ID dispositivo) \\ \hline
+    macAddress & u8[6] & MAC address (seriale del dispositivo) \\ \hline
     systemStatus & u8 & stato del Sistema (bitmask) \\ \hline
     filPiloteStatus & u8 & stato ingress Fil Pilote \\ \hline
     alarm & u8 & allarmi (bitmask)\\ \hline
@@ -770,13 +920,13 @@ A seguire nel messaggio è presente il payload:
     vocValue & u16 & valore VOC (qualità dell’aria)\\ \hline
     co2Value & u16 & valore CO2 (qualità dell’aria)\\ \hline
     temperature & i16 & temperature ambiente (in decimi di grado)\\ \hline
-    setPointOff & u16 & set point di OFF (in decimi di grado)\\ \hline
-    setPointEco & u8 & set point di ECO (in decimi di grado)\\ \hline
-    manualSetPoint & u8 & set point manual (in decimi di grado)\\ \hline
+    setPointOff & u16 & set point di OFF (espresso in decimi di grado)\\ \hline
+    setPointEco & u8 & set point di ECO (espresso in decimi di grado - 10C)\\ \hline
+    manualSetPoint & u8 & set point manual (espresso in decimi di grado -10C)\\ \hline
     temporaryManualSetPoint & u8 & set point manual temporaneo (in decimi di grado)\\ \hline
     temporaryManualEnd & u32 & fine manuale temporaneo (timestamp)\\ \hline
-    hysteresis & u8 & isteresi (+/- decimi di grado)\\ \hline
-    temperatureSensorOffset & i8 & correzione sensore di temperature (in decimi di grado)\\ \hline
+    hysteresis & u8 & isteresi (espressa in decimi di grado)\\ \hline
+    temperatureSensorOffset & i8 & correzione sensore di temperature (espresso in decimi di grado)\\ \hline
     loadTemperature & i16 & temperature carico (in decimi di grado)\\ \hline
     loadOnSeconds & u32 & cumulativo in secondi di accensione del carico\\ \hline
     holidayStart & u32 & timestamp inizio vacanza\\ \hline
@@ -787,20 +937,20 @@ A seguire nel messaggio è presente il payload:
     systemConfiguration & u8 & configurazione di sistema (bitmask)\\ \hline
     ipAddress & u8[4] & indirizzo IP Wi-Fi\\ \hline
     openWindowOffTime & u8 & tempo di spegnimento in caso rilevamento finestra aperta\\ \hline
-    ledManualSetPoint & u32 & colore LED ambiente (HSV)\\ \hline
+    ledManualSetPoint & u32 & colore \acrshort{led} ambiente (HSV)\\ \hline
     schedule & u8[196] & programmazione riscaldamento\\ \hline
-    ledSchedule & u8[196] & programmazione LED (stesso formato di prima)\\ \hline
-    ledEnabled & u8 & LED ambiente on/off\\ \hline
+    ledSchedule & u8[196] & programmazione \acrshort{led} (stesso formato di prima)\\ \hline
+    ledEnabled & u8 & \acrshort{led} ambiente on/off\\ \hline
     ledMode & u8 & modalità led ambiente (manuale/programmato)\\ \hline
-    ledColor & u32[10] & preset colori LED ambiente per uso in fasce orarie\\ \hline
-    temporaryManLedSP & u32 & set point LED manuale a tempo\\ \hline
-    temporaryManLedSPEnd & u32 & fine manuale a tempo LED\\ \hline
+    ledColor & u32[10] & preset colori \acrshort{led} ambiente per uso in fasce orarie\\ \hline
+    temporaryManLedSP & u32 & set point \acrshort{led} manuale a tempo\\ \hline
+    temporaryManLedSPEnd & u32 & fine manuale a tempo \acrshort{led}\\ \hline
     estimatedTemperature & i16 &temperatura ambiente (scritta da cloud per uso con altri sensori)\\ \hline
     externalTemperature & i16 & umidità esterna (scritta da cloud)\\ \hline
     estimatedHumidity & u8 & umidità ambiente (scritta da cloud)\\ \hline
     externalHumidity & u8 & umidità esterna (scritta da cloud)\\ \hline
-    currentLedSetPoint & u32 & set point LED corrente\\ \hline
-    currentLedSetPointEnd & u32 & fine fascia oraria LED corrente\\ \hline
+    currentLedSetPoint & u32 & set point \acrshort{led} corrente\\ \hline
+    currentLedSetPointEnd & u32 & fine fascia oraria \acrshort{led} corrente\\ \hline
     cartridgePowerWatts & u16 & potenza della cartuccia\\ \hline
     cumuConsumption & u32 & consumo cumulato in tutta la vita del radiatore\\ \hline
     cumuConsumptionValue & u32 & valore all’ultimo snapshot di constumo\\ \hline
@@ -816,8 +966,8 @@ configurazione della rete Wi-Fi e l'identificativo (UUID) dell'impianto al quale
 collegarsi prima che esso possa iniziare a funzionare.
 
 Per fare ciò il dispositivo mette a dispozione un'API REST attraverso la quale la
-app ``IRSAP NOW'' comunica attraverso una connessione Wi-Fi diretta (in questa fase
-il dispositivo imposta la propria interfaccia Wi-Fi in modo access-point).
+app \Gls{now} comunica attraverso una connessione Wi-Fi diretta (in questa fase
+il dispositivo imposta la propria interfaccia Wi-Fi in modo \acrshort{ap}).
 
 Mette a dispozizione le seguenti API REST:
 
@@ -828,7 +978,7 @@ Mette a dispozizione le seguenti API REST:
     \hline /irsap/wifi/scan & GET & ottiene l'elenco di reti Wi-Fi visibili dal dispositivo \\
     \hline /irsap/provision & POST & invia al dispositivo la configurazione \\
     \hline /irsap/test & POST & attiva la modalità collaudo del dispositivo \\
-    \hline /gainspan/system/fwup & POST & invia un aggiornamento firmware al dispositivo \\
+    \hline /gainspan/system/fwup & POST & invia un aggiornamento \gls{firmware} al dispositivo \\
     \hline
 \end{tabular}
 \end{center}
@@ -836,9 +986,9 @@ Mette a dispozizione le seguenti API REST:
 \subsection{HMI}
 
 L'interfaccia untente del dispositivo si compone di due pulsanti, \textbf{+} e \textbf{-},
-i LED RGB di illuminazione della pulsantiera ed il buzzer.
+i \acrshort{led} RGB di illuminazione della pulsantiera ed il buzzer.
 
-Tramite l'HMI è possibile affettuare le seguenti operazioni:
+Tramite l'\acrshort{hmi} è possibile affettuare le seguenti operazioni:
 
 \begin{itemize}
     \item pressione breve \textbf{+}: incrementa il set-point corrente
@@ -851,9 +1001,9 @@ Tramite l'HMI è possibile affettuare le seguenti operazioni:
         ripristino impostazioni di fabbrica
 \end{itemize}
 
-I LED invece sono utilizzati per segnalare la temperatura impostata dall'utente
+I \acrshort{led} invece sono utilizzati per segnalare la temperatura impostata dall'utente
 (in base al set-point passano da un colore più freddo ad uno più caldo), sia ad
-indicare condizioni particolari quali radiatore non abbinato (LED rossi), connessione
+indicare condizioni particolari quali radiatore non abbinato (\acrshort{led} rossi), connessione
 in corso (viola lampeggiante), modo \textit{stand-by} (viola fisso) o \textit{antigelo} (bianco).
 
 \section{Intefacciamento con il sistema di test}
@@ -864,7 +1014,7 @@ può interagire con il mondo esterno essenzialmente in tre modi:
 
 \begin{enumerate}
     \item comunicazione cloud: invio e ricezione di stati complesi (\textit{shadow})
-        mediante il collegamento MQTT al cloud AWS
+        mediante il collegamento \Gls{mqtt} al cloud \Gls{mqtt}
     \item comunicazione locale: invio e ricezione di comandi mediante l'API REST locale
     \item fenomeni fisici: calore emesso, pulsanti che vengono premuti, luce e suoni
         emessi, temperatura ambiente che varia
@@ -879,7 +1029,7 @@ Possiamo pensare a tre modi:
 \begin{itemize}
     \item interazione con il dispositivo fisico
     \item interazione con la scheda elettronica
-    \item esecuzione del firmware in un emulatore
+    \item esecuzione del \gls{firmware} in un emulatore
 \end{itemize}
 
 \subsection{Interazione con il dispositivo fisico}
@@ -923,14 +1073,14 @@ funzionante come da specifica (in quanto già collaudata in fase di produzione).
 
 Possiamo quindi isolare solo la parte che ci interessa, ovvero il chip Telit, utilizzando
 un kit di sviluppo fornito direttamente dal produttore. Questo permmette di connettere
-la nostra interfaccia di test con tutti gli input/output digitali (GPIO) della scheda,
+la nostra interfaccia di test con tutti gli input/output digitali (\Gls{gpio}) della scheda,
 così che potremo andare a simulare tutte le periferiche hardware più agevolmente via software.
 
 Questa è la soluzione che alla fine ho scelto.
 
 \subsection{Esecuzione del firmware in un emulatore}
 
-Infine un'ultima possibilità è quella di eseguire il firmware non sull'hardware
+Infine un'ultima possibilità è quella di eseguire il \gls{firmware} non sull'hardware
 reale ma su un sistema emulato.
 
 Questo presenta alcune problematiche, in particolare essendo la piattaforma Telit
@@ -941,10 +1091,10 @@ Si potrebbe quindi decidere di compilare un binario x86, andando a sostituire tu
 le funzioni utilizzate del framework Telit con stub implementati ex-novo. Questo
 sebbene potrebbe funzionare (anche se il suo sviluppo sarebbe molto lungo e dispensioso)
 avrebbe come effetto che non si sta effettivamente testando il binario che poi andrà
-in produzione, compresa l'integrazione con l'SDK e le caratteristiche fisiche dell'hardware.
+in produzione, compresa l'integrazione con l'\acrshort{sdk} e le caratteristiche fisiche dell'hardware.
 
 Ho quindi deciso di escludere questa strada, che invece è percorribile su altre
-piattaforme hardware quali l'ESP-32, in quanto utilizza un SDK completamente open-source,
+piattaforme hardware quali l'ESP-32, in quanto utilizza un \acrshort{sdk} completamente open-source,
 e mette già a disposizione la possibilità di emulare un hardware con il software \textit{qemu}.
 
 \chapter{Implementazione}
@@ -957,12 +1107,12 @@ Come già detto in precedenza ho scelto di interfacciarmi direttamente con un ki
 di sviluppo del microcontrollore scelto, come si può vedere in \autoref{fig:quadretto}.
 
 Il kit di sviluppo mette a disposizione tutti i pin connessi al microcontrollore
-su comodi pin header. Integra inoltre un convertitore UART (seriale) - USB per
+su comodi pin header. Integra inoltre un convertitore \Gls{uart} (seriale) - \acrshort{usb} per
 permettere di programmarlo e per interagire con la eventuale console di debug
 (che il radiatore mette a disposizione).
 
 Tutti gli I/O lavorano nel dominio dei 3.3v, quindi ho scelto di utilizzare un
-Raspberry Pi come interfaccia hardware, connettendo direttamente i sui GPIO con
+Raspberry Pi come interfaccia hardware, connettendo direttamente i sui \Gls{gpio} con
 quelli del kit di sviluppo.
 
 Questo ha un'unica limitazione, che è quella che il Raspberry Pi non mette a disposizione
@@ -1003,17 +1153,17 @@ di interfacce che consentono l'interazione con i vari moduli visti pocanzi:
 
 \begin{itemize}
     \item \texttt{io}: è responsabile a gestire tutte le periferiche di I/O
-        verso la scheda, ossia GPIO e UART di debug. Mette a disposizione dei metodi di
+        verso la scheda, ossia \Gls{gpio} e \Gls{uart} di debug. Mette a disposizione dei metodi di
         alto livello per interagire con la scheda e verificare lo stato del dispositivo,
         quali ad esempio \texttt{get\_status\_led\_color()} che ottiene il colore del
-        LED di stato, oppure \texttt{press\_plus()} che invia la pressione del stato \texttt{+}.
+        \acrshort{led} di stato, oppure \texttt{press\_plus()} che invia la pressione del stato \texttt{+}.
     \item \texttt{cloud}: è il modulo responsabile all'interazione con il cloud. Si
-        occupa di mantenere attiva la connessione MQTT con il broker AWS IoT Core,
+        occupa di mantenere attiva la connessione \Gls{mqtt} con il broker \Gls{mqtt} IoT Core,
         gestire la codifica/decodifica di messaggi da oggetti a binario e vice versa,
-        di interfacciarsi con la gestione dei Job di AWS per la distribuzione di aggiornamenti
-        OTA.
+        di interfacciarsi con la gestione dei \Gls{awsjob} per la distribuzione di aggiornamenti
+        \acrshort{ota}.
     \item \texttt{wifi}: è il modulo deputato al controllo dell'interfaccia Wi-Fi
-        della raspberry. Consente di cambiare la modalità fra \textit{AP} e \textit{station},
+        della raspberry. Consente di cambiare la modalità fra \acrshort{ap} e \acrshort{sta},
         supportando l'uso di configurazioni differenti di access point.
     \item \texttt{api}: implementa l'API REST di comunicazione locale con il dispositivo,
         che come detto è usata dalla app in fase di abbinamento del dispositivo
@@ -1029,7 +1179,7 @@ sviluppata sopra. In particolare il motore di test:
     \item si occupa di instanziare la libreria \texttt{fw\_test} prima dell'avvio
         dei test, ed a terminarla una volta terminati tutti i test
     \item prima di ogni test, si preoccupa di portare il sistema in uno stato normale,
-        ovvero il dispositivo deve avere in esecuzione la versione firmware sotto test
+        ovvero il dispositivo deve avere in esecuzione la versione \gls{firmware} sotto test
         e deve essere resettato
     \item raccoglie i log dai vari moduli, inclusa la libreria \texttt{fw\_test} che
         usa il modulo logging standard di Python. In questo modo quando un test
@@ -1040,10 +1190,10 @@ sviluppata sopra. In particolare il motore di test:
 \subsection{Interfacciamento con l'I/O}
 
 Per l'interfacciamento con l'I/O ho deciso di utilizzare la libreria di riferimento
-per comunicare con i GPIO del Raspberry Pi.
+per comunicare con i \Gls{gpio} del Raspberry Pi.
 
 In una prima fase vengono inizializzati tutti i pin in base alla loro funzione, input
-o output, e viene aperta l'interfaccia seriale UART con la quale si può comunicare con
+o output, e viene aperta l'interfaccia seriale \Gls{uart} con la quale si può comunicare con
 il kit di sviluppo.
 
 I messaggi di debug del radiatore vengono quindi catturati e convogliati sul logger
@@ -1058,25 +1208,25 @@ radiatore.
 
 \subsection{Interfacciamento con il cloud}
 
-Come visto in precedenza il dispositivo si collega al cloud AWS IoT Core mediante
+Come visto in precedenza il dispositivo si collega al cloud \Gls{mqtt} IoT Core mediante
 autenticazione con certificato client. Essendo il meccanismo di autenticazione con il
-server oggetto stesso del test, ed essendo che il broker AWS IoT Core non è installabile
+server oggetto stesso del test, ed essendo che il broker \Gls{mqtt} IoT Core non è installabile
 su un normale computer essendo una componente proprietaria, è impossibile testare il
-dispositivo facendolo collegare ad un MQTT broker differente (come può essere mosquitto).
+dispositivo facendolo collegare ad un \Gls{mqtt} broker differente (come può essere mosquitto).
 
 Inoltre IoT Core mette a disposizine alcune funzionalità che non sono disponibili in
 altri broker. In particolare la funzionalità dei job, ossia dei processi batch che è
 possibile schedulare e fare eseguire ai dispositivi, che consentono di distribuire l'esecuzione
-di operazioni. Noi utilizziamo principalmente i job per la distribuzione degli aggiornamenti OTA,
+di operazioni. Noi utilizziamo principalmente i job per la distribuzione degli aggiornamenti \acrshort{ota},
 ma anche per altre operazioni di servizio (come l'aggiornamento di alcuni dati statistici).
 
 Per questo motivo la cosa più semplice è utilizzare IoT Core stesso, ma isolare il collegamento
 fra il broker ed il resto del sistema per il dispositivo sotto test. Il che si traduce nel
 fatto che le regole che azionerebbero il resto del sistema ad un evento di pubblicazione
-sui topic usati dal cloud sono disabilitate per il seriale del dispositivo in test.
+sui \gls{topic} usati dal cloud sono disabilitate per il seriale del dispositivo in test.
 
-Il raspberry di test si interfaccia quindi con IoT Core come client MQTT che può
-andare a pubblicare/sottoscriversi ai topic su cui il dispositivo comunica, come vediamo in \autoref{fig:cloud}.
+Il raspberry di test si interfaccia quindi con IoT Core come client \Gls{mqtt} che può
+andare a pubblicare/sottoscriversi ai \gls{topic} su cui il dispositivo comunica, come vediamo in \autoref{fig:cloud}.
 Dato che il broker non ha un ruolo attivo nel sistema (si occupa solo di inoltrare i messaggi ma non
 applica alcuna logica di protocollo) la sua presenza all'interno dello scenario di test non
 è problematica, in quanto viene trattato come un qualsiasi dispositivo di infrastruttura
@@ -1085,11 +1235,11 @@ applica alcuna logica di protocollo) la sua presenza all'interno dello scenario 
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}
-        \node[cloud, draw,cloud puffs=10,cloud puff arc=120, aspect=2, inner ysep=1em] (cloud) {AWS IoT};
-        \node[below of=cloud, left of=cloud, node distance=3cm, rectangle, draw, inner sep=8pt] (dispositivo) {Radiatore elettrico};
+        \node[cloud, draw,cloud puffs=10,cloud puff arc=120, aspect=2, inner ysep=1em] (cloud) {\Gls{mqtt} IoT};
+        \node[below of=cloud, left of=cloud, node distance=3cm, rectangle, draw, inner sep=8pt] (dispositivo) {\Gls{re}};
         \node[below of=cloud, right of=cloud, node distance=3cm, rectangle, draw, inner sep=8pt] (raspberry) {Raspberry Pi};
-        \draw (dispositivo) edge[bend left, left, align=center] node[left=0.5cm]{MQTT\\certificato} (cloud)
-            (raspberry) edge[bend right, right, align=center] node[right=0.5cm]{MQTT su Websocket\\autenticazione IAM} (cloud);
+        \draw (dispositivo) edge[bend left, left, align=center] node[left=0.5cm]{\Gls{mqtt}\\certificato} (cloud)
+            (raspberry) edge[bend right, right, align=center] node[right=0.5cm]{\Gls{mqtt} su Websocket\\autenticazione IAM} (cloud);
     \end{tikzpicture}
     \caption{interfacciamento fra raspberry e cloud}
     \label{fig:cloud}
@@ -1098,24 +1248,24 @@ applica alcuna logica di protocollo) la sua presenza all'interno dello scenario 
 
 A livello implementativo uso per collegare il software ad IoT Core
 la libreria ufficiale di AWS, \textit{awsiotsdk}. Questa libreria, a differenza dei
-normali client MQTT, consente infatti di autenticarsi grazie a credenziali IAM, non
+normali client \Gls{mqtt}, consente infatti di autenticarsi grazie a credenziali IAM, non
 richiedendo quindi la generazione di certificati per il tool di test.
 
 Il modulo cloud del sistema di test, oltre a gestire a basso livello la connessione
-al server MQTT, aggiunge un layer di astrazione che automatizza la conversione fra
+al server \Gls{mqtt}, aggiunge un layer di astrazione che automatizza la conversione fra
 binario e oggetti Python, e vice versa, dei messaggi secondo il protocollo custom
 implementato.
 
 È fornito un metodo \texttt{publish(msg)} per inviare un messaggio, che viene codificato ed
-inviato sul topic opportuno (scelto in base al tipo di messaggio secondo la specifica
-del protocollo). Ad ogni messaggio ricevuto sui topic a cui il dispositivo fa la
+inviato sul \gls{topic} opportuno (scelto in base al tipo di messaggio secondo la specifica
+del protocollo). Ad ogni messaggio ricevuto sui \gls{topic} a cui il dispositivo fa la
 subscription viene decodificato e salvato in una coda. Viene fornito un metodo \texttt{receive(timeout)}
 per ricevere un messaggio, ossia scodare l'ultimo messaggio dalla coda, o attendere
 fino ad un dato timeout che arrivi un messaggio dal dispositivo.
 
-Per quanto converne la gestione degli AWS IoT Core Jobs, che come detto prima vengono
+Per quanto converne la gestione degli \Gls{mqtt} IoT Core Jobs, che come detto prima vengono
 utilizzati per distribuire sui dispositivi operazioni batch da eseguire, viene
-utilizzata la libreria ufficiale Python di AWS \textit{boto3}. Vengono fornite
+utilizzata la libreria ufficiale Python di \Gls{mqtt} \textit{boto3}. Vengono fornite
 3 interfacce:
 \begin{itemize}
     \item \texttt{job\_create(document)}: che crea un job con il documento JSON specificato
@@ -1136,16 +1286,16 @@ Il Wi-Fi del Raspberry deve asservire a due compiti:
 Pertanto, vengono supportate due modalità di funzionamento, che non possono essere
 attive entrambe:
 \begin{itemize}
-    \item \textit{client}, in questo caso il Raspberry si collega all'interfaccia
-        access-point del radiatore elettrico
-    \item \textit{AP}, in questo caso il Raspberry agisce come access-point software
-        a cui il dispositivo radiatore elettrico si può connettere per raggiungere il
+    \item \acrshort{sta}, in questo caso il Raspberry si collega all'interfaccia
+        access-point del \Gls{re}
+    \item \acrshort{ap}, in questo caso il Raspberry agisce come \acrshort{ap} software
+        a cui il dispositivo \Gls{re} si può connettere per raggiungere il
         cloud.
 \end{itemize}
 
 Il vincolo che non possano essere attive entrambe è una semplificazione che viene ma che
 non riduce generalità, in quanto il radiatore in un momento può trovarsi a sua volta o in
-modalità \textit{AP} o in modalità \textit{client}. Il Raspberry dovrà quindi in maniera
+modalità \textit{ap} o in modalità \textit{client}. Il Raspberry dovrà quindi in maniera
 speculare andare ad attivare l'altra modalità. Facendo fede sul fatto che il Raspberry è
 più veloce a cambiare modalità del radiatore (cosa vera in quanto il dispositivo per poter
 cambiare modalità deve essere riavviato) la limitazione non toglie possibilità di test.
@@ -1196,28 +1346,52 @@ Queste sono le casistiche più difficili da testare ed avere la possibilità di 
 può voler dire accorgersi subito di problemi che altrimenti sarebbero difficilissimi
 se non impossibili da individuare in utenza.
 
-
 \section{Integrazione continua}
 
-Attualmente per i progetti aziendali utilizziamo un'infrastruttura di CI basata
-su Github Actions. Un server interno all'azienda esegue container e macchine virtuali
-sulle quali gira il software client di GitHub Actions.
+L'ultimo passo è quindi quello di integrare i test automatizzati nel flusso attuale 
+di \textit{continuos integration} (CI) aziendale, in maniera tale da non richiedere 
+un intervento manuale ogni volta che viene prodotta una nuova release. 
 
-Ad ogni commit (tipicamente merge) sul ramo principale (\textit{master}) del repository
-git del progetto viene automaticamente lanciato un job che ha come scopo quello
-di compilare tutti gli artefatti, che poi vengono archiviati su un bucket AWS S3
-dedicato.
+Per la gestione del versionamento del codice sorgente utilizziamo il sistema di controllo 
+versionamento \Gls{git} sul servizio \textit{GitHub}. Come politica interna di 
+\textit{branching model} abbiamo scelto di usare il \textit{trunk based developement}, 
+che sta sempre prendendo più piede all'interno delle aziende. 
 
-L'esito di ogni processo di CI viene anche tracciato in un database CouchDB,
-così come ogni installazione di un artefatto in un ambiente (quale può essere
-\textit{produzione}, \textit{staging}, etc.).
+Questo prevede che vi sia sempre un unico ramo, nel nostro caso il \textit{master}, sul 
+quale tutte le modifiche vengono integrate, idealmente il più spesso possibile, in 
+maniera tale da evitare che i vari rami di sviluppo divergano al punto da rendere difficile,
+se non impossibile, integrarli.
 
-Il test di integrazione automatizzato si integra perfettamente all'interno
-del flusso esistente: a setuito di un processo di compilazione finito con successo,
-e quindi la produzione di un nuovo firmware, viene avviato il flusso di test discusso
-fin ora. Esso viene eseguito su un runner GitHub Actions installato direttamente
-sul Raspberry in questione, che quindi esegue i job e, nel caso questi abbiano
-esito positivo, conferma la creazione di una nuova release, come mostrato in \autoref{fig:ci}.
+Fondamentale per questa filosofia di sviluppo è però l'uso di strumenti di \textit{continuos integration},
+che continuino a compilare e testare ogni nuovo commit sul \textit{master}, in maniera 
+tale da accorgersi il prima possibile di eventuali bug introdotti. Questo assicura che 
+vi sia sempre una versione compilata e funzionante potenzialmente rilasciabile agli utenti. 
+
+Utilizzando \textit{GitHub} viene naturale l'integrazione con il servizio di CI 
+\textit{GitHub actions}, che permette l'esecuzione di flussi di lavoro (\textit{workflow}), 
+a sua volta suddivisi in \textit{job}, su delle macchine worker, che possono essere sia 
+gestite da \textit{GitHub} stesso, sia essere installate su dei server gestiti da se. 
+
+Nel nostro caso utilizziamo un server di build con al interno container e macchine virtuali 
+sia Linux che Windows, oltre che ad un paio di server macOS per la compilazione di applicazioni 
+iOS. 
+
+Oltre a questo utilizziamo un database \textit{CouchDB} per archiviare lo stato di tutti 
+gli artefatti prodotti dai processi di CI e tracciare i loro rilasci nei vari ambienti di 
+esecuzione che noi abbiamo (produzione, staging, test). 
+
+Per questo progetto ho creato un unico \textit{workflow} che viene invocato quando viene eseguito 
+un push sul branch \textit{master} del repository contenente il firwmare del \Gls{re}, 
+che contiene a sua volta all'interno due \textit{job}:
+\begin{itemize}
+    \item \textit{compilazione}: il primo step è eseguito su una macchina virtuale Windows 
+        ed è quello che si occupa di compilare una nuova versione del \gls{firmware}, e di archiviarla
+        nel bucket contenente tutti gli artefatti prodotti dal processo CI
+    \item \textit{test}: esegue quanto descritto fin ora attraverso un runner installato 
+        direttamente sulla raspberry di test 
+\end{itemize}
+
+Vediamo in maniera schematica questa integrazione in \autoref{fig:ci}. 
 
 \begin{figure}
     \centering
@@ -1251,18 +1425,19 @@ di essi pregiudica ogni tipo di funzionalità del dispositivo o non ne permette 
 a successive versioni.
 
 \subsection{Abbinamento del dispositivo ad un impianto}
+\label{section:test_pairing}
 
 Viene testata la capacità di abbinare mediante app il dispositivo ad un impianto.
 Il dispositivo deve correttamente abbinarsi all’impianto ed inviare al cloud la versione
-del firmware corretta.
+del \gls{firmware} corretta.
 
 \subsubsection{Caso di test}
 \begin{center}
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo in stato \textit{non abbinato} & \\
-    \hline connettersi alla rete Wi-Fi del radiatore elettrico in test & la connessione ha successo. È possibile pingare il radiatore all'indirizzo 192.168.240.1 \\
-    \hline effettuare una richiesta HTTP GET all'API \textit{/irsap/status} & viene restituito un JSON contenente alcune informazioni sul dispositivo. Verificare che la versione del firmware indicata sia quella in test \\
+    \hline connettersi alla rete Wi-Fi del \Gls{re} in test & la connessione ha successo. È possibile pingare il radiatore all'indirizzo 192.168.240.1 \\
+    \hline effettuare una richiesta HTTP GET all'API \textit{/irsap/status} & viene restituito un JSON contenente alcune informazioni sul dispositivo. Verificare che la versione del \gls{firmware} indicata sia quella in test \\
     \hline effettuare una richiesta HTTP GET all'API \textit{/irsap/wifi/scan} & viene restituito un JSON contenente l'elenco delle reti Wi-Fi viste dal radiatore \\
     \hline inviare una richiesta HTTP POST all'API \textit{/irsap/provision} & entro 5 secondi il disposivo si riavvia. I led quindi lampeggiano di viola fino che non viene stabilita una connessione correttamente alla rete, a quel punto si spengono e si vede arrivare su cloud un messaggio di \textit{update}. \\
     \hline
@@ -1273,9 +1448,11 @@ del firmware corretta.
 \inputminted[]{python3}{src/test_pairing.py}
 
 \subsection{Downgrade del firmware mediante API REST locale}
+\label{section:test_downgrade}
+
 Il dispositivo deve essere sempre aggiornabile mediante API REST locale quando questo
 è in stato \textit{non abbinato}. Garantisce che in caso di problemi la app possa sempre
-installare sul dispositivo un firmware sicuramente funzionante, nonché il firmware
+installare sul dispositivo un \gls{firmware} sicuramente funzionante, nonché il \gls{firmware}
 possa essere aggiornato all’ultima versione fabbrica durante la procedura di collaudo.
 
 \subsubsection{Caso di test}
@@ -1283,7 +1460,7 @@ possa essere aggiornato all’ultima versione fabbrica durante la procedura di c
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo appena inizializzato alle impostazioni di fabbrica & il dispositivo si trova in stato \textit{non abbinato} \\
-    \hline inviare al dispositivo una versione del firmware precedente a quella installata & il dispositivo entro 30 secondi si riavvia e presenta nel suo stato la versione firmware inviatagli \\
+    \hline inviare al dispositivo una versione del \gls{firmware} precedente a quella installata & il dispositivo entro 30 secondi si riavvia e presenta nel suo stato la versione \gls{firmware} inviatagli \\
     \hline
 \end{tabular}
 \end{center}
@@ -1291,17 +1468,18 @@ possa essere aggiornato all’ultima versione fabbrica durante la procedura di c
 \subsubsection{Implementazione}
 \inputminted[]{python3}{src/test_downgrade.py}
 
-\subsection{Aggiornamento di un dispositivo mediante OTA AWS}
+\subsection{Aggiornamento di un dispositivo mediante OTA MQTT}
+\label{section:test_ota}
 
 Un dispositivo abbinato ad una app e connesso ad internet deve poter ricevere gli
-aggiornamenti OTA mediante Job di AWS.
+aggiornamenti \acrshort{ota} mediante \Gls{awsjob}.
 
 \subsubsection{Caso di test}
 \begin{center}
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & i LED della pulsantiera sono spenti \\
-    \hline inviare mediante AWS Job la versione firmware precedente & il job passa in stato \textit{in corso} sulla console di AWS. Entro un minuto il dispositivo si riavvia con il nuovo firmware ed il job passa in stato \textit{successo}. Su cloud è inviato un messaggio riportante la versione del firmware inviatagli. \\
+    \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
+    \hline inviare mediante \Gls{awsjob} la versione \gls{firmware} precedente & il job passa in stato \textit{in corso} sulla console di \Gls{mqtt}. Entro un minuto il dispositivo si riavvia con il nuovo \gls{firmware} ed il job passa in stato \textit{successo}. Su cloud è inviato un messaggio riportante la versione del \gls{firmware} inviatagli. \\
     \hline
 \end{tabular}
 \end{center}
@@ -1310,14 +1488,16 @@ aggiornamenti OTA mediante Job di AWS.
 \inputminted{python3}{src/test_ota.py}
 
 \subsection{Ripristino di fabbrica di un dispositivo connesso}
+\label{section:test_factory_reset}
+
 Deve essere sempre garantito che un dispositivo possa essere riportato alle impostazioni di fabbrica.
 
 \subsubsection{Caso di test}
 \begin{center}
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & i LED della pulsantiera sono spenti \\
-    \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i LED rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
+    \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
+    \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
     \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{DELETE} \\
     \hline
 \end{tabular}
@@ -1327,19 +1507,21 @@ Deve essere sempre garantito che un dispositivo possa essere riportato alle impo
 \inputminted{python3}{src/test_factory_reset.py}
 
 \subsection{Ripristino di fabbrica di un dispositivo disconnesso}
+\label{section:test_factory_reset_unbounded}
 
 Deve essere possibile resettare un dispositivo anche quando questo non è connesso
 alla rete, in quanto l'utente potrebbe volerlo riabbinare da app in quanto ha sostituito
-o cambiato la configurazione del proprio access-point Wi-Fi.
+o cambiato la configurazione del proprio \acrshort{ap} Wi-Fi.
 
 \subsubsection{Caso di test}
 \begin{center}
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{disconnesso} & i LED della pulsantiera sono gialli \\
-    \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i LED rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
-    \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso \\
     \hline
+    \textbf{azione} & \textbf{risultato atteso} \\ \hline
+    portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\ \hline
+    spegnere l'\acrshort{ap} al quale il dispositivo è connesso & il dispositivo continua a funzionare in modalità \textit{disconnesso} \\ \hline
+    tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\ \hline
+    rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso \\ \hline
 \end{tabular}
 \end{center}
 
@@ -1347,6 +1529,7 @@ o cambiato la configurazione del proprio access-point Wi-Fi.
 \inputminted{python3}{src/test_factory_reset_unbounded.py}
 
 \subsection{Termoregolazione di base}
+\label{section:test_thermoregulation}
 
 Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente seguendo un set-point manuale.
 
@@ -1356,15 +1539,16 @@ Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente segu
     \hline
     \textbf{azione} & \textbf{risultato atteso} \\ \hline
     abbinare un radiatore e portarlo in modo funzionamento \textit{manuale} con set-point inferiore alla temperatura ambiente & il radiatore non è in riscaldamento \\ \hline
-    incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i LED della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\ \hline
-    decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i LED della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\ \hline
+    incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\ \hline
+    decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\ \hline
 \end{tabular}
 \end{center}
 
 \subsubsection{Implementazione}
 \inputminted{python3}{src/test_thermoregulation.py}
 
-\subsection{Attivazione modalità stand-by mediante pulsantiera del radiatore}
+\subsection{Attivazione modalità stand-by}
+\label{section:test_standby}
 
 Scopo di questo test è la verifica che la funzionalità di stand-by funzioni correttamente.
 È molto importante in quanto una normativa europea impone che ogni prodotto abbia una
@@ -1375,10 +1559,10 @@ modalità stand-by imponendo anche un limite massimo di consumo in questa modali
 \begin{center}
 \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
     \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline prendere un radiatore dotato di LED RGBW \textit{connesso} ed in modo \textit{manuale} che sta chiamando e con i LED accesi & \\
-    \hline tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore smette di riscaldare ed i LED RGBW si spengono \\
-    \hline toccare la pulsantiera del radiatore & i LED della pulsantiera si illuminano di viola \\
-    \hline tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore riprende a riscaldare ed i LED RGBW si riaccendono con lo stesso colore che avevano in precedenza \\
+    \hline prendere un radiatore dotato di \acrshort{led} RGBW \textit{connesso} ed in modo \textit{manuale} che sta chiamando e con i \acrshort{led} accesi & \\
+    \hline tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore smette di riscaldare ed i \acrshort{led} RGBW si spengono \\
+    \hline toccare la pulsantiera del radiatore & i \acrshort{led} della pulsantiera si illuminano di viola \\
+    \hline tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore riprende a riscaldare ed i \acrshort{led} RGBW si riaccendono con lo stesso colore che avevano in precedenza \\
     \hline
 \end{tabular}
 \end{center}
@@ -1387,6 +1571,7 @@ modalità stand-by imponendo anche un limite massimo di consumo in questa modali
 \inputminted{python3}{src/test_standby.py}
 
 \subsection{Funzionamento disconnesso}
+\label{section:test_offline_working}
 
 Lo scopo di questo test è verificare che in assenza di connessione ad internet il
 dispositivo continui a funzionare per quanto previsto dalla modalità \textit{degradata}.
@@ -1397,8 +1582,8 @@ dispositivo continui a funzionare per quanto previsto dalla modalità \textit{de
     \hline \textbf{azione} & \textbf{risultato atteso} \\
     \hline prendere un dispositivo abbinato ad un impianto in modo \textit{programmato} spento & \\
     \hline spegnere l'access point Wi-Fi configurato nel dispositivo & \\
-    \hline accendere il dispositivo & i LED della pulsantiera entro 30 secondi si illuminano di giallo \\
-    \hline riconnettere l'access point & entro 30 secondi i LED del dispositivo si spengono. Su cloud arriva una richiesta GET dal dispositivo \\
+    \hline accendere il dispositivo & i \acrshort{led} della pulsantiera entro 30 secondi si illuminano di giallo \\
+    \hline riconnettere l'access point & entro 30 secondi i \acrshort{led} del dispositivo si spengono. Su cloud arriva una richiesta GET dal dispositivo \\
     \hline
 \end{tabular}
 \end{center}
@@ -1412,10 +1597,17 @@ Vediamo ora la differenza in termini di tempo fra l'esecuzione del test in manie
 e l'esecuzione manuale:
 
 \begin{center}
-\begin{tabular}{| c | c | c |}
+\begin{tabular}{| l | c | c |}
     \hline
     \textbf{test} & \textbf{manuale} & \textbf{automatico} \\ \hline
-    paring & ??min & ??min \\ \hline
+    \fullref{section:test_pairing} & ??min & ??min \\ \hline
+    \fullref{section:test_downgrade} & ??min & ??min \\ \hline
+    \fullref{section:test_ota} & ??min & ??min \\ \hline
+    \fullref{section:test_factory_reset} & ??min & ??min \\ \hline
+    \fullref{section:test_factory_reset_unbounded} & ??min & ??min \\ \hline 
+    \fullref{section:test_thermoregulation} & ??min & ??min \\ \hline 
+    \fullref{section:test_standby} & ??min & ??min \\ \hline 
+    \fullref{section:test_offline_working} & ??min & ??min \\ \hline 
 \end{tabular}
 \end{center}
 
@@ -1433,7 +1625,7 @@ potrà essere applicata, e le relative sfide per implementarla.
 
 \section{Futuri radiatori elettrici}
 
-Attualmente è in progettazione una nuova elettronica per il radiatore elettrico,
+Attualmente è in progettazione una nuova elettronica per il \Gls{re},
 che mira a produrre un'unica piattaforma modulare per tutti i dispositivi radiatori elettrici
 (e non solo) smart prodotti da IRSAP.
 
@@ -1453,7 +1645,7 @@ da un prodotto all'altro, anche per adattarlo alle esigenze di mercati different
 
 Per la scheda logica abbiamo deciso di scegliere un modulo Wi-Fi Espressif
 ESP-32, che non solo è più economico rispetto al Telit ma ha delle caratteristiche
-hardware superiori, ed integra oltre al Wi-Fi anche un interfaccia Bluetooth Low Energy (BLE).
+hardware superiori, ed integra oltre al Wi-Fi anche un interfaccia \Gls{ble}.
 
 Questo rende anche possibile adottare l'elettronica smart anche su prodotti di
 fascia entry-level, che attualmente montano un controllo totalmente analogico se non
@@ -1462,8 +1654,8 @@ quanto per garantire il risparmio energetico si chiede che sia implementata una 
 a fasce orarie).
 
 Dato il basso costo di alcuni di questi dispositivi non tutti di fabbrica usciranno
-connessi al cloud ``IRSAP NOW'', ma avranno una modalità di funzionamento solo locale
-tramite Bluetooth Low Energy (BLE). Questo perché l'avere svariate migliaia di dispositivi
+connessi al cloud \Gls{now}, ma avranno una modalità di funzionamento solo locale
+tramite \Gls{ble}. Questo perché l'avere svariate migliaia di dispositivi
 (si pensa di arrivare a produrne circa 60.000 all'anno) connessi al cloud comporterebbe
 dei costi insostenibili. Inoltre per molti clienti, soprattutto dei modelli più di
 fascia bassa, l'uso della app è solo un impedimento e preferiscono avere una gestione
@@ -1471,7 +1663,7 @@ manuale del dispositivo.
 
 Se il cliente lo deciderà potrà acquistare la possibilità di connetterlo alla piattaforma
 NOW e renderlo quindi gestibile non solo in locale ma anche da remoto, oltre che
-ottenere tutti i benefici e le funzioni che ``IRSAP NOW'' può offrire, come la
+ottenere tutti i benefici e le funzioni che \Gls{now} può offrire, come la
 raccolta di dati statistici sul funzionamento dell'impianto.
 
 In questi dispositivi è previsto infine il supporto al protocollo \textit{Matter},
@@ -1481,13 +1673,13 @@ Quanto detto sopra consegue che il numero di test che dovranno essere effettuati
 ogni nuovo rilascio aumenta di parecchio: diventa ancora più vantaggioso andare ad
 utilizzare le procedure di testing automatizzato visto fin ora.
 
-\subsection{Test di dispositivi RF}
+\section{Test di dispositivi RF}
 
-Sempre il cliente IRSAP dispone di un altro prodotto nell'ecosistema ``IRSAP NOW'',
+Sempre il cliente IRSAP dispone di un altro prodotto nell'ecosistema \Gls{now},
 un sistema di controllo per impianti idraulici composto da teste termostatiche,
 termostati ambiente ed un modulo di interfacciamento verso la caldaia. Tutti questi
 dispositivi (\autoref{fig:dispositivi_now}) comunicano con una unità centrlae di controllo
-(CU), che è il cuore del sistema, tramite un protocollo RF a 868MHz.
+(CU), che è il cuore del sistema, tramite un protocollo \Gls{rf} a 868MHz.
 
 \begin{figure}[h]
     \centering
@@ -1497,7 +1689,7 @@ dispositivi (\autoref{fig:dispositivi_now}) comunicano con una unità centrlae d
 \end{figure}
 
 Una delle difficoltà attuali è l'impossibilità di andare a testare in maniera isolata i
-dispositivi RF e l'unità centrale.
+dispositivi \Gls{rf} e l'unità centrale.
 
 Ad esempio per validare una nuova versoine firmware della CU è necessario avere a disposizione tanti dispositivi quanti
 ne supporta al massimo il sistema, ovvero 48, un numero che rende molto complessa anche a
@@ -1509,47 +1701,47 @@ dal sistema, andare a simulare i dispositivi lato software, consentendo con un'u
 radio di simulare tutti i 48 dispositivi senza fisicamente averli in ufficio.
 
 Oltre a ciò in questo progetto si può porsi anche ad un livello più basso: l'unità
-centrale contiene due microcontrollori (e di conseguenza due firmware) che comunicano fra di
-loro mediante un protocollo seriale (su interfaccia UART). Uno integra il ricetrasmettitore
+centrale contiene due microcontrollori (e di conseguenza due \gls{firmware}) che comunicano fra di
+loro mediante un protocollo seriale (su interfaccia \Gls{uart}). Uno integra il ricetrasmettitore
 a radiofrequenza ed è deputato a gestire la comunicazione con i dispositivi
 finali, l'altro invece implementa tutte le logiche di funzionamento incluso l'interfacciamento
 con il cloud, che avviene tramite porta ethernet.
 
-Si potrebbe quindi andare a testare i due firmware in maniera isolata l'uno dall'altro,
+Si potrebbe quindi andare a testare i due \gls{firmware} in maniera isolata l'uno dall'altro,
 andando a simulare sempre tramite software la controparte mancante. Questo evita di dover
-testare tutto i sistema, in particolare la parte RF, quando uno solo dei due software viene
+testare tutto i sistema, in particolare la parte \Gls{rf}, quando uno solo dei due software viene
 aggiornato. Infatti la parte radio viene aggiornata decisamente più di rado rispetto alla
 gestione delle logiche di funzionamento, ma è la più dispendiosa in termini di tempo da testare
-(anche perché gestendo a livello fisico la comunicazione RF, in linea teorica, ogni volta andrebbero
+(anche perché gestendo a livello fisico la comunicazione \Gls{rf}, in linea teorica, ogni volta andrebbero
 rieseguiti i test di laboratorio per assicurarsi che i parametri radio restino nei limiti
 imposti dalla normativa vigente).
 
 \section{Test di un termostato}
 
-In IOTINGA infine abbiamo altri progetti firmware più complessi su cui questa metodologia
+In IOTINGA infine abbiamo altri progetti \gls{firmware} più complessi su cui questa metodologia
 di test potrebbe essere applicata. Uno su tutti il progetto YAT (Yet Another Thermostat),
 un cronotermostato Wi-Fi in grado di comunicare con la caldaia su bus OpenTherm, ma
 che in futuro verrà prodotto anche in versione Modbus.
 
 La peculiarità di questo progetto è il fatto che è prevista l'interazione fra più
-termostati mediante Bluetooth Low Energy (BLE) in modalità Long Range. In questo modo
+termostati mediante \Gls{ble} in modalità Long Range. In questo modo
 si può gestire un impianto multizona, in cui vi è un termostato ``master'' (alimentato
 tramite tensione di rete) che mantiene la connessione verso il cloud e la comunicazione
 con gli altri termostati ``slave'', che possono essere dei dispositivi a batteria
 in quanto non necessitano di una costante connessione con la rete.
 
-Altra caratteristica è un'interfaccia utente (HMI)
+Altra caratteristica è un'interfaccia utente (\acrshort{hmi})
 locale completa, che utilizza un display a matrice in bianco e nero (o in modelli
 futuri a colori TFT) e dei pulsanti capacitivi per navigare nei vari menù. Anche
 qui la sfida è riuscire a testare anche l'interfaccia utente in maniera più o meno
 automatizzata. Si potrebbe ad esempio escludere completamente il display e verificare
-tramite interfacciamento SPI che il microcontrollore arrivi a scrivere i dati correttamente
+tramite interfacciamento \Gls{spi} che il microcontrollore arrivi a scrivere i dati correttamente
 nella memoria video dello schermo.
 
 Come negli scenari visti fin ora anche qui abbiamo una possibilità di gestire configurazioni
 differenti, unita al fatto che questo dispositivo verrà venduto anche in modalità ``white label'',
 ossia ogni produttore potrà scegliere di andare a personalizzare alcuni aspetti e quindi
-avere un firmware differente dagli altri. Consegue quindi che ad una modifica potrebbe
+avere un \gls{firmware} differente dagli altri. Consegue quindi che ad una modifica potrebbe
 corrispondere un numero elevato di binari differenti da testare, uno per cliente, e
 ancora la necessità di effettuare dei test automatizzati per garantire la qualità di
 quanto finisce in mano ai clienti.
@@ -1561,7 +1753,12 @@ lavoro assieme, dove ho potuto sperimentare e migliorare la mia conoscenza su un
 numero di tecnologie ed ambiti che è impossibile elencare in un paragrafo.
 
 Ringrazio IRSAP s.p.a., ed in particolare Marco, Leandro, Daniele, Mario, e tutto il team
-di ``IRSAP NOW'' con cui ho potuto lavorare assieme in questi ultimi anni per realizzare
+di \Gls{now} con cui ho potuto lavorare assieme in questi ultimi anni per realizzare
 quanto si è visto solo in piccola parte in questo documento.
+
+\clearpage
+
+\printglossary
+\printglossary[type=\acronymtype]
 
 \end{document}

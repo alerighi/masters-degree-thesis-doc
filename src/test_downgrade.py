@@ -1,14 +1,16 @@
-def test_downgrade(ctx: Context):
-    # quando il dispositivo è resettato i LED devono essere rossi
-    assert ctx.io.get_led_color() == LedColor.RED
+from time import sleep
 
+from fw_test.context import Context 
+from fw_test.firmware import FirmwareVersion
+
+
+def test_downgrade(ctx: Context):
     # connette il Raspberry all'AP del radiatore elettrico
     ctx.wifi.client_connect()
 
     # invio aun aggiornamento firmware locale
-    response = ctx.wifi.local_send_firmware_update(ctx.config.prev_firmware_path)
-
-    assert response == 200
+    response = ctx.api.firmware_update(ctx.config.prev_firmware_path)
+    assert response.status_code == 200
 
     # attendo che il dispositivo si riavvii
     sleep(2)
@@ -16,8 +18,8 @@ def test_downgrade(ctx: Context):
     # mi ricollego al radiatore     
     ctx.wifi.client_connect()
 
-    response = ctx.wifi.local_get_status()
+    response = ctx.wifi.status()
 
     # controllo che la versione firmware sia quella inviata
-    assert response.json()['system']['fwVer'] == ctx.config.prev_firmware_version
+    assert FirmwareVersion.from_str(["system"]["fwVer"]) == ctx.config.prev_firmware_version
 

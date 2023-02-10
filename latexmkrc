@@ -6,16 +6,17 @@ sub frn2pdf {
 
 set_tex_cmds( '--shell-escape %O %S' );
 
-# add_cus_dep( 'acn', 'acr', 0, 'makeglossaries' );
-# add_cus_dep( 'glo', 'gls', 0, 'makeglossaries' );
-# $clean_ext .= " acr acn alg glo gls glg";
+add_cus_dep( 'acn', 'acr', 0, 'makeglossaries' );
+add_cus_dep( 'glo', 'gls', 0, 'makeglossaries' );
+$clean_ext .= " acr acn alg glo gls glg";
 
-# sub makeglossaries {
-#     my ($base_name, $path) = fileparse( $_[0] );
-#     my @args = ( "-q", "-d", $path, $base_name );
-#     if ($silent) {
-#         unshift @args, "-q";
-#     }
+sub makeglossaries {
+    my ($base_name, $path) = fileparse( $_[0] );
+    my @args = ( "-q", "-d", $path, $base_name );
+    if ($silent) {
+        unshift @args, "-q";
+    }
 
-#     return system "makeglossaries", "-d", $path, $base_name;
-#  }
+    return system "makeglossaries", "-d", $path, $base_name;
+}
+
