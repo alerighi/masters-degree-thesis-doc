@@ -38,7 +38,7 @@ def test_thermoregulation(ctx: Context):
     assert ctx.io.status_led_color == LedColor.OFF
 
     ctx.cloud.publish(Message(
-        action=Action.GET,
+        action=Action.DESIRED_UPDATE,
         state={
             **STATE_MANUAL,
             "clientToken": msg.state["clientToken"],
