@@ -69,6 +69,8 @@
 \newacronym{sil}{SIL}{System Integrity Level}
 \newacronym{ca}{CA}{Certification Authority}
 \newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{sntp}{SNTP}{Simple Network Time Protocol}
+\newacronym{ncm}{NCM}{Network Connection Manager}
 
 % glossario
 \newglossaryentry{mqtt}{
@@ -187,6 +189,18 @@
         che è in grado oltre a portare i dati di fornire alimentazione al dispositivo master (termostato).}
 }
 
+\newglossaryentry{produttore}{
+    name=produttore,
+    description={Colui che pone il proprio marcho sul prodotto. È suo obbligo garantire le qualità del prodotto dichiarate, 
+        e risponde al consumatore in caso di non conformità o danni}
+}
+
+\newglossaryentry{consumatore}{
+    name=consumatore,
+    description={L'utente finale del sistema. È suo obbligo utilizzare il prodotto per gli scopi e nei modi 
+        dichiarati dal produttore}
+}
+
 % macro
 \newcommand*{\fullref}[1]{\hyperref[{#1}]{\nameref*{#1} (\ref*{#1})}}
 
@@ -220,7 +234,7 @@
 
 \chapter{Introduzione}
 
-Oggigiorno nelle nostre case ci sono sempre più prodotti connessi,
+Nelle nostre case ci sono sempre più prodotti connessi,
 dalle lavatrici, ai televisori, fino agli impianti domotici che
 consentono di controllare la nostra casa mediante un comando vocale
 anche quando ci si trova dall'altra parte del pianeta.
@@ -296,34 +310,43 @@ dell'ecosistema cloud e della app.
 \chapter{Definizione del problema}
 
 Le conseguenze legali determinate dall'introduzione di un prodotto sul mercato 
-sono a carico del produttore (colui che appone il proprio marchio sullo stesso). 
+sono a carico del produttore, ovvero di colui che appone il proprio marchio sullo stesso. 
+È quindi interesse del produttore tutelarsi andando a dimostrare che nel realizzare il 
+prodotto ha prestato tutte le accortezze possibili, ossia lo ha realizzato \textit{a regola d'arte}. 
 
-\section{Test di qualità}
+\section{Assicurazione sulla qualità}
 
 Per quanto concerne le caratteristiche fisiche questi obblighi sono 
-espressi in varie direttive europee (come la direttiva \acrshort{red} che si applica agli apparati 
-radio, la direttiva \acrshort{emc} che riguarda le emissioni elettromagnetiche e la 
-direttiva \acrshort{bt} che riguarda i dispositivi alimentati a tensione di rete) 
+anche espressi da varie leggi italiane ed europee (ad esempio la \acrshort{red}, 
+che si applica agli apparati elettronici contenenti all'interno interfacce radio) 
 che dettano le linee guida generali da seguire per poter considerare il prodotto 
-conforme (e poter apporvi il marchio \textbf{CE}). 
+conforme. Queste direttive sono atte a far sì che i prodotti immessi sul mercato non 
+presentino dei pericoli per gli utilizzatori o possano disturbare il funzionamento o 
+danneggiare altre apparecchiature (come nel caso delle emissioni elettromagnetiche). 
 
-Le direttive impongono principi generali che essenzialmente richiedono che il 
-prodotto sia realizzato \textit{a regola d'arte}. Il modo migliore (ma non l'unico)
-che un produttore ha per dimostrare che il prodotto è conforme è quello di progettarlo 
-seguendo le \textit{norme di prodotto} relative a quanto si sta realizzando. 
+Ogni produttore è quindi obbligato a rilasciare una textit{dichiarazione di conformità}
+del prodotto ed apporvi il marchio \textbf{CE}. A differenza di quanto si crede, e di 
+quanto avviene negli Stati Uniti, il marchio \textbf{CE} non richiede test da un laboratorio 
+di terze parti ma è un'autocertificazione del produttore che dichiara di aver realizzato 
+il prodotto \textit{a regola d'arte} e di aver fatto tutti i test necessari per considerarlo tale. 
 
-Tuttavia non è sufficiente questo per garantire la qualità: è necessario mettere 
-in piedi una procedura atta a verificare che ogni esemplare prodotto sia conforme 
-a quanto dichiarato. Questo si ottiene mediante procedure di \textit{quality testing}, 
-ovvero dei test effettuati su ogni prodotto prima che questo lasci la fabbrica. 
+Chiaramente il modo più semplice (ma non l'unico) che ha il produttore per dimostrare che 
+il proprio prodotto è realizzato \textit{a regola d'arte} è il seguire
+durante la sua progettazione le \textit{norme di prodotto} che lo riguardano, dimostrandolo 
+poi facendo eseguire dei test di laboratorio ad un ente terzo certificatore. 
+
+Tuttavia non è sufficiente eseguire solamente dei test a campione: è anche necessario mettere 
+in piedi una procedura per collaudare ogni esemplare che esce dalla fabbrica. Questo si ottiene 
+mediante procedure di \textit{quality testing}. 
 
 Nel nostro caso questi test sono effettuati sia dal produttore della scheda elettronica, 
-che collaudano ogni scheda sia a livello elettrico che funzionale, sia dal produttore finale,
-ossia IRSAP stessa, che collauda ogni radiatore assemblato per garantire che funzioni correttamente 
-e che non presenti pericoli (ad esempio viene verificato che non vi siano dispersioni elettriche). 
+che collaudano ogni scheda a livello elettrico e funzionale, sia dal produttore finale,
+ossia IRSAP stessa, che collauda ogni radiatore assemblato (elettronica più corpo scaldante) per 
+verificare che funzioni correttamente e che non presenti pericoli (non ci sono dispersioni elettriche). 
 
-E per quanto concerne il software? Purtroppo attualmente non esistono direttive che 
-impongono di seguire determinati standard per assicurarne la qualità. 
+E per quanto concerne il software? Purtroppo attualmente non esistono obblighi normativi generali di 
+nessun tipo riguardo alla realizzazione del software, salvo per settori considerati critici per la 
+sicurezza, come l'aereospaziale, il medicale, il militare, ecc. 
 
 \section{Lo standard SIL}
 
@@ -357,134 +380,124 @@ del software realizzato, che sono riassunti nella seguente tabella:
 
 Nei progetti che sviluppiamo in IOTINGA utilizziamo solitamente il livello 2. 
 Il limite principale dei livelli 3 e 4 è la definizione della specifica, che 
-deve essere formale. I clienti solitamente forniscono le specifiche in linguaggio 
-naturale, ed andarle ad esprimere in linguaggio formale o semi-formale è un'attività 
-dispendiosa, che poco si adatta con il modello di sviluppo \textit{agile} che seguiamo. 
+deve essere formale o semiformale. I clienti solitamente ci forniscono le specifiche in linguaggio 
+naturale, in quanto il fare diversamente sarebbe molto dispendioso in termini di tempo, 
+e ciò poco si adatta con il modello di sviluppo \textit{agile} che seguiamo. 
 
-I prodotti infatti per rispondere alle esigenze del mercato, e per non rimanere indietro 
-rispetto ai concorrenti, devono essere sviluppati velocemente, ed inoltre devono poter 
+Infatti i prodotti per rispondere alle esigenze del mercato, così da rimanere 
+competitivi verso la concorrenza, devono essere sviluppati velocemente, ed devono poter 
 evolvere durante la loro vita con l'aggiunta di nuove funzionalità. 
 
-\section{Necessità di test di un dispositivo IoT}
+\section{Perché assicurare la qualità del prodotto}
 
-La caratteristica fondamentale per questi prodotti è l'affidabilità.
-Infatti nessun utente installerebbe in casa propria un dispositivo che
-non è in grado di svolgere la funzione per la quale è stato acquistato.
+Oltre agli obblighi normativi citati sopra, il produttore ha interesse ad andare oltre, 
+assicurando non solo che il prodotto non sia dannoso, ma che questo funzioni in maniera 
+affidabile. 
 
-A maggior ragione i danni derivanti dal malfunzionamento di un impianto
-di riscaldamento possono coinvolgere non solo cose, ad esempio tubature 
-che si ghiacciano, ma anche estendersi a persone ed animali domestici.
+Nessun utente installerebbe in casa propria un dispositivo che
+non è in grado di svolgere la funzione per la quale è stato acquistato, 
+o che necessita di continue attenzioni.
+A maggior ragione nessun installatore consiglierebbe ad un cliente un prodotto che 
+funziona male, visto che poi è lui che ci mette la faccia e che deve anche 
+fornire assistenza al cliente riguardo al dispositivo che ha installato. 
 
-È tassativo prestare attenzione alle problematiche che si possono verificare
-in utenza, le quali non sono solo un danno per il cliente stesso ma anche
-per l'azienda produttrice:
+I danni che possono poi derivare dal malfunzionamento di un impianto
+di riscaldamento in particolare possono coinvolgere non solo cose, ad esempio tubature 
+ghiacciate, ma anche estendersi a persone ed animali domestici.
+
+Tutto ciò si traduce in una necessità di prevenire i problemi anziché risolverli in seguito, 
+per 3 motivi principali:
 
 \begin{itemize}
     \item la prima impressione sul cliente è quella che conta, se il cliente si ritrova
         un prodotto che funziona male o addirittura non svolge la funzione prevista ne parlerà
-        male, anche mediante recensioni negative online, e creerà un danno d'immagine all'azienda
-        difficilissimo da sanare
+        male, anche con recensioni negative online, e creerà un danno d'immagine all'azienda
+        difficile da rimediare
     \item quando il problema si verifica dal cliente è complicata la diagnostica. I clienti,
-        e spesso anche gli installatori stessi, non hanno competenze tecniche o il
-        tempo da dedicare nel supportare il produttore nella ricerca del problema
+        e spesso anche gli installatori stessi, non hanno nè competenze tecniche in ambito informatico nè il
+        tempo da dedicare nel supportare il produttore nella ricerca del problema effettuando prove ed esperimenti
     \item se il problema non è risolvibile mediante un aggiornamento \gls{firmware} è necessario
         effettuare un reso, che ha dei costi molto elevati per il produttore, in quanto
         durante il trasporto molto spesso il prodotto viene danneggiato e quindi deve
-        essere rimpiazzato con un nuovo
+        essere sostituito con un nuovo
 \end{itemize}
 
-È di fondamentale importanza assicurarsi di identificare il prima possibile quanti
-più problemi possibili prima che il prodotto arrivi nelle mani dell'utente finale.
-
-In tutto questo il software ricopre un ruolo sempre più da protagonista, in quanto
-per garantire la connettività al cloud è necessario gestire una complessità elevata.
-
-I prodotti della precedente generazione utilizzavano il software per una mera gestione
+I prodotti della precedente generazione utilizzavano il software per una sola gestione
 delle periferiche fisiche del prodotto, senza la necessità di interfacciarsi con sistemi
-terzi. Al contrario i prodotti della attuale per svolgere tutte le funzioni di
-integrazione cloud in maniera sicura richiedono un livello aggiuntivo di astrazione,
-ovvero quello di un \Gls{rtos}.
+terzi. Il software era quindi molto semplice, e soprattutto una volta validato in laboratorio 
+non vi erano possibilità che smettesse di funzionare come in origine (salvo guasti hardware). 
 
-Anche l'hardware stesso è più evoluto, infatti si passa dalle piattaforme ad 8 bit ai
-microcontrollori a 32, con funzionalità sempre più assimilabili a quelle di un sistema
-general purpose, quali ad esempio una gestione di programmazione concorrente, uno
+Nella nuova generazione di prodotti invece l'hardware è più evoluto, passiamo ai \gls{micro} 
+ad 8 bit quelli a 32-bit, con funzionalità sempre più assimilabili a quelle di un sistema
+general purpose, quali ad esempio una gestione di programmazione concorrente tramite un \acrfull{rtos}, uno
 stack di rete TCP/IP, ed una gestione della memoria virtual con MMU.
 
 Un'altra differenza rispetto al passato è la possibilità di aggiornare il software dopo
 che il prodotto lascia la fabbrica, mediante aggiornamenti di tipo \acrfull{ota}.
-Questo si rende necessario non solo per la mera introduzione di nuove funzionalità in
+Questo si rende necessario non solo per l'introduzione di nuove funzionalità in
 un prodotto esistente, ma anche per mantenere il software al passo con l'evoluzione degli
-altri sistemi a cui esso si collega, quale ad esempio modifiche nei protocolli di rete
-dettate dall'arrivo di nuovi standard.
+altri sistemi lato server a cui si collega, che nel tempo necessariamente evolvono a volte 
+in maniera non retrocompatibili.
 
-Sebbene l'aggiornamento consenta di risolvere problemi dopo che il dispositivo ha lasciato la
-fabbrica esso comporta anche una criticità, in quanto vi è il rischio di introdurre altri problemi
-in prodotti che fino a quel momento non li avevano, andando a creare un disservizio.
-
-Bisogna infine tener conto che un prodotto di questo tipo segue un ciclo di vita molto lungo
+Bisogna infatti tener conto che un prodotto di questo tipo segue un ciclo di vita molto lungo
 rispetto ad esempio a PC o smartphone, che può tranquillamente superare i 10 anni dalla data di
-immissione nel mercato, e l'utente si aspetta che in tutti questi anni possa continuare ad
-utilizzarlo come il giorno in cui lo ha acquistato.
+immissione nel mercato, e l'utente si aspetta che in tutti questi anni continui a funzionare. 
+Sebbene la legge obblighi solo a garantire il funzionamento soltanto per il periodo di durata 
+della garanzia, è chiaro che se il prodotto dopo 2 anni smette di funzionare come in origine 
+il cliente sarebbe particolarmente arrabbiato e probabilmente per i prossimi acquisti si rivolgerebbe altrove. 
 
-Conseguentemente diventa prioritario garantire i massimi livelli di qualità possibile
+Non basta più quindi andare a validare il software una sola volta quando si fanno i test 
+di laboratorio prima di immettere il prodotto sul mercato, ma la validazione deve essere continua, 
+per tutta la vita del prodotto, per ogni singolo aggiornamento \acrfull{ota} che viene mandato 
+ai dispositivi. 
+
+\section{Prassi attuale testing}
+
+Diventa quindi sempre più prioritario garantire i massimi livelli di qualità possibile
 sul software rilasciato. Questo non si limita alla semplice assenza di bug, in quanto
 questa è una garanzia che matematicamente è impossibile offrire, ma anche all'adottare
 delle procedure procedure tali che consentano, dal momento che un bug si
 presenta, di individuarlo e sistemarlo nel minor tempo possibile.
 
-Tracciabilità e mantenibilità del codice sono quindi parole chiave, la prima garantisce che
-sia sempre possibile risalire all'esatta versione del codice per il quale viene segnalato un
-problema di modo da poterlo riprodurre, la seconda invece assicura che la soluzione al problema
-sia implementabile nel minor tempo possibile e senza il rischio di regressioni.
-
-Infine l'altro punto cardine è l'eseguire test metodologici prima che il \gls{firmware} venga
-rilasciato al pubblico, sia tramite aggiornamento \acrshort{ota} che tramite installazione in fabbrica
-su di un nuovo prodotto.
-
-\section{Prassi attuale testing}
-
-Allo stato attuale abbiamo 3 momenti di validazione di un rilascio:
+Attualmente questo viene fatto in 3 momenti diversi di validazione:
 
 \begin{enumerate}
     \item test durante lo sviluppo
     \item test di accettazione interna (effettuati da IOTINGA)
-    \item test di accettazione del cliente finale (effettuati da IRSAP)
+    \item test di accettazione del produttore (effettuati da IRSAP)
 \end{enumerate}
 
 \subsection{Test durante lo sviluppo}
+\label{subsection:test_sviluppo}
 
 Quando uno sviluppatore finisce di implementare una nuova funzionalità o risolve un
-bug  prima di considerare l'attività conclusa ed integrare il
-proprio lavoro nel ramo di sviluppo principale ed effettua i propri test.
+bug prima di poter considerare l'attività conclusa ed integrare il
+proprio lavoro nel ramo di sviluppo principale è tenuto ad effettuare dei test.
 
-Questi si occupano sia di verificare che quanto è stato implementato è conforme
-alla specifica approvata dal cliente (nel caso di nuove funzionalità) oppure che
-il bug sia stato risolto, sia che non siano stato modificato il funzionamento del sistema
-nelle parti che sono state impattate dalla modifica.
+Questi sono volti ad assicurare:
+\begin{itemize}
+    \item che le funzioni che prima c'erano continuino a funzionare come prima (test di regressione)
+    \item che le eventuali nuove funzionalità aggiunte siano conformi alla specifica del cliente
+    \item che gli eventuali i bug risolti non siano più presenti 
+\end{itemize}
 
-Tali test sono a discrezione dello sviluppatore, che avendo modificato il codice sa
-quali comportamenti sono impattati dalla modifica che ha realizzato e quindi devono essere
-provati.
-
-Questi test possono essere automatizzati facilmente mediante la creazione di unit-test,
-che possono essere usati per validare sia le parti nuove che assicurarsi che non vi siano
-regressioni che fanno smettere di funzionare quanto prima andava.
+Questi test possono essere svolti sia in maniera automatizzata, ovvero tramite strumenti di 
+\textit{unit testing}, che è il modo preferibile di procedere, sia manualmente, installando 
+il software su un dispositivo. 
 
 \subsection{Test di accettazione interna}
+\label{subsection:test_accettazione_interna}
 
-Questi test sono effettuati prima di ogni rilascio verso il cliente IRSAP.
-
-Si occupano di validare che il software garantisca il funzionamento di una serie di casi d'uso
-definiti critici, senza i quali il prodotto non sarebbe utilizzabile.
+I test di accettazione interna si occupano di validare l'output finale del processo di sviluppo, 
+il binario eseguibile, prima che arrivi nelle mani del cliente.  
 Solo se una versione del software passa tutti questi test può essere consegnata al cliente.
 
-Essi si pongono dal punto di vista dell'utente finale, pertanto sono effettuati su un
-hardware completo, isolato però dal resto del sistema, ovvero dalla componente cloud
-e dall'applicazione mobile. Questo per evitare che ci sia il dubbio che il bug sia
-nel cloud o nella app anziché nel dispositivo stesso.
+Questi test si pongono dal punto di vista dell'utilizzatore finale e non entrano nel merito di come 
+il codice è stato strutturato internamente, che viene trattato come una scatola chiusa. 
 
-Attualmente vengono effettuati seguendo un documento contenente una serie di scenari da testare.
-Ognuno di questi è diviso in passi, e per ognuno dei quali viene indicato:
+Attualmente vengono effettuati esclusivamente in maniera manuale, con il solo ausilio di un documento
+di definizione contenente una serie di casi da testare. Per ognuno di essi è indicata una serie di 
+passaggi, ognuno riportante:
 
 \begin{itemize}
     \item azione da compiere: un'operazione da effettuare sul sistema mediante l'interazione fisica
@@ -496,17 +509,23 @@ Ognuno di questi è diviso in passi, e per ognuno dei quali viene indicato:
         il test viene interrotto con esito negativo, e deve essere segnalato ad uno sviluppatore il problema.
 \end{itemize}
 
-Preferibilmente questa procedura viene fatta eseguire da chi non ha preso parte allo
-sviluppo del sistema stesso. Questo per evitare che chi esegue la procedura, conoscendo
+Per ogni passo chi esegue il test deve effettuare l'azione e verificare che il risultato atteso sia 
+conforme a quanto indicato. Se così non è bisogna indicare a margine del documento cosa è andato 
+storto, cercando di raccogliere quante più informazioni possibili per aiutare lo sviluppatore a replicare 
+il problema per poi risolverlo. 
+
+Una nota interessante è che questa procedura preferiamo farla eseguire a persone che non sono 
+sviluppatori del progetto in questione. Questo per evitare che chi esegue la procedura, conoscendo
 le logiche interne del software, possa essere portato a saltare o ignorare determinati
 passaggi in quanto ``ovvi'', mentre chi non conosce il sistema è più propenso a seguire
 i passaggi alla lettera e segnalare ogni singolo comportamento discordante con quanto
 atteso.
 
-\subsection{Test di accettazione del cliente finale}
+\subsection{Test di accettazione del produttore}
+\label{subsection:test_accettazione_produttore}
 
-Sul cliente finale ricade la responsabilità (anche a livello legale) del prodotto
-che viene immesso sul mercato con il proprio nome sopra, e questo include anche
+Sul \gls{produttore} ricade la responsabilità (legale) del prodotto
+che viene immesso sul mercato con il proprio marchio sopra, e questo include anche
 il software. Questo comporta il fatto che a sua volta deve svolgere dei test per
 assicurarsi che il software sia conforme a quanto atteso, e nel caso segnalare i
 problemi riscontrati in maniera tale che vengano corretti.
@@ -522,41 +541,47 @@ presso i clienti finali.
 
 \section{Problemi dell'approccio attuale}
 
-L'approccio attuale, basato sul documento di test con fasi da seguire, presenta
-alcune problematiche:
+Per la fase vista in \autoref{subsection:test_sviluppo} non ci sono particolari problemi,
+come detto esistono una moltitudine di strumenti con i quali il lavoro può essere automatizzato. 
+
+La fase in \autoref{subsection:test_accettazione_produttore} invece è piena responsabilità del 
+\gls{produttore} che decide come meglio crede come svolgerla. 
+
+La componente più critica ora è la fase in \autoref{subsection:test_accettazione_interna}. 
+L'approccio attuale infatti presenta varie problematiche:
 \begin{itemize}
-    \item la procedura è ripetitiva, e questo può facilmente introdurre
-        l'operatore che esegue i test a commettere errori, con dolo o meno
-    \item l'esecuzione dei test porta via tempo, che altrimenti potrebbe essere dedicato
-        a svolgere altre mansioni
-    \item i test sono scritti in linguaggio naturale, non formale, e questo lascia spazio
-        a libera interpretazione dalla persona che esegue i test
-    \item il fatto che sia un costo eseguire la procedura fa sì che questa sia
-        limitata nel numero di scenari che sono effettivamente testati
-    \item per quanto detto al punto precedente il numero di build effettivamente testate
-        è un sottoinsieme di quelle che vengono effettivamente effettuate, il che significa che
+    \item la procedura è ripetitiva, e questo può facilmente indurre
+        l'operatore a commettere errori
+    \item l'esecuzione della procedura richiede molto tempo, che potrebbe essere dedicato
+        ad altre mansioni
+    \item i test sono scritti in linguaggio naturale, non formale, e questo lascia un grado di 
+        interpretazione all'operatore che svolge i test
+    \item per quanto detto ai punti precedenti la procedura non può prendere in considerazione 
+        tutti i possibili scenari, altrimenti sarebbe troppo lunga da eseguire, pertanto solo un 
+        sottoinsieme di casi d'uso ``critici'' viene testata
+    \item infine ancora per quanto sopra il numero di build effettivamente testate
+        è un sottoinsieme di quelle prodotte, il che significa che
         i rilasci verso il cliente avvengono con meno frequenza, e si tende ad accorpare
         più funzionalità in maniera tale da effettuare un unico ciclo di test.
 \end{itemize}
 
-A questo si aggiunge il fatto che man mano che i prodotti vengono venduti il cliente ci
-chiede sempre più test ad ogni release, in quanto un potenziale bug va ad impattare un numero
-sempre maggiore di utenti (e quindi il danno potenziale per il produttore è sempre più grande).
+A questo si aggiunge il fatto che man mano che i prodotti arrivano nelle mani di sempre più consumatori 
+il rischio per il produttore aumenta, e quindi viene richiesta sempre una maggiore qualità del software, 
+che ci costringe ad effettuare sempre più test. 
 
-Viene quindi da chiedersi se, vista la ripetitività e schematicità di queste operazioni,
-sia possibile farle eseguire ad un computer, senza perdite di generalità rispetto all'esecuzione
-manuale.
+La cosa positiva è che vista la definizione pressoché schematica e meccanica degli scenari da validare 
+si potrebbe pensare di scrivere un software in grado di eseguirlo in maniera del tutto automatizzata, 
+che possa richiedere un intervento umano nullo.
 
 \section{Requisiti software per l'automazione}
 
-Abbiamo quindi stabilito i seguenti requisiti per un sistema di automatizzazione dei test di
-accettazione:
+Vediamo quindi i requisiti che questo sistema deve avere:
 
 \begin{itemize}
     \item il sistema deve testare esattamente il binario che poi viene rilasciato agli utenti finali.
         Questo perché ogni alterazione, come potrebbe essere una ricompilazione del codice, può andare
         ad aggiungere errori e quindi invalidare i test effettuati
-    \item l'ambiente di esecuzione (runtime environment) sul quale il test viene eseguito deve essere quanto
+    \item l'ambiente di esecuzione (\textit{runtime environment}) sul quale il test viene eseguito deve essere quanto
         più vicino possibile all'ambiente reale. Idealmente il test viene effettuato sullo stesso hardware,
         di modo da dipanare ogni possibile dubbio che il \gls{firmware} una volta installato sull'hardware abbia
         comportamenti differenti
@@ -570,96 +595,59 @@ accettazione:
         un intervento manuale
 \end{itemize}
 
-% Vediamo ora cosa è disponibile in commercio per fare quanto descritto al capitolo precedente.
-
-% \section{Strumenti di unit test}
-
-% Una prima soluzione è quella di utilizzare gli strumenti di
-% unit-test anche per effettuare i test di accettazione.
-% È possibile infatti andare ad effettuare il mock di tutte le interfacce utilizzate dall'\acrshort{sdk}
-% al fine di poter eseguire singoli test-case all'interno del binario.
-
-% Questa soluzione presenta il vantaggio di poter testare in maniera veloce ed agevole
-% ogni nuova release del \gls{firmware}, ma al contempo presenta alcuni svantaggi che la rendono
-% inadatta allo scopo di approvare un nuovo \gls{firmware} per la produzione.
-
-% Il problema principale è che viene testato il codice facendolo girare in un ambiente simulato,
-% che per quanto simile all'ambiente reale non sarà mai completamente uguale. Soprattutto
-% quando ci si interfaccia con periferiche complesse, come il \Gls{wifi}, è fondamentale che
-% l'ambiente sul quale vengono eseguiti i test sia quanto più uguale possibile al runtime effettivo.
-
-% In questo caso la soluzione migliore è effettuare i test facendo eseguire il \gls{firmware} direttamente
-% all'hardware sul quale dovrà girare.
-
-% \section{Strumenti commerciali di test elettronici}
-
-% In commercio esistono vari strumenti che consentono di testare un dispositivo elettronico andando
-% a comandare i vari input/output con i quali si interfaccia verso il mondo esterno.
-
-% Uno di questi software è TestStand della National Instrument\footnote{https://www.ni.com/it-it/shop/software/products/teststand.html}.
-% Questo software è infatti pensato per l'interfacciamento con apparecchiature di misura prodotte
-% dalla medesima azienda, quali ad esempio oscilloscopi, multimetri da banco, generatori di frequenza, ecc.
-% e consente di automatizzare le operazioni di test e misura.
-
-% Come questo esistono altri software, principalmente proprietari e sviluppati internamente dalle singole
-% aziende elettroniche, che svolgono la medesima funziona. Questi software tipicamente si interfacciano
-% con la scheda hardware attraverso una fixture, composta da un letto di aghi conduttivi che vanno a
-% fare contatto con dei test-point sulla scheda da testare.
-
-% Questi sistemi possono benissimo essere utilizzati anche per testare il firwmare. Tuttavia non è
-% il loro scopo primario, essendo pensati per identificare in primo luogo difetti nella produzione
-% fisica delle schede. In particolare non offrono routine per testare componenti complesse come \Gls{wifi} o comunicazione con il
-% cloud, ma si limitano a fare verifiche fra gli input e gli output.
-
-% Inoltre l'hardware di questi dispositivi è molto costoso, essendo pensato per effettuare misurazioni
-% precise a livello fisico, cosa che è fondamentale per identificare difetti sull'hardware, ma lo è
-% meno per testare la release del firwmare (dove si assume che l'hardware sul quale viene lanciato il test
-% sia correttamente funzionante).
+Osservato che sul mercato non esistono sistemi commerciali o open-source in grado di rispondere ai requisiti 
+sopra elencati non ci rimane che svilupparne uno in casa. 
 
 \chapter{Approccio}
 
 Prima di descrivere l'implementazione è necessario fare un passo indietro ed andare
-ad analizzare con più attenzione il dispositivo \Gls{re} preso in esame.
+ad sviscerare il dispositivo \Gls{re} andando a vedere i dettagli più tecnici.
 
 \section{Caratteristiche hardware}
 
 Il corpo principale dei radiatori elettrici di IRSAP è del tutto identico al radiatore idraulico,
-con la differenza che il calore non viene fornito dall'acqua che circola nell'impianto ma da una 
-resistenza elettrica, installata all'interno del radiatore. Il tutto viene riempito con del glicole,
-per garantire una protezione antigelo, e viene sigillato con dei tappi al posto dei rubinetti di 
-attacco per la mandata/ritorno dell'acqua calda.  
+ed è realizzato mediante tubi d'acciaio saldati in un'unico corpo all'interno del quale circola 
+il liquido termovettore, che tipicamente è l'acqua riscaldata da una caldaia o da una pompa di calore. 
+
+Nel caso dell'elettrico viene inserita una resistenza elettrica, in gergo specifico \textit{cartuccia},
+all'interno del radiatore, che viene riempito con del glicole, che a differenza della normale acqua 
+ha un punto di congelamento più basso ed un punto di ebollizione più alto. Vengono infine sigillati 
+tutti gli ingressi/uscite che normalmente consentirebbero il collegamento ad un impianto idraulico con dei tappi. 
+
+Il cuore del sistema è poi la scheda elettronica di controllo che va ad alimentare la \textit{cartuccia},
+e viene installata nella parte bassa del radiatore. 
 
 \subsection{Scheda elettronica}
 
-Attualmente la gamma di radiatori elettrici IRSAP elettrificati smart include 17 prodotti distinti, 
-ma ogni anno ne vengono aggiunti di nuovi. Per tutti questi progetti è quindi fondamentale, per 
-questioni di ottimizzazione dei costi, avere un'elettronica quanto più possibile simile. 
+Attualmente la gamma di radiatori IRSAP elettrificati smart include 17 modelli distinti, 
+ognuno dei quali disponibile in decine di colorazioni, ed ogni anno ne vengono aggiunti di nuovi. 
 
-Attualmente vi sono due tipologie di scheda logica che viene installata all'interno dei prodotti:
+Per tutti questi dispositivi è quindi fondamentale, per ottimizzare i costi, avere un'elettronica 
+unica. Attualmente vi è soltanto un'unica tipologia di scheda, che viene prodotta in due modelli 
+leggermente diversi dal punto di vista fisico:
 
 \begin{itemize}
     \item \textit{luxury}: è la versione più basilare, che viene utilizzata sulla linea di
         radiatori da bagno (chiamati anche ``scaldasalviette''). Essendo installata in ambiente 
         particolarmente umido e con il rischio di schizzi d'acqua deve sopportare un grado IP (
-        misura standard del grado di protezione per componenti elettrici) superiore all'altro modello
-    \item \textit{design}: è la versione riservata ai prodotti design. È la più completa,
+        misura standard del grado di protezione per componenti elettrici) superiore
+    \item \textit{design} (\autoref{fig:schedadesign}): è la versione riservata ai prodotti design. È la più completa,
         che offre anche modularità essendo che tutte le periferiche (pulsantiera, sensore di temperatura,
-        sensore VOC, \acrshort{led}) sono collegati alla stessa con dei cavi, il che consente di inglobare l'elettronica 
-        all'interno della carcassa in maniera da renderla invisibile, cosa molto importante per non rovinare 
+        sensore VOC, \acrshort{led}) sono collegati alla stessa con dei cavi, il che consente di inglobarla
+        all'interno della carcassa del \acrshort{re} in maniera da renderla invisibile, molto importante per non rovinare 
         il desing del prodotto. Offre inoltre funzionalità aggiuntive, quali un sensore di qualità
         dell'aria (in grado di rilevare i valori di VOC e CO\textsubscript{2}) e la possibilità di
         controllare una striscia \acrshort{led} \Gls{rgbw}, utilizzata su alcuni modelli per un'illuminazione ambientale.
 \end{itemize}
 
-
-Ogni scheda elettronica, sia essa di tipo \textit{luxury} che \textit{design} (in \autoref{fig:schedadesign}), include le seguenti 
-periferiche hardware:
+Il modello \textit{luxury} è dal punto di vista delle caratteristiche hardware un sottoinsieme di quanto 
+previsto dal modello superiore (\textit{design}). Entrambe montano:
 
 \begin{itemize}
     \item un modulo \Gls{wifi} Telit GS2200M
-    \item circuito di alimentazione a tensione di rete (230V AC)
-    \item un circuito composto da un relè combinato ad un triac dedicato al controllo della
-        cartuccia, ossia l'elemento riscaldante inserito all'interno del corpo del radiatore
+    \item un circuito di alimentazione a tensione di rete (230V AC)
+    \item un circuito composto da un relè combinato ad un triac dedicato al controllo di potenza, 
+        ossia l'accensione e spegnimento della resistenza scaldante
     \item una sonda di temperatura \Gls{ntc} usata per misurare la temperatura ambiente
     \item una pulsantiera dotata di due pulsanti capacitivi e di \acrshort{led} RGB di illuminazione
         come feedback verso l'utente
@@ -668,10 +656,9 @@ periferiche hardware:
         in basso a destra nella scheda in \autoref{fig:schedadesign})
 \end{itemize}
 
-Oltre a quanto descritto precedentemente la versione \textit{design} include inoltre:
+La versione \textit{design} include inoltre:
 \begin{itemize}
-    \item un sensore di qualità dell'aria in grado di
-        misurare i livelli VOC e CO\textsubscript{2}
+    \item un sensore di qualità dell'aria in grado di misurare i livelli VOC e CO\textsubscript{2}
     \item la circuiteria di controllo per una striscia a \acrshort{led} \acrshort{rgbw} di illuminazione ambientale
         ed il relativo alimentatore da 230V AC a 24V DC
     \item la circuiteria di controllo per una seconda sonda di temperatura \acrshort{ntc} secondaria in grado di
@@ -686,18 +673,14 @@ Oltre a quanto descritto precedentemente la versione \textit{design} include ino
     \label{fig:schedadesign}
 \end{figure}
     
-Entrambe le versioni di scheda elettronica eseguono la stessa versione del \gls{firmware},
-che ha una fase iniziale in cui identifica la tipologia di scheda e le funzionalità
-opzionali abilitate leggendole da un file di configurazione caricato nel dispositivo
-in fase di collaudo, e di conseguenza configura le periferiche del \gls{micro}.
-
-Tuttavia per essere esaustivi è necessario svolgere i test di accettazione su entrambe
-le versioni di scheda elettronica, in quanto possono esservi comportamenti differenti.
+Vista la similarità entrambe le versioni di scheda elettronica eseguono la stessa versione del \gls{firmware},
+che all'avvio identifica la tipologia di scheda tramite un file di configurazione caricato in fase di produzione
+ed abilita/disabilita di conseguenza le periferiche opzionali. 
 
 \subsection{Modulo Telit}
 
-Come cuore del sistema abbiamo il GS2200M. Questo \gls{micro} inizialmente
-prodotto da Gainspan, successivamente acquisita da Telit, presenta le seguenti
+Il fulcro del sistema è il modulo \Gls{wifi} GS2200M. Questo \gls{micro}, inizialmente
+prodotto da Gainspan e successivamente acquisita da Telit, presenta le seguenti
 caratteristiche hardware:
 
 \begin{itemize}
@@ -719,92 +702,87 @@ caratteristiche hardware:
 \end{itemize}
 
 Il microcontrollore è dotato due due core \Gls{arm}, di cui uno è deputato alla gestione
-della parte \Gls{wifi} ed esegue un \gls{firmware} scritto dal produttore stesso. I due microcontrollori
-comunicano attraverso una memoria condivisa (dual-port) da 64Mb. Il core principale
-si occupa invece di gestire la parte applicativa.
+della parte \Gls{wifi} ed esegue un \gls{firmware} scritto dal produttore stesso, l'altro 
+invece è sotto il controllo dello sviluppatore. 
 
-La toolchain fornita dal produttore per lo sviluppo del \gls{firmware} in grado di girare
-sul core applicativo si basa sull'ambiente di sviluppo proprietario IAR.
-
-Viene fornito un \acrfull{sdk} che offre:
+La toolchain fornita dal produttore si basa sull'ambiente di sviluppo proprietario IAR. Insieme 
+a questa Telit fornisce un \acrfull{sdk} che offre:
 
 \begin{itemize}
     \item un \Gls{rtos} basato su ThreadX
     \item uno stack di rete TCP/IP basato su NetX
     \item implementazione software \Gls{wifi} sia in modalità \acrfull{sta} che \acrfull{ap},
         con relativi protocolli WEP, WPA/WPA2 sia personal che enterprise
-    \item un filesystem (simile al FAT32) per la gestione della memoria flash integrata
+    \item un filesystem (simile a FAT32) per la gestione della memoria flash integrata
     \item implementazione \gls{tls}
     \item implementazione client e server del protocollo \acrshort{http} ed HTTPS
-    \item implementazione client del protocollo SNTP
+    \item implementazione client del protocollo \acrfull{sntp} 
     \item aggiornamento \acrshort{ota} con doppia partizione
     \item hardware abstraction layer (HAL) per la gestione di tutti i \Gls{gpio},
         lettura dei due \Gls{adc}, del modulo PWM, gestione del RTC, del bus i2c ed SPI
 \end{itemize}
 
-I moduli \Gls{wifi} di questo tipo possono essere utilizzati secondo due modalità:
+I moduli \Gls{wifi} di questo tipo generalmente possono essere utilizzati secondo due modalità:
 \begin{itemize}
     \item \textit{hosted}: il modulo \Gls{wifi} viene interfacciato ad un microcontrollore
         principale che implementa le funzioni del dispositivo. Quest'ultimo si interfaccia
-        con il Telit mediante interfaccia seriale e comunica con i comandi AT (standard
+        con il Telit mediante interfaccia \acrshort{uart} e comunica con i comandi AT (standard
         per la gestione dei modem)
     \item \textit{hostless}: il modulo \Gls{wifi} esegue direttamente l'applicativo senza
-        che vi sia un microcontrollore principale. Tutte le funzionalità del dispositivo
+        l'ausilio di un \gls{micro} principale. Tutte le funzionalità del dispositivo
         sono implementare sul modulo Telit
 \end{itemize}
 
-Tipicamente viene seguito il primo approccio, tuttavia noi abbiamo optato per il secondo.
-Questo comporta svariate semplificazioni, quali il non dover gestire la distribuzione
-e l'aggiornamento di due \gls{firmware}, e l'avere quindi un prodotto più solido.
+L'approccio più seguito è il primo approccio, tuttavia noi usiamo il secondo.
+Questo offre svariate semplificazioni: non dobbiamo gestire la distribuzione
+e l'aggiornamento \acrshort{ota} di due \gls{firmware} ed abbiamo più controllo sulla 
+parte di \Gls{wifi}.
 
-Un secondo microcontrollore comporta inoltre problemi di approvvigionamento, soprattutto di
-questi ultimi periodi in cui il mercato dei componenti elettronici è impazzito, con
-articoli che un tempo costavano pochi dollari arrivati a costare svariate decine.
+Un secondo microcontrollore comporta poi problemi di approvvigionamento, soprattutto di
+questi tempi in cui il mercato dei componenti elettronici è impazzito è importante ridurre 
+al minimo il numero di componenti critici utilizzati, quelli di difficile rimpiazzo, usati in un progetto.
 
 La scelta di seguire l'approccio \textit{hostless} non è stata senza difficoltà, dovute
-principalmente alla scarsa documentazione fornita dal produttore Telit. Infatti il
-produttore ha deciso di seguire un approccio completamente closed-source, dove tutta
-la documentazione ed il codice di esempio non è pubblico ma dato solo sotto NDA.
-
+principalmente alla scarsa documentazione fornita dal produttore Telit. Infatti 
+Telit ha deciso di seguire un approccio completamente closed-source, dove tutta
+la documentazione ed il codice di esempio non è pubblico accessibile solo da area riservata.
 Questo comporta che l'unico modo per risolvere i problemi sia quello di rivolgersi
 al supporto ufficiale, non trovando nulla riguardo questa particolare piattaforma
-hardware con una semplice ricerca su Google. Questo ha indubbiamente reso molto più
-difficoltoso lo sviluppo.
+hardware con una semplice ricerca su Google.
 
 \section{Caratteristiche software}
 
-Il \gls{firmware} è suddiviso in moduli (\textit{task}):
+Il \gls{firmware} sviluppato è suddiviso in moduli (ognuno dei quali gira in un \textit{thread} dedicato):
 
 \begin{itemize}
-    \item \textit{core}, si occupa della gestione della macchina a stati principale
-        del dispositivo e del coordinamento di tutti gli altri task. Inizializza tutte
-        le periferiche hardware e la rete, oltre che gestire
-        gli eventi notevoli che arrivano dagli altri task
-    \item \textit{termostato}, task che si occupa di tutto quel che è necessario
-        per regolare la temperatura ambiente secondo le modalità di funzionamento del dispositivo,
-        della lettura delle sonde ambiente/VOC, non che della gestione dell'illuminazione \acrshort{led}
-        nel caso sia presente
-    \item \textit{\Gls{mqtt}}, si occupa di mantenere la connessione \Gls{mqtt} verso \Gls{mqtt} IoT Core,
-        sincronizzato lo stato interno del dispositivo con il server \Gls{now} mediante protocollo \Gls{mqtt}
-    \item \textit{hmi}, si occupa di rispondere agli input dell'utente
-        sulla pulsantiera e di darne relativo feedback mediante l'uso dei \acrshort{led} RGB e del buzzer
+    \item \textit{core}: implementa la macchina a stati che gestisce gli stati principali del dispositivo. 
+        È il primo a partire e pertanto gestisce tutta la fase di inizializzazione del sistema, riceve e gestisce 
+        gli eventi dagli altri moduli mediante una coda di messaggi.  
+    \item \textit{termostato}: si occupa di tutto quel che concerne la regolazione della temperatura ambiente 
+        secondo le modalità di funzionamento selezionata. Oltre a ciò effettua le letture delle sonde \acrshort{ntc}
+        e VOC, e nei modelli che ne sono dotati gestisce anche i \acrshort{led} \acrshort{rgbw}, 
+    \item \textit{\acrshort{aws}}: si occupa di mantenere attiva la connessione \Gls{mqtt} verso \Gls{iotcore},
+        mantenendo sincronizzato lo stato interno del dispositivo con il server \Gls{now} attraverso il protocollo 
+        \textit{stateless} che vedremo in seguito
+    \item \textit{\acrshort{hmi}}, si occupa dell'interazione fisica con l'utente mediante l'input di due pulsanti \textit{+} e 
+        \textit{-}, e l'output dei \acrshort{led} di stato e del buzzer. In base agli input dell'utente invia i relativi 
+        messaggi agli altri moduli
     \item \textit{\acrshort{http}}, si occupa di fornire mediante webserver \acrshort{http} un'API REST con
-        la quale è possibile interagire direttamente con il dispositivo. È utilizzata
-        per la fase di provisioning.
-    \item \textit{NCM}, si occupa di gestire la connessione di rete \Gls{wifi}. Questo task
-        è fornito dal produttore.
+        la quale è possibile interagire direttamente con il dispositivo. È utilizzata principalmente durante per 
+        la fase di abbinamento del dispositivo con la app, ma ha anche funzioni di diagnostica.
+    \item \textit{\acrfull{ncm}}, si occupa di gestire la connessione di rete \Gls{wifi}. 
 \end{itemize}
 
 \subsection{Stati interni del dispositivo}
 
-Il dispositivo ad alto livello può trovarsi in 3 stati distinti:
+Il dispositivo ad alto livello (\textit{core}) può trovarsi in 3 stati:
 
 \begin{itemize}
     \item \textit{non abbinato}: in attesa di un primo abbinamento da app. Ogni funzione del
-        dispositivo è esclusa finché l'utente non lo collega mediante l'applicazione
+        dispositivo è disabilitata finché l'utente non lo collega mediante l'applicazione
     \item \textit{disconnesso}: il dispositivo è stato in passato abbinato ma al momento non è
         connesso al cloud, perché ad esempio la connessione \Gls{wifi} non è momentaneamente disponibile
-    \item \textit{connesso}: il dispositivo è connesso e sincronizzato con il cloud
+    \item \textit{connesso}: il dispositivo è connesso e sincronizzato con il cloud, è la modalità di funzionamento usuale
 \end{itemize}
 
 \begin{figure}[ht]
@@ -824,19 +802,15 @@ Il dispositivo ad alto livello può trovarsi in 3 stati distinti:
 \end{figure}
 
 Ad ogni stato del dispositivo corrisponde l'attivazione/disattivazione di uno o più
-componenti software del dispositivo:
+moduli:
 
 \begin{center}
 \begin{tabular}{| c | c | l |}
     \hline
-    stato & modo \Gls{wifi} & moduli attivi \\
-    \hline
-    \textit{non abbinato} & \acrshort{ap} & \acrshort{hmi}, \acrshort{http} \\
-    \hline
-    \textit{disconnesso} & \acrshort{sta} & \acrshort{hmi}, termostato \\
-    \hline
-    \textit{connesso} & \acrshort{sta} & \acrshort{hmi}, termostato, \acrshort{mqtt} \\
-    \hline
+    stato & modo \Gls{wifi} & moduli attivi \\ \hline
+    \textit{non abbinato} & \acrshort{ap} & core, \acrshort{ncm}, \acrshort{hmi}, \acrshort{http} \\ \hline
+    \textit{disconnesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato \\ \hline
+    \textit{connesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato, \acrshort{aws} \\ \hline
 \end{tabular}
 \end{center}
 
@@ -847,22 +821,23 @@ il più vicino possibile a quanto desiderato dall'utente (set-point) mediante
 il controllo dell'accensione (on/off) dell'elemento riscaldante. Il feedback sulla
 temperatura ambiente è ottenuto mediante la sonda di temperatura \acrshort{ntc}.
 
-Il dispositivo ha diversi modi di funzionamento:
+Il dispositivo ha diversi modi di funzionamento (in ordine di priorità):
 \begin{itemize}
     \item \textit{standby}: dispositivo completamente spento, sia per quanto riguarda il riscaldamento
-        che per l'illuminazione \acrshort{led}
+    che per l'illuminazione \acrshort{led}
+    \item \textit{\gls{filpilote}}: il dispositivo è controllato da un segnale
+        esterno in ingresso sul cavo \Gls{filpilote}
     \item \textit{antigelo}: il dispositivo mantiene una temperatura di sicurezza (impostata dall'utente)
-        per prevenire danni dati da una temperatura ambiente troppo bassa (ad es. congelamento delle tubature)
-    \item \textit{vacanza}: all'interno di un intervallo temporale impostato dall'utente funziona
-        in modalità antigelo
+        per prevenire danni alla casa ed al dispositivo causati da una temperatura ambiente troppo bassa
+    \item \textit{vacanza}: funziona all'interno di un intervallo impostato fra due timestamp di inizio e di 
+        fine come in modalità \textit{antigelo}
     \item \textit{away}: imposta un set-point ridotto (ECO) in quanto l'utente non è in casa
+    \item \textit{manuale temporaneo}: segue un set-point manuale impostato dall'utente fino al raggiungere 
+        un timestamp di fine
     \item \textit{programmato}: segue una programmazione settimanale che consente per ogni
         giorno della settimana di creare fino ad 8 fasce orarie
-    \item \textit{manuale temporaneo}: segue un set-point manuale per un determinato tempo
     \item \textit{manuale}: segue il set-point utente che è fisso e non varia mai
         configurato dall'utente, quindi torna a funzionare nella modalità precedente
-    \item \textit{\gls{filpilote}}: il dispositivo è controllato (ove disponibile) da un segnale
-        esterno in ingresso sul cavo \Gls{filpilote}
 \end{itemize}
 
 È possibile mediante interfaccia utente muoversi fra le varie modalità come dettagliato
@@ -988,11 +963,11 @@ stato della richiesta sullo stesso \gls{topic} con aggiunto un suffisso:
     \centering
     \begin{tikzpicture}
         \node[rectangle, minimum height=1cm, draw] (dispositivo) {\Gls{re}};
-        \node[rectangle, minimum height=1cm, draw, right of=dispositivo] (cloud) {Cloud \Gls{mqtt}};
-        \draw (dispositivo) edge[bend left=40, above] node{\textit{get}} (cloud)
-            (dispositivo) edge[bend left=10, above] node{\textit{reported-update}} (cloud)
-            (dispositivo) edge[bend right=10, below] node{\textit{delete}} (cloud)
-            (cloud) edge[bend left=40, below] node{\textit{desired-update}} (dispositivo);
+        \node[rectangle, minimum height=1cm, draw, right of=dispositivo] (cloud) {\Gls{iotcore}};
+        \draw (dispositivo) edge[bend left=60, above] node{\textit{reported-update}} (cloud)
+            (dispositivo) edge[bend left=20, above] node{\textit{get}} (cloud)
+            (dispositivo) edge[bend right=20, below] node{\textit{delete}} (cloud)
+            (cloud) edge[bend left=60, below] node{\textit{desired-update}} (dispositivo);
     \end{tikzpicture}
     \caption{Schema di comunicazione dispositivo/cloud}
     \label{fig:comunicazione_cloud}
