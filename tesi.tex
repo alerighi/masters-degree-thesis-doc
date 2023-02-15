@@ -318,7 +318,7 @@ al dispositivo che gli ha venduto.
 A maggior ragione il malfunzionamento di un impianto di riscaldamento può essere particolarmente 
 fastidioso in quanto questo ricopre un ruolo fondamentale per il benessere domestico.
 
-\section{Obblighi di legge}
+\section{Obblighi normativi}
 
 Trattando prodotti destinati alla grande distribuzione e quindi all'acquisto da parte 
 di privati si applica il \textit{codice del consumo}, che regolamenta i contratti di vendita
@@ -359,7 +359,8 @@ possibile la probabilità che questi difetti emergano.
 
 Per quanto concerne il prevenire danni fisici esistono leggi italiane e direttive europee che si applicano 
 a determinate categorie di prodotti di elettronica di consumo. Nel nostro caso si applica, ad esempio, la
-direttiva 2014/53/UE \acrshort{red}, che ha campo di applicazione sui dispositivi elettronici in grado di 
+direttiva 2014/53/UE \acrshort{red}\footnote{\url{https://eur-lex.europa.eu/legal-content/IT/TXT/PDF/?uri=CELEX:32014L0053&from=lv}},
+che ha campo di applicazione sui dispositivi elettronici in grado di 
 effettuare comunicazioni radio (il che include l'uso del \Gls{wifi}). 
 
 Lo scopo di leggi e direttive è fissare i principi generali che essenzialmente si riducono al dire che 
@@ -392,8 +393,8 @@ i prodotti di \textit{elettronica di consumo} che impongano la realizzazione del
 standard. Essi esistono solo per settori specifici, come l'aereospaziale, il medicale, il militare, ecc. 
 
 Il fatto che non esistano obblighi non significa che volontariamente un produttore non possa auto imporsi determinati 
-standard internamente. La normativa più riconosciuta per quanto concerne il software è la IEC 61508, 
-che definisce lo standard \acrfull{sil}. 
+standard internamente. Lo standard \acrfull{sil} è il più riconosciuto in ambito industriale per la valutazione 
+della sicurezza del software ed è contenuto nella norma IEC 61508. 
 
 Esso definisce 4 livelli, dal meno stringente (livello 1) al più restrittivo (4). Ogni 
 livello presenta requisiti per quanto concerne la progettazione, lo sviluppo e la validazione 
@@ -426,14 +427,14 @@ deve essere formale o semi-formale. I clienti solitamente ci forniscono le speci
 naturale, in quanto il fare diversamente sarebbe molto dispendioso in termini di tempo, 
 e ciò poco si adatta con il modello di sviluppo \textit{agile} che seguiamo. 
 
-Infatti i prodotti per rispondere alle esigenze del mercato, così da rimanere 
-competitivi verso la concorrenza, devono essere sviluppati velocemente, ed devono poter 
-evolvere durante la loro vita con l'aggiunta di nuove funzionalità. 
+Infatti i prodotti di elettronica di consumo devono rispondere velocemente alle esigenze del mercato, 
+così da rimanere competitivi verso la concorrenza, e quindi devono essere sviluppati velocemente e poter 
+evolvere durante la loro vita con l'aggiunta di nuove funzionalità per rimanere appetibili. 
 
 I prodotti della precedente generazione utilizzavano il software per una sola gestione
 delle periferiche fisiche del prodotto, senza la necessità di interfacciarsi con sistemi
-terzi. Il software era quindi molto semplice, e soprattutto una volta validato in laboratorio 
-non vi erano possibilità che smettesse di funzionare come in origine (salvo guasti hardware). 
+terzi. Il software era quindi molto semplice, e una volta validato in laboratorio 
+non c'erano grosse possibilità che smettesse di funzionare (salvo guasti hardware). 
 
 Nella nuova generazione di prodotti invece l'hardware è più evoluto, passiamo ai \gls{micro} 
 ad 8 bit quelli a 32-bit, con funzionalità sempre più assimilabili a quelle di un sistema
@@ -459,16 +460,14 @@ di laboratorio prima di immettere il prodotto sul mercato, ma la validazione dev
 per tutta la vita del prodotto, per ogni singolo aggiornamento \acrfull{ota} che viene mandato 
 ai dispositivi. 
 
-\section{Prassi attuale testing}
+\section{Prassi attuale di test}
 
-Diventa quindi sempre più prioritario garantire i massimi livelli di qualità possibile
-sul software rilasciato. Questo non si limita alla semplice assenza di bug, in quanto
-questa è una garanzia che matematicamente è impossibile offrire, ma anche all'adottare
-delle procedure procedure tali che consentano, dal momento che un bug si
-presenta, di individuarlo e sistemarlo nel minor tempo possibile.
+Posto che il rischio zero è irraggiungibile è necessità del produttore mettere in campo 
+tutte le procedure possibili per ridurre il più possibile la probabilità che i problemi 
+sopracitati si verifichino.
 
-Attualmente questo viene fatto in 3 momenti diversi di validazione:
-
+Un ruolo fondamentale lo assumono quindi i test funzionali che si occupano di validare 
+ogni rilascio firmware per il dispositivo. Questo è attualmente fatto in tre momenti:
 \begin{enumerate}
     \item test durante lo sviluppo
     \item test di accettazione interna (effettuati da IOTINGA)
@@ -907,7 +906,7 @@ necessarie per la comunicazione su \gls{cloud}:
     \item \textit{connect}: autorizza il client a connettersi ad \Gls{iotcore} utilizzando il \textit{clientId}
         corrispondente al proprio indirizzo MAC
     \item \textit{publish}: consente al client precedentemente autenticato di pubblicare i messaggi sui topic ad 
-        esso riservati, ovvero i \gls{topic} \Gls{mqtt} con prefisso \textrm{re/things/\{MAC\}}
+        esso riservati, ovvero i \gls{topic} con prefisso \textrm{re/things/\{MAC\}}
     \item \textit{subscribe}: consente al dispositivo di sottoscriversi per gli aggiornamenti ai topic a lui dedicati, 
         ovvero i \gls{topic} con prefisso \textrm{re/things/\{MAC\}}
 \end{itemize}
@@ -956,7 +955,7 @@ il dispositivo o verso il \gls{cloud} (come visibile in \autoref{fig:comunicazio
     \item \textit{desired-update}: il \gls{cloud} notifica al dispositivo che vi è un nuovo stato \textit{desired}
 \end{itemize}
 
-Il tipo di messaggio dipende dal \gls{topic} \Gls{mqtt} sul quale i pacchetti sono pubblicati. Ad
+Il tipo di messaggio dipende dal \gls{topic} sul quale i pacchetti sono pubblicati. Ad
 un messaggio pubblicato dal dispositivo verso il \gls{cloud} segue una risposta sullo stesso \gls{topic}
 con aggiunto un suffisso che indica l'esito dell'operazione:
 \begin{itemize}
@@ -1099,16 +1098,16 @@ Il flusso di abbinamento funziona pertanto nel seguente modo:
         in attesa di ricevere tramite \gls{cloud} una prima comunicazione dal \acrshort{re}
 \end{itemize}
 
-\subsection{HMI}
+\subsection{Interfaccia utente}
 
-L'interfaccia utente del dispositivo permette di interagire con l'utente attraverso:
+La \acrfull{hmi} del dispositivo permette di interagire con l'utilizzatore mediante:
 \begin{itemize}
     \item due pulsanti capacitivi, \textbf{+} e \textbf{-}
     \item dei led \acrshort{led} RGB di illuminazione dei pulsanti 
     \item un buzzer in grado di dare un feedback acustico ad ogni tocco della pulsantiera
 \end{itemize}
 
-Attraverso i due pulsanti è possibile comandare un numero limitato di operazioni:
+Attraverso i due pulsanti è possibile comandare diverse operazioni:
 
 \begin{itemize}
     \item pressione breve \textbf{+}: incrementa il set-point corrente (se \acrshort{re} in modo \textit{manuale} o \textit{manuale a tempo})
@@ -2063,16 +2062,6 @@ avere un \gls{firmware} differente dagli altri. Consegue quindi che ad una modif
 corrispondere un numero elevato di binari differenti da testare, uno per cliente, e
 ancora la necessità di effettuare dei test automatizzati per garantire la qualità di
 quanto finisce in mano ai clienti.
-
-\section{Ringraziamenti}
-
-Ringrazio IOTINGA s.r.l, ed in particolare Matteo e Simone, per questi 3 anni di
-lavoro assieme, dove ho potuto sperimentare e migliorare la mia conoscenza su un
-numero di tecnologie ed ambiti che è impossibile elencare in un paragrafo.
-
-Ringrazio IRSAP s.p.a., ed in particolare Marco, Leandro, Daniele, Mario, e tutto il team
-di \Gls{now} con cui ho potuto lavorare assieme in questi ultimi anni per realizzare
-quanto si è visto solo in piccola parte in questo documento.
 
 \appendix
 
