@@ -1651,9 +1651,14 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
+    \end{itemize}
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
+    \item attendi un secondo 
+    \begin{itemize}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
     \end{itemize}
     \item invia un aggiornamento \acrshort{ota} al \acrshort{re} mediante il \gls{cloud} con versione 
         precedente da quella attualmente in esecuzione \label{item:test_ota:send_ota}
@@ -1696,9 +1701,14 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
+    \end{itemize}
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
+    \item attendi un secondo 
+    \begin{itemize}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
     \end{itemize}
     \item esegui la procedura \textit{reset di fabbrica}
     \item attendi un messaggio su cloud
@@ -1741,14 +1751,19 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
+    \end{itemize}
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
+    \item attendi un secondo 
+    \begin{itemize}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
     \end{itemize}
     \item esegui la procedura \textit{reset di fabbrica}
     \item attendi un secondo affinché il \acrshort{re} si possa riavviare
     \begin{itemize}
-        \item \textbf{verifica}: i  \acrshort{led} di stato del \acrshort{re} sono di colore rosso
+        \item \textbf{verifica}: i \acrshort{led} di stato del \acrshort{re} sono di colore rosso
     \end{itemize}
 \end{enumerate}
 
@@ -1779,14 +1794,15 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
     \end{itemize}
-    \item pubblica un messaggio \textit{DESIRED\_UPDATE}
-    \item attendi un messaggio su cloud 
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
+    \item attendi 1 secondo
     \begin{itemize}
-        \item \textbf{verifica}: il messaggio è di tipo \textit{REPORTED\_UPDATE}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il carico del \textit{re} è spento
     \end{itemize}
     \item premi il pulsante \textit{+} per 20 volte
     \item attendi un secondo
@@ -1840,13 +1856,14 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
     \end{itemize}
-    \item invia una richiesta \textit{DESIRED\_UPDATE} al \acrshort{re} con stato \textit{MANUALE}
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
     \item attendi un secondo 
     \begin{itemize}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
         \item \textbf{verifica}: il carico del \acrshort{re} è attivo 
     \end{itemize}
     \item tieni premuto per 6 secondi il pulsante \textit{-}
@@ -1891,9 +1908,14 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
         \item \textbf{verifica}: la risposta presenta uno stato di successo 
     \end{itemize}
     \item commuta la modalità \Gls{wifi} del Raspberry in \acrshort{ap}
-    \item attendi che il dispositivo si colleghi all'\acrshort{ap} del \acrshort{re}
+    \item attendi un messaggio da parte del \acrshort{re}
     \begin{itemize}
-        \item \textbf{verifica}: il  \acrshort{led} di stato del \acrshort{re} è spento 
+        \item \textbf{verifica}: il messaggio indica l'azione \textit{GET}
+    \end{itemize}
+    \item rispondi alla richiesta \textit{GET} \textit{accepted} con stato \textit{MANUALE}
+    \item attendi un secondo 
+    \begin{itemize}
+        \item \textbf{verifica}: il \acrshort{led} di stato del \acrshort{re} è spento 
     \end{itemize}
     \item disabilita l'\acrshort{ap} del raspberry 
     \item riavvia il \acrshort{re}
@@ -1929,11 +1951,13 @@ e l'esecuzione manuale:
 \end{tabular}
 \end{center}
 
-\footnotetext[1]{Include oltre al tempo per svolgere il test il tempo necessario per leggere i passi da svolgere,
-    assicurarsi che il RE sia alle condizioni iniziali, ed alla fine del test aggiornare il documento con l'esito}
-\footnotetext[2]{Tempo necessario per predisporre l'ambiente ed il materiale per poter iniziare a svolgere i test}
-\footnotetext[3]{Tempo di esecuzione lanciando assieme tutti i test, 
-    potrebbe non corrispondere esattamente alla somma dei tempi di esecuzione dei singoli test}
+\footnotetext[1]{Include oltre al tempo per svolgere il test il tempo necessario per leggere 
+    i passi da svolgere, assicurarsi che il RE sia alle condizioni iniziali, ed alla fine del 
+    test aggiornare il documento con l'esito}
+\footnotetext[2]{Tempo necessario per predisporre l'ambiente ed il materiale per poter iniziare
+    a svolgere i test}
+\footnotetext[3]{Tempo di esecuzione lanciando assieme tutti i test, potrebbe non corrispondere
+    esattamente alla somma dei tempi di esecuzione dei singoli test}
 
 Come vediamo si passa da un tempo di esecuzione manuale di circa mezz'ora ad un tempo di esecuzione automatica 
 di poco meno di 5 minuti. Ovviamente il vero risparmio non è il tempo in sè, ma il fatto che non vi è più la necessità 
@@ -1957,7 +1981,7 @@ potrà essere applicata, e le relative sfide per implementarla.
 
 \section{Futuri radiatori elettrici}
 
-Attualmente è in progettazione una nuova elettronica per il \Gls{re},
+Attualmente è in progettazione una nuova elettronica per il \acrshort{re},
 che mira a produrre un'unica piattaforma modulare per tutti i dispositivi radiatori elettrici
 (e non solo) smart prodotti da IRSAP.
 
@@ -1975,9 +1999,9 @@ unica scheda) la prima è identica per tutti i prodotti, le altre invece cambian
 da un prodotto all'altro, anche per adattarlo alle esigenze di mercati differenti
 (come ad esempio il mercato americano dove la tensione di rete è 115V).
 
-Per la scheda logica abbiamo deciso di scegliere un modulo \Gls{wifi} Espressif
+Per la scheda logica abbiamo deciso di scegliere un modulo \acrshort{wifi} Espressif
 ESP-32, che non solo è più economico rispetto al Telit ma ha delle caratteristiche
-hardware superiori, ed integra oltre al \Gls{wifi} anche un interfaccia \Gls{ble}.
+hardware superiori, ed integra oltre al \Gls{wifi} anche un interfaccia \acrshort{ble}.
 
 Questo rende anche possibile adottare l'elettronica smart anche su prodotti di
 fascia entry-level, che attualmente montano un controllo totalmente analogico se non
@@ -1987,7 +2011,7 @@ a fasce orarie).
 
 Dato il basso costo di alcuni di questi dispositivi non tutti di fabbrica usciranno
 connessi al cloud \Gls{now}, ma avranno una modalità di funzionamento solo locale
-tramite \Gls{ble}. Questo perché l'avere svariate migliaia di dispositivi
+tramite \acrshort{ble}. Questo perché l'avere svariate migliaia di dispositivi
 (si pensa di arrivare a produrne circa 60.000 all'anno) connessi al cloud comporterebbe
 dei costi insostenibili. Inoltre per molti clienti, soprattutto dei modelli più di
 fascia bassa, l'uso della app è solo un impedimento e preferiscono avere una gestione
@@ -2024,10 +2048,11 @@ tramite un protocollo \acrshort{rf} su banda 868MHz.
 Una delle difficoltà attuali è l'impossibilità di andare a testare in maniera isolata i
 dispositivi \Gls{rf} e l'unità centrale.
 
-Ad esempio per validare una nuova versione \gls{firmware} della \acrshort{cu} è necessario avere a disposizione tanti dispositivi quanti
-ne supporta al massimo il sistema, ovvero 48, un numero che rende molto complessa anche a
-livello logistico l'operazione (si pensi ad es. solo al fatto che questi dispositivi funzionano a
-batterie che dovrebbero essere continuamente mantenute cariche).
+Ad esempio per validare una nuova versione \gls{firmware} della \acrshort{cu} è necessario
+avere a disposizione tanti dispositivi quanti ne supporta al massimo il sistema, ovvero 48, 
+un numero che rende molto complessa anche a livello logistico l'operazione (si pensi ad es.
+solo al fatto che questi dispositivi funzionano a batterie che dovrebbero essere continuamente
+mantenute cariche).
 
 Si potrebbe quindi, mediante un'interfaccia radio opportunamente tarata sulle frequenze usate
 dal sistema, andare a simulare i dispositivi lato software, consentendo con un'unica interfaccia
@@ -2042,11 +2067,11 @@ con il cloud, che avviene tramite porta ethernet.
 
 Si potrebbe quindi andare a testare i due \gls{firmware} in maniera isolata l'uno dall'altro,
 andando a simulare sempre tramite software la controparte mancante. Questo evita di dover
-testare tutto i sistema, in particolare la parte \Gls{rf}, quando uno solo dei due software viene
+testare tutto i sistema, in particolare la parte \acrshort{rf}, quando uno solo dei due software viene
 aggiornato. Infatti la parte radio viene aggiornata decisamente più di rado rispetto alla
 gestione delle logiche di funzionamento, ma è la più dispendiosa in termini di tempo da testare
-(anche perché gestendo a livello fisico la comunicazione \Gls{rf}, in linea teorica, ogni volta andrebbero
-rieseguiti i test di laboratorio per assicurarsi che i parametri radio restino nei limiti
+(anche perché gestendo a livello fisico la comunicazione \acrshort{rf}, in linea teorica, ogni volta 
+andrebbero rieseguiti i test di laboratorio per assicurarsi che i parametri radio restino nei limiti
 imposti dalla normativa vigente).
 
 \section{Test di un termostato}
@@ -2057,7 +2082,7 @@ un cronotermostato \Gls{wifi} in grado di comunicare con la caldaia su bus \Gls{
 che in futuro verrà prodotto anche in versione \Gls{modbus}.
 
 La peculiarità di questo progetto è il fatto che è prevista l'interazione fra più
-termostati mediante \Gls{ble} in modalità Long Range. In questo modo
+termostati mediante \acrshort{ble} in modalità Long Range. In questo modo
 si può gestire un impianto multizona, in cui vi è uno \acrshort{yat} \textit{master} (alimentato
 dalla rete) che mantiene la connessione verso il \gls{cloud} e la comunicazione
 con gli altri \acrshort{yat} \textit{slave}, che possono essere alimentati a batteria
@@ -2068,7 +2093,7 @@ locale completa, che utilizza un display a matrice in bianco e nero (o in modell
 futuri a colori TFT) e dei pulsanti capacitivi per navigare nei vari menù. Anche
 qui la sfida è riuscire a testare anche l'interfaccia utente in maniera più o meno
 automatizzata. Si potrebbe ad esempio escludere completamente il display e verificare
-tramite interfacciamento \Gls{spi} che il microcontrollore arrivi a scrivere i dati correttamente
+tramite interfacciamento \acrshort{spi} che il microcontrollore arrivi a scrivere i dati correttamente
 nella memoria video dello schermo.
 
 Come negli scenari visti fin ora anche qui abbiamo una possibilità di gestire configurazioni
