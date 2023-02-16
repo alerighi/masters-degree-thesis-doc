@@ -1,41 +1,45 @@
-from time import sleep
+from time import sleep, time
 
 import uuid
 
 from fw_test.context import Context
 from fw_test.io import LedColor
-from fw_test.cloud import Action
-from fw_test.wifi import ApConfiguration, WifiSecurityType
+from fw_test.cloud import Action, Message, Response
 
+from .utils import TEST_AP_CONFIG, STATE_MANUAL
 
-TEST_SSID = "TEST-NETWORK"
-TEST_PASSPHRASE = "test-network-passphrase"
-
-
-def offline_working(ctx: Context):
+def test_offline_working(ctx: Context):
     # avvio la connessione del Raspberry all'AP
     ctx.wifi.client_connect()
 
     sleep(1)
 
     # invio la richiesta provision
-    ap_config = ApConfiguration(
-        ssid=TEST_SSID,
-        passphrase=TEST_PASSPHRASE,
-        security_type=WifiSecurityType.WPA2,
-        channel=6,
-    )
     env_id = uuid.uuid4()
-    response = ctx.api.provision(ap_config, env_id)
+    response = ctx.api.provision(TEST_AP_CONFIG, env_id)
     assert response["status"] == "success"
 
     # communto la raspberry in AP mode
-    ctx.wifi.start_ap(ap_config)
+    ctx.wifi.start_ap(TEST_AP_CONFIG)
 
     # attendo che il pairing abbia successo 
-    sleep(10)
+    msg = ctx.cloud.receive(timeout=30)
+    assert msg.action == Action.GET
 
-    assert ctx.io.status_led_color == LedColor.OFF
+    ctx.cloud.publish(Message(
+        action=Action.GET,
+        response=Response.ACCEPTED,
+        state={
+            **STATE_MANUAL,
+            "clientToken": msg.state["clientToken"],
+            "timestamp": int(time()),
+            "envId": env_id.bytes,
+        }
+    ))
+
+    sleep(1)
+
+    assert ctx.io.status_led_color() == LedColor.OFF
 
     # ora stoppo l'access-point
     ctx.wifi.stop_ap()
@@ -43,13 +47,15 @@ def offline_working(ctx: Context):
     # riavvio il dispositivo
     ctx.io.reset()
 
-    sleep(30)
+    sleep(20)
 
     # il LED indica dispositivo resettato
     assert ctx.io.status_led_color() == LedColor.YELLOW
 
-    ctx.wifi.start_ap(ap_config)
+    ctx.cloud.flush()
+    ctx.wifi.start_ap(TEST_AP_CONFIG)
 
-    msg = ctx.cloud.receive(timeout=10)
-    assert msg.method == Action.GET
+    # quando il RE si riconnette deve fare subito una GET
+    msg = ctx.cloud.receive(timeout=5)
+    assert msg.action == Action.GET
 

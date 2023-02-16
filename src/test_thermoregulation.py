@@ -4,13 +4,13 @@ import uuid
 from fw_test.context import Context
 from fw_test.io import LedColor
 from fw_test.cloud import Message, Response, Action
-from fw_test.wifi import ApConfiguration, WifiSecurityType
+from fw_test.cloud.state import SYSTEM_STATUS_HEATING, SYSTEM_STATUS_LOAD_ACTIVE
 
-from .state import STATE_MANUAL
+from .utils import STATE_MANUAL, TEST_AP_CONFIG
 
-TEST_SSID = "TEST-NETWORK"
-TEST_PASSPHRASE = "test-network-passphrase"
 
+START_SET_POINT = 60
+SET_POINT_INCREMENT = 20
 
 def test_thermoregulation(ctx: Context):
     # avvio la connessione del Raspberry all'AP
@@ -19,62 +19,68 @@ def test_thermoregulation(ctx: Context):
     sleep(1)
 
     # invio la richiesta provision
-    ap_config = ApConfiguration(
-        ssid=TEST_SSID,
-        passphrase=TEST_PASSPHRASE,
-        security_type=WifiSecurityType.WPA2,
-        channel=6,
-    )
     env_id = uuid.uuid4()
-    response = ctx.api.provision(ap_config, env_id)
+    response = ctx.api.provision(TEST_AP_CONFIG, env_id)
     assert response["status"] == "success"
 
     # communto la raspberry in AP mode
-    ctx.wifi.start_ap(ap_config)
+    ctx.wifi.start_ap(TEST_AP_CONFIG)
 
-    # attendo che il pairing abbia successo 
-    sleep(10)
-
-    assert ctx.io.status_led_color == LedColor.OFF
+    msg = ctx.cloud.receive(timeout=30)
+    assert msg.action == Action.GET
 
     ctx.cloud.publish(Message(
-        action=Action.DESIRED_UPDATE,
+        action=Action.GET,
+        response=Response.ACCEPTED,
         state={
             **STATE_MANUAL,
             "clientToken": msg.state["clientToken"],
             "timestamp": int(time()),
-            "systemId": env_id.bytes(),
-            "requestId": 1,
+            "envId": env_id.bytes,
+            "manualSetPoint": START_SET_POINT
         }
     ))
 
-    sleep(2)
-    msg = ctx.cloud.receive(timeout=5)
-    assert msg.method == Action.REPORTED_UPDATE
-
-    for _ in range(20):
-        ctx.io.press_plus()
-        sleep(0.5)
-
     sleep(1)
+
+    assert ctx.io.status_led_color() == LedColor.OFF
+    assert not ctx.io.is_load_active() 
+
+    ctx.cloud.flush()
+
+    for _ in range(SET_POINT_INCREMENT + 1):
+        ctx.io.press_plus()
+        sleep(0.1)
+
+    # i LED sono rossi
+    assert ctx.io.status_led_color() == LedColor.RED
 
     # il radiatore deve scalare ora
     assert ctx.io.is_load_active() 
 
     msg = ctx.cloud.receive(timeout=5)
-    assert msg.method == Action.REPORTED_UPDATE
-    assert msg.status["heatingStatus"] != 0
+    assert msg.action == Action.REPORTED_UPDATE
+    assert msg.state["manualSetPoint"] == START_SET_POINT + SET_POINT_INCREMENT * 5
+    assert msg.state["systemStatus"] & SYSTEM_STATUS_HEATING != 0
+    assert msg.state["systemStatus"] & SYSTEM_STATUS_LOAD_ACTIVE != 0
 
-    for _ in range(20):
+    # attendo che la tastiera si spenga
+    sleep(5)
+    assert ctx.io.status_led_color() == LedColor.OFF
+
+    for _ in range(SET_POINT_INCREMENT + 1):
         ctx.io.press_minus()
-        sleep(0.5)
+        sleep(0.1)
 
-    sleep(1)
+    # i LED sono azzurri
+    assert ctx.io.status_led_color() == LedColor.CYAN
 
     # il radiatore non deve più scaldare
     assert not ctx.io.is_load_active()
 
     msg = ctx.cloud.receive(timeout=5)
-    assert msg.method == Action.REPORTED_UPDATE
-    assert msg.status["heatingStatus"] == 0
+    assert msg.action == Action.REPORTED_UPDATE
+    assert msg.state["manualSetPoint"] == START_SET_POINT
+    assert msg.state["systemStatus"] & SYSTEM_STATUS_HEATING == 0
+    assert msg.state["systemStatus"] & SYSTEM_STATUS_LOAD_ACTIVE == 0
 

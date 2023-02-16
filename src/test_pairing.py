@@ -57,21 +57,21 @@ def test_pairing(ctx: Context):
         state={
             "clientToken": msg.state["clientToken"],
             "timestamp": int(time()),
-            "requestId": 0,
+            "version": 0,
             "type": PacketType.HEADER,
         }
     ))
 
     # mi aspetto ora un reported update
     msg = ctx.cloud.receive(timeout=5)
-    assert msg.method == Action.REPORTED_UPDATE
+    assert msg.action == Action.REPORTED_UPDATE
 
     # la versione iniziale deve essere zero
     assert msg.state["version"] == 0
 
     # il system id deve essere uguale all'env id
-    assert msg.state["systemId"] == env_id.bytes()
+    assert msg.state["envId"] == env_id.bytes
 
     # la versione firmware deve corrispondere a quella in test
-    assert FirmwareVersion.from_bytes(msg.state["firmwareVersion"]) == ctx.firmware.version
-
+    assert msg.state["firmwareVersion"][0] == ctx.firmware.version.major
+    assert msg.state["firmwareVersion"][1] == ctx.firmware.version.minor

@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{time} \PYG{k+kn}{import} \PYG{n}{sleep}
+
+\PYG{k+kn}{from} \PYG{n+nn}{fw\PYGZus{}test.context} \PYG{k+kn}{import} \PYG{n}{Context} 
+\PYG{k+kn}{from} \PYG{n+nn}{fw\PYGZus{}test.firmware} \PYG{k+kn}{import} \PYG{n}{FirmwareVersion}
+
+
+\PYG{k}{def} \PYG{n+nf}{test\PYGZus{}downgrade}\PYG{p}{(}\PYG{n}{ctx}\PYG{p}{:} \PYG{n}{Context}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} connette il Raspberry all\PYGZsq{}AP del radiatore elettrico}
+    \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{client\PYGZus{}connect}\PYG{p}{()}
+
+    \PYG{n}{sleep}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} invio aun aggiornamento firmware locale}
+    \PYG{n}{response} \PYG{o}{=} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{api}\PYG{o}{.}\PYG{n}{firmware\PYGZus{}update}\PYG{p}{(}\PYG{n}{ctx}\PYG{o}{.}\PYG{n}{prev\PYGZus{}firmware}\PYG{p}{)}
+    \PYG{k}{assert} \PYG{n}{response}\PYG{o}{.}\PYG{n}{status\PYGZus{}code} \PYG{o}{==} \PYG{l+m+mi}{200}
+
+    \PYG{c+c1}{\PYGZsh{} attendo che il dispositivo si riavvii}
+    \PYG{n}{sleep}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} mi ricollego al radiatore     }
+    \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{wifi}\PYG{o}{.}\PYG{n}{client\PYGZus{}connect}\PYG{p}{()}
+
+    \PYG{n}{sleep}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{n}{status} \PYG{o}{=} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{api}\PYG{o}{.}\PYG{n}{status}\PYG{p}{()}
+
+    \PYG{c+c1}{\PYGZsh{} controllo che la versione firmware sia quella inviata}
+    \PYG{k}{assert} \PYG{n}{FirmwareVersion}\PYG{o}{.}\PYG{n}{from\PYGZus{}str}\PYG{p}{(}\PYG{n}{status}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}system\PYGZsq{}}\PYG{p}{][}\PYG{l+s+s1}{\PYGZsq{}fwVer\PYGZsq{}}\PYG{p}{])} \PYG{o}{==} \PYG{n}{ctx}\PYG{o}{.}\PYG{n}{prev\PYGZus{}firmware}\PYG{o}{.}\PYG{n}{version}
+\end{Verbatim}

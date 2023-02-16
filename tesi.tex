@@ -1531,7 +1531,7 @@ Questi corrispondono ai casi d'uso considerati critici, in quanto un malfunziona
 di essi pregiudica ogni tipo di funzionalità del dispositivo o non ne permette l'aggiornamento
 a successive versioni.
 
-\subsection{Abbinamento del dispositivo ad un impianto}
+\subsection{Abbinamento del dispositivo}
 \label{section:test_pairing}
 
 Viene testata la capacità di abbinare mediante app il dispositivo ad un impianto.
@@ -1587,7 +1587,7 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Downgrade del firmware mediante API REST locale}
+\subsection{Downgrade locale}
 \label{section:test_downgrade}
 
 Il dispositivo deve essere sempre aggiornabile mediante API REST locale quando questo
@@ -1624,7 +1624,7 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Aggiornamento di un dispositivo mediante OTA MQTT}
+\subsection{Aggiornamento OTA cloud}
 \label{section:test_ota}
 
 Un dispositivo abbinato ad una app e connesso ad internet deve poter ricevere gli
@@ -1669,7 +1669,7 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Ripristino di fabbrica di un dispositivo connesso}
+\subsection{Ripristino di fabbrica}
 \label{section:test_factory_reset}
 
 Deve essere sempre garantito che un dispositivo possa essere riportato alle impostazioni di fabbrica.
@@ -1711,8 +1711,8 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Ripristino di fabbrica di un dispositivo disconnesso}
-\label{section:test_factory_reset_unbounded}
+\subsection{Ripristino di fabbrica disconnesso}
+\label{section:test_factory_reset_offline}
 
 Deve essere possibile resettare un dispositivo anche quando questo non è connesso
 alla rete, in quanto l'utente potrebbe volerlo abbinare nuovamente da app in quanto ha sostituito
@@ -1732,7 +1732,7 @@ o cambiato la configurazione del proprio \acrshort{ap} \Gls{wifi}.
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
-È possibile vedere il codice Python in \autoref{section:impl_test_factory_reset_unbounded}.
+È possibile vedere il codice Python in \autoref{section:impl_test_factory_reset_offline}.
 
 \begin{enumerate}
     \item connettiti all'\acrshort{ap} del \acrshort{re}
@@ -1752,7 +1752,7 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Termoregolazione di base}
+\subsection{Termoregolazione base}
 \label{section:test_thermoregulation}
 
 Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente seguendo un set-point manuale.
@@ -1809,7 +1809,7 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \end{itemize}
 \end{enumerate}
 
-\subsection{Attivazione modalità stand-by}
+\subsection{Modalità stand-by}
 \label{section:test_standby}
 
 Scopo di questo test è la verifica che la funzionalità di stand-by funzioni correttamente.
@@ -1915,17 +1915,33 @@ e l'esecuzione manuale:
 \begin{center}
 \begin{tabular}{| l | c | c |}
     \hline
-    \textbf{test} & \textbf{manuale} & \textbf{automatico} \\ \hline
-    \fullref{section:test_pairing} & ??min & ??min \\ \hline
-    \fullref{section:test_downgrade} & ??min & ??min \\ \hline
-    \fullref{section:test_ota} & ??min & ??min \\ \hline
-    \fullref{section:test_factory_reset} & ??min & ??min \\ \hline
-    \fullref{section:test_factory_reset_unbounded} & ??min & ??min \\ \hline 
-    \fullref{section:test_thermoregulation} & ??min & ??min \\ \hline 
-    \fullref{section:test_standby} & ??min & ??min \\ \hline 
-    \fullref{section:test_offline_working} & ??min & ??min \\ \hline 
+    \textbf{Test} & \textbf{Automatico} & \textbf{Manuale}\footnotemark \\ \hline
+    \textbf{Tempo di setup}\footnotemark & 0m 5s & circa 10 minuti \\\hline
+    \fullref{section:test_pairing} & 0m 18s & 3m 56s \\ \hline
+    \fullref{section:test_downgrade} & 0m 28s & 3m 47s \\ \hline
+    \fullref{section:test_ota} & 0m 48s & 5m 12s \\ \hline
+    \fullref{section:test_factory_reset} & 0m 27s & 3m 34s \\ \hline
+    \fullref{section:test_factory_reset_offline} & 0m 32s & 3m 50s \\ \hline 
+    \fullref{section:test_thermoregulation} & 0m 41s & 3m 58s \\ \hline 
+    \fullref{section:test_standby} & 0m 40s & 4m 9s \\ \hline 
+    \fullref{section:test_offline_working} & 1m 20s & 5m 30s \\ \hline 
+    \textbf{Totale} & 4m 52s\footnotemark & 33m 56s \\ \hline
 \end{tabular}
 \end{center}
+
+\footnotetext[1]{Include oltre al tempo per svolgere il test il tempo necessario per leggere i passi da svolgere,
+    assicurarsi che il RE sia alle condizioni iniziali, ed alla fine del test aggiornare il documento con l'esito}
+\footnotetext[2]{Tempo necessario per predisporre l'ambiente ed il materiale per poter iniziare a svolgere i test}
+\footnotetext[3]{Tempo di esecuzione lanciando assieme tutti i test, 
+    potrebbe non corrispondere esattamente alla somma dei tempi di esecuzione dei singoli test}
+
+Come vediamo si passa da un tempo di esecuzione manuale di circa mezz'ora ad un tempo di esecuzione automatica 
+di poco meno di 5 minuti. Ovviamente il vero risparmio non è il tempo in sè, ma il fatto che non vi è più la necessità 
+di un operatore che supervisioni le operazioni, e che possa commettere errori nello svolgerle. 
+
+Ho voluto testare l'infrastruttura con varie versioni del software, inclusa una che non è ancora stata rilasciata. 
+Grazie ai test automatizzati, e questo non è stato fatto apposta, mi sono potuto rendere conto di un bug nella gestione 
+dei LED di illuminazione della pulsantiera che facevano sì che in certe casistiche non venissero spente. 
 
 \chapter{Conclusioni}
 
@@ -2083,8 +2099,8 @@ quanto finisce in mano ai clienti.
 \inputminted[]{python3}{src/test_factory_reset.py}
 
 \section{Test ripristino di fabbrica disconnesso}
-\label{section:impl_test_factory_reset_unbounded}
-\inputminted[]{python3}{src/test_factory_reset_unbounded.py}
+\label{section:impl_test_factory_reset_offline}
+\inputminted[]{python3}{src/test_factory_reset_offline.py}
 
 \section{Test termoregolazione}
 \label{section:impl_test_thermoregulation}
