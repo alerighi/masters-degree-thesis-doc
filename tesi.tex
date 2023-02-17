@@ -241,7 +241,7 @@ anche quando ci si trova dall'altra parte del pianeta.
 
 Questi dispositivi svolgono anche funzioni critiche per il nostro
 benessere domestico, quale ad esempio il controllo della temperatura
-ambientale, che è oggetto del mio lavoro in IOTINGA.
+ambientale.
 
 IOTINGA s.r.l. nasce con lo scopo di aiutare altre aziende nel realizzare e
 commercializzare dispositivi \Gls{iot}. IOTINGA si distingue dagli altri
@@ -306,6 +306,8 @@ dell'ecosistema cloud e della app.
     \caption{IRSAP ed IOTINGA al CES 2022}
     \label{fig:ces}
 \end{figure}
+
+% aggiungere sintesi problema affrontato 
 
 \chapter{Definizione del problema}
 
@@ -388,7 +390,7 @@ pericoli (ad esempio dispersioni elettriche).
 
 \section{Prevenzione dei danni software}
 
-E per quanto concerne il software? Purtroppo attualmente non esistono (ancora) obblighi normativi per 
+Purtroppo attualmente non esistono (ancora) obblighi normativi per 
 i prodotti di \textit{elettronica di consumo} che impongano la realizzazione del software seguendo determinati 
 standard. Essi esistono solo per settori specifici, come l'aereospaziale, il medicale, il militare, ecc. 
 
@@ -398,7 +400,7 @@ della sicurezza del software ed è contenuto nella norma IEC 61508.
 
 Esso definisce 4 livelli, dal meno stringente (livello 1) al più restrittivo (4). Ogni 
 livello presenta requisiti per quanto concerne la progettazione, lo sviluppo e la validazione 
-del software realizzato, che sono riassunti nella seguente tabella:
+del software realizzato, che sono riassunti in \autoref{table:sil}:
 
 \begin{center}
 \begin{small}
@@ -417,6 +419,8 @@ del software realizzato, che sono riassunti nella seguente tabella:
     Analisi Dinamica (es. Test automatici) & Si & Si & Si & Si \\ \hline
     Testing indipendente & Si (da org. esterna) & Si (da org. esterna) & Si (da Committente) & Opzionale \\ \hline
     Monitoraggio indipendente (test periodici) & Si (da org. esterna) & Si (da org. esterna) & Si (da Committente) & Opzionale \\ \hline
+    \caption{standard SIL}
+    \label{table:sil} \\
 \end{longtable}
 \end{small}
 \end{center}
@@ -548,13 +552,13 @@ presso i clienti finali.
 
 \section{Problemi dell'approccio attuale}
 
-Per la fase vista in \autoref{subsection:test_sviluppo} non ci sono particolari problemi,
+Per i test durante lo sviluppo (vedi \autoref{subsection:test_sviluppo}) non ci sono particolari problemi,
 come detto esistono una moltitudine di strumenti con i quali il lavoro può essere automatizzato. 
 
-La fase in \autoref{subsection:test_accettazione_produttore} invece è piena responsabilità del 
-\gls{produttore} che decide come meglio crede come svolgerla. 
+La fase di test di accettazione del produttore (in \autoref{subsection:test_accettazione_produttore}) invece 
+è piena responsabilità del \gls{produttore} che decide come meglio crede come svolgerla. 
 
-La componente più critica ora è la fase in \autoref{subsection:test_accettazione_interna}. 
+La componente più critica ora è la fase dei test di accettazione interna (\autoref{subsection:test_accettazione_interna}). 
 L'approccio attuale infatti presenta varie problematiche:
 \begin{itemize}
     \item la procedura è ripetitiva, e questo può facilmente indurre
@@ -603,12 +607,13 @@ Vediamo quindi i requisiti che questo sistema deve avere:
 \end{itemize}
 
 Osservato che sul mercato non esistono sistemi commerciali o open-source in grado di rispondere ai requisiti 
-sopra elencati non ci rimane che svilupparne uno in casa. 
+sopra elencati. L'obiettivo di questa tesi è implementare e analizzare sperimentalmente un sistema in grado di 
+rispondere a questa esigenza. 
 
 \chapter{Approccio}
 
-Prima di descrivere l'implementazione è necessario fare un passo indietro ed andare
-ad sviscerare il dispositivo \Gls{re} andando a vedere i dettagli più tecnici.
+Prima di descrivere l'implementazione è necessario andare a sviscerare il dispositivo \Gls{re}
+andando a vedere i dettagli più tecnici.
 
 \section{Caratteristiche hardware}
 
@@ -746,7 +751,7 @@ e l'aggiornamento \acrshort{ota} di due \gls{firmware} ed abbiamo più controllo
 parte di \Gls{wifi}.
 
 Un secondo microcontrollore comporta poi problemi di approvvigionamento, soprattutto di
-questi tempi in cui il mercato dei componenti elettronici è impazzito è importante ridurre 
+questi tempi in cui il mercato dei componenti elettronici è problematico è importante ridurre 
 al minimo il numero di componenti critici utilizzati, quelli di difficile rimpiazzo, usati in un progetto.
 
 La scelta di seguire l'approccio \textit{hostless} non è stata senza difficoltà, dovute
@@ -792,6 +797,19 @@ Il dispositivo ad alto livello (\textit{core}) può trovarsi in 3 stati:
     \item \textit{connesso}: il dispositivo è connesso e sincronizzato con il cloud, è la modalità di funzionamento usuale
 \end{itemize}
 
+In \autoref{fig:stati} si può vedere come è possibile muoversi fra i vari stati del dispositivo:
+\begin{itemize}
+    \item tramite la procedura di \textit{abbinamento} il dispositivo passa dallo stato \textit{non abbinato}
+        allo stato \textit{connesso}. Questa procedura è quella che fa l'utente tramite app quando installa 
+        per la prima volta il dispositivo a casa propria, ed ogni qualvolta il dispositivo viene reiniziallizzato 
+        alle impostazioni di fabbrica 
+    \item con la procedura di \textit{ripristino di fabbrica} è possibile portare un dispositivo alle impostazioni 
+        iniziali e quindi allo stato \textit{non abbinato}. La procedura è utile in caso di problemi di connettività 
+        sia quando si vuole abbinare il radiatore ad un altro impianto
+    \item ogni qualvolta che la connessione \Gls{wifi} è assente il dispositivo passa in stato di funzionamento \textit{disconnesso}
+    \item quando invece la connessione torna disponibile il dispositivo passa allo stato \textit{connesso}
+\end{itemize}
+
 \begin{figure}[ht]
     \centering
     \begin{tikzpicture}
@@ -809,17 +827,20 @@ Il dispositivo ad alto livello (\textit{core}) può trovarsi in 3 stati:
 \end{figure}
 
 Ad ogni stato del dispositivo corrisponde l'attivazione/disattivazione di uno o più
-moduli:
+moduli come in \autoref{table:state_mode}
 
-\begin{center}
-\begin{tabular}{| c | c | l |}
-    \hline
-    stato & modo \Gls{wifi} & moduli attivi \\ \hline
-    \textit{non abbinato} & \acrshort{ap} & core, \acrshort{ncm}, \acrshort{hmi}, \acrshort{http} \\ \hline
-    \textit{disconnesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato \\ \hline
-    \textit{connesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato, \acrshort{aws} \\ \hline
-\end{tabular}
-\end{center}
+\begin{table}
+    \centering
+    \begin{tabular}{| c | c | l |}
+        \hline
+        stato & modo \Gls{wifi} & moduli attivi \\ \hline
+        \textit{non abbinato} & \acrshort{ap} & core, \acrshort{ncm}, \acrshort{hmi}, \acrshort{http} \\ \hline
+        \textit{disconnesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato \\ \hline
+        \textit{connesso} & \acrshort{sta} & core, \acrshort{ncm}, \acrshort{hmi}, termostato, \acrshort{aws} \\ \hline
+    \end{tabular}
+    \caption{moduli attivati negli stati del dispositivo}
+    \label{table:state_mode}
+\end{table}
 
 \subsection{Termoregolazione}
 
@@ -847,7 +868,14 @@ Il dispositivo ha diversi modi di funzionamento, in ordine di priorità:
 \end{itemize}
 
 Tutti i modi sopraelencati sono attivabili tramite app. Invece tramite pulsantiera del dispositivo è possibile 
-muoversi nelle modalità \textit{manuale a tempo} oppure \textit{manuale} secondo lo schema in \autoref{fig:modi}.
+muoversi nelle modalità \textit{manuale a tempo} oppure \textit{manuale} secondo lo schema in \autoref{fig:modi}:
+\begin{itemize}
+    \item se ci si trovava in stato \textit{programmato} alla prima modifica manuale il dispositivo passa in 
+        modo \textit{manuale a tempo}
+    \item se ci si trovava in stato \textit{manuale a tempo} invece si passa in stato \textit{manuale} indefinito
+    \item in ogni caso quando il dispositivo è in stato \textit{manuale} vi resta fino a che non viene comandato il 
+        passaggio in un altro stato tramite la app
+\end{itemize}
 
 \begin{figure}[ht]
     \centering
@@ -979,7 +1007,7 @@ con aggiunto un suffisso che indica l'esito dell'operazione:
 
 \subsubsection{Formato messaggi cloud}
 
-Ogni messaggio su cloud include un header sempre uguale, che include i seguenti campi
+Ogni messaggio su cloud include un header sempre uguale, che include ic ampi in \autoref{table:packet_header}.
 
 \begin{center}
 \begin{longtable}{| p{5cm} | c | p{8cm} |}
@@ -993,11 +1021,13 @@ Ogni messaggio su cloud include un header sempre uguale, che include i seguenti 
         da parte della app \\\hline
     length & u16 & lunghezza totale del messaggio in byte (header incluso) \\ \hline
     type & u8 & tipologia di messaggio inviata \\ \hline
+    \caption{header del pacchetto}
+    \label{table:packet_header}
 \end{longtable}
 \end{center}
 
-Per i messaggi che prevedono dei dati sono aggiunti questi parametri (alcuni di questi 
-parametri sono presenti solo nello stato \textit{reported}, altri sia nel \textit{desired} che nel \textit{reported}):
+Per i messaggi che prevedono un body sono aggiunti i parametri in \autoref{table:device_state} (alcuni di questi parametri sono presenti \
+solo nello stato \textit{reported}, altri sia nel \textit{desired} che nel \textit{reported}).
 
 \begin{center}
 \begin{longtable}{| p{5cm} | c | p{8cm} |}
@@ -1054,6 +1084,8 @@ parametri sono presenti solo nello stato \textit{reported}, altri sia nel \texti
     totConsumptionValue & u32 & valore all’ultimo snapshot di consumo\\ \hline
     totConsumptionTime & u32 & consumo all’ultimo snapshot\\ \hline
     modelName & char[32] & nome modello del radiatore\\ \hline
+    \caption{stato del dispositivo}
+    \label{table:device_state}
 \end{longtable}
 \end{center}
 
@@ -1066,19 +1098,22 @@ collegarsi prima che esso possa iniziare a funzionare tramite la app \Gls{now}.
 Questo avviene tramite \Gls{wifi} in quanto il modulo GS2200M non dispone di interfaccia 
 \acrshort{ble}. Il cellulare effettua una connessione ad una rete \Gls{wifi} il cui 
 SSID inizia con il prefisso di IRSAP (\texttt{IRSAP\_}). Dopo di che può chiamare 
-le seguenti API REST implementate dal dispositivo:
+le API REST implementate dal dispositivo in \autoref{table:local_api}. 
 
-\begin{center}
-\begin{tabular}{| l | c | p{6cm} |}
-    \hline 
-    \textbf{endpoint} & \textbf{metodo} & \textbf{descrizione} \\ \hline 
-    \texttt{/irsap/state} & GET & ottiene informazioni sul dispositivo \\ \hline 
-    \texttt{/irsap/wifi/scan} & GET & ottiene l'elenco di reti \Gls{wifi} visibili dal dispositivo \\ \hline 
-    \texttt{/irsap/provision} & POST & invia al dispositivo la configurazione \\ \hline 
-    \texttt{/irsap/test} & POST & attiva la modalità collaudo del dispositivo \\ \hline 
-    \texttt{/gainspan/system/fwup} & POST & invia un aggiornamento \gls{firmware} al dispositivo \\ \hline
-\end{tabular}
-\end{center}
+\begin{table}
+    \centering
+    \begin{tabular}{| l | c | p{6cm} |}
+        \hline 
+        \textbf{endpoint} & \textbf{metodo} & \textbf{descrizione} \\ \hline 
+        \texttt{/irsap/state} & GET & ottiene informazioni sul dispositivo \\ \hline 
+        \texttt{/irsap/wifi/scan} & GET & ottiene l'elenco di reti \Gls{wifi} visibili dal dispositivo \\ \hline 
+        \texttt{/irsap/provision} & POST & invia al dispositivo la configurazione \\ \hline 
+        \texttt{/irsap/test} & POST & attiva la modalità collaudo del dispositivo \\ \hline 
+        \texttt{/gainspan/system/fwup} & POST & invia un aggiornamento \gls{firmware} al dispositivo \\ \hline
+    \end{tabular}
+    \caption{API locale}
+    \label{table:local_api}
+\end{table}
 
 Il flusso di abbinamento funziona pertanto nel seguente modo:
 \begin{itemize}
@@ -1216,7 +1251,7 @@ come il \Gls{wifi} il comportamento potrebbe essere particolarmente diverso. A t
 uno dei bug principali che abbiamo avuto sul \acrshort{re} era proprio l'incompatibilità con alcuni tipi di \acrlong{ap}
 \Gls{wifi}, una condizione che sarebbe stata impossibile da diagnosticare senza far girare il software su hardware fisico.
 
-\section{Conclusioni}
+\section{Configurazione selezionata per i test}
 
 Concludiamo quindi stabilendo che il modo migliore di procedere è realizzare un dispositivo hardware in 
 grado di interfacciarsi a livello elettrico con un kit di sviluppo (\textit{devkit}) del modulo Telit GS2200M. 
@@ -1463,7 +1498,7 @@ Per la gestione del controllo versione del codice sorgente utilizziamo \Gls{git}
 sul servizio \textit{GitHub}. Come politica interna di 
 \textit{branching model} abbiamo scelto di usare il \textit{trunk based developement}\footnote{\url{https://trunkbaseddevelopment.com/}}. 
 
-Questo prevede che vi sia sempre un unico ramo, nel nostro caso il \textit{master}, sul 
+Questo prevede che vi sia sempre un unico \textit{branch}, nel nostro caso il \textit{master}, sul 
 quale tutte le modifiche vengono integrate, idealmente il più spesso possibile, in 
 maniera tale da evitare che i vari rami di sviluppo divergano al punto da rendere difficile,
 se non impossibile, integrarli.
@@ -1496,7 +1531,16 @@ che contiene a sua volta all'interno due \textit{job}:
         direttamente sulla raspberry di test 
 \end{itemize}
 
-Vediamo in maniera schematica questa integrazione in \autoref{fig:ci}. 
+Vediamo in maniera schematica questa integrazione in \autoref{fig:ci}. Quando lo sviluppatore esegue 
+un push sul \textit{branch} \textit{master} \textit{Github Actions} avvia il processo di \acrshort{ci}. 
+Per prima cosa viene avviato il job di \textit{compilazione} che, nel caso completi con successo, va a 
+produrre un nuovo binario con un numero di versione \textit{vX.Y.Z}, che è automaticamente calcolato andando 
+ad incrementare la \textit{patch version} rispetto all'ultimo \textit{tag} presente nel repository. 
+
+Nel caso questo abbia successo viene quindi attivata la procedura di test automatizzato, andando a lanciare 
+un processo sul worker che viene eseguito sul Raspberry Pi di test. A questo punto, nel caso il test sia 
+completato con successo, GitHub Actions considera l'intero \textit{workflow} come completato con successo e 
+quindi informa mediante mail lo sviluppatore che il processo di \acrshort{ci} ha avuto successo. 
 
 \begin{figure}
     \centering
@@ -1520,7 +1564,7 @@ Vediamo in maniera schematica questa integrazione in \autoref{fig:ci}.
 
 \chapter{Validazione sperimentale}
 
-\section{scenari da testare}
+\section{Scenari da testare}
 
 Per iniziare ho deciso di andare a scrivere un test per ognuno degli scenari attualmente
 testati manualmente nei test di accettazione di IOTINGA. Questo è solo un inizio, in quanto 
@@ -1539,17 +1583,20 @@ Il dispositivo deve correttamente abbinarsi all’impianto ed inviare al cloud l
 del \gls{firmware} corretta.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline 
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline
-    prendere un dispositivo in stato \textit{non abbinato} & \\ \hline
-    connettersi alla rete \Gls{wifi} del \Gls{re} in test & la connessione ha successo. È possibile raggiungere il radiatore all'indirizzo locale 192.168.240.1 \\ \hline
-    effettuare una richiesta HTTP GET all'API \textit{/irsap/status} & viene restituito un \acrshort{json} contenente alcune informazioni sul dispositivo. Verificare che la versione del \gls{firmware} indicata sia quella in test \\ \hline
-    effettuare una richiesta HTTP GET all'API \textit{/irsap/wifi/scan} & viene restituito un \acrshort{json} contenente l'elenco delle reti \Gls{wifi} viste dal radiatore \\ \hline
-    inviare una richiesta HTTP POST all'API \textit{/irsap/provision} & entro 5 secondi il dispositivo si riavvia. I led quindi lampeggiano di viola fino che non viene stabilita una connessione correttamente alla rete, a quel punto si spengono e si vede arrivare su cloud un messaggio di \textit{update}. \\ \hline
-\end{tabular}
-\end{center}
+
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline 
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline
+        prendere un dispositivo in stato \textit{non abbinato} & \\ \hline
+        connettersi alla rete \Gls{wifi} del \Gls{re} in test & la connessione ha successo. È possibile raggiungere il radiatore all'indirizzo locale 192.168.240.1 \\ \hline
+        effettuare una richiesta HTTP GET all'API \textit{/irsap/status} & viene restituito un \acrshort{json} contenente alcune informazioni sul dispositivo. Verificare che la versione del \gls{firmware} indicata sia quella in test \\ \hline
+        effettuare una richiesta HTTP GET all'API \textit{/irsap/wifi/scan} & viene restituito un \acrshort{json} contenente l'elenco delle reti \Gls{wifi} viste dal radiatore \\ \hline
+        inviare una richiesta HTTP POST all'API \textit{/irsap/provision} & entro 5 secondi il dispositivo si riavvia. I led quindi lampeggiano di viola fino che non viene stabilita una connessione correttamente alla rete, a quel punto si spengono e si vede arrivare su cloud un messaggio di \textit{update}. \\ \hline
+    \end{tabular}
+    \caption{test abbinamento del dispositivo}
+\end{table}
 
 \subsubsection{Implementazione}
 
@@ -1596,14 +1643,17 @@ installare sul dispositivo un \gls{firmware} sicuramente funzionante, nonché il
 possa essere aggiornato all’ultima versione fabbrica durante la procedura di collaudo.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline
-    prendere un dispositivo appena inizializzato alle impostazioni di fabbrica & il dispositivo si trova in stato \textit{non abbinato} \\ \hline
-    inviare al dispositivo una versione del \gls{firmware} precedente a quella installata & il dispositivo entro 30 secondi si riavvia e presenta nel suo stato la versione \gls{firmware} inviatagli \\ \hline
-\end{tabular}
-\end{center}
+
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline
+        prendere un dispositivo appena inizializzato alle impostazioni di fabbrica & il dispositivo si trova in stato \textit{non abbinato} \\ \hline
+        inviare al dispositivo una versione del \gls{firmware} precedente a quella installata & il dispositivo entro 30 secondi si riavvia e presenta nel suo stato la versione \gls{firmware} inviatagli \\ \hline
+    \end{tabular}
+    \caption{test di downgrade locale del dispositivo}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1631,14 +1681,16 @@ Un dispositivo abbinato ad una app e connesso ad internet deve poter ricevere gl
 aggiornamenti \acrshort{ota} mediante \Gls{awsjob}.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
-    \hline inviare mediante \Gls{awsjob} la versione \gls{firmware} precedente & il job passa in stato \textit{in corso} sulla console di \Gls{mqtt}. Entro un minuto il dispositivo si riavvia con il nuovo \gls{firmware} ed il job passa in stato \textit{successo}. Su cloud è inviato un messaggio riportante la versione del \gls{firmware} inviatagli. \\
-    \hline
-\end{tabular}
-\end{center}
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline \textbf{azione} & \textbf{risultato atteso} \\
+        \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
+        \hline inviare mediante \Gls{awsjob} la versione \gls{firmware} precedente & il job passa in stato \textit{in corso} sulla console di \Gls{mqtt}. Entro un minuto il dispositivo si riavvia con il nuovo \gls{firmware} ed il job passa in stato \textit{successo}. Su cloud è inviato un messaggio riportante la versione del \gls{firmware} inviatagli. \\
+        \hline
+    \end{tabular}
+    \caption{test di aggiornamento OTA}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1680,15 +1732,18 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
 Deve essere sempre garantito che un dispositivo possa essere riportato alle impostazioni di fabbrica.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline \textbf{azione} & \textbf{risultato atteso} \\
-    \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
-    \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
-    \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{DELETE} \\
-    \hline
-\end{tabular}
-\end{center}
+
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline \textbf{azione} & \textbf{risultato atteso} \\
+        \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
+        \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
+        \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{DELETE} \\
+        \hline
+    \end{tabular}
+    \caption{test ripristino di fabbrica}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1729,16 +1784,19 @@ alla rete, in quanto l'utente potrebbe volerlo abbinare nuovamente da app in qua
 o cambiato la configurazione del proprio \acrshort{ap} \Gls{wifi}.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline
-    portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\ \hline
-    spegnere l'\acrshort{ap} al quale il dispositivo è connesso & il dispositivo continua a funzionare in modalità \textit{disconnesso} \\ \hline
-    tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\ \hline
-    rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso \\ \hline
-\end{tabular}
-\end{center}
+
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline
+        portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\ \hline
+        spegnere l'\acrshort{ap} al quale il dispositivo è connesso & il dispositivo continua a funzionare in modalità \textit{disconnesso} \\ \hline
+        tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\ \hline
+        rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso \\ \hline
+    \end{tabular}
+    \caption{test di ripristino di fabbrica con dispositivo disconesso}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1773,15 +1831,17 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
 Questo test verifica che il radiatore sia in grado di riscaldare l'ambiente seguendo un set-point manuale.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline
-    abbinare un radiatore e portarlo in modo funzionamento \textit{manuale} con set-point inferiore alla temperatura ambiente & il radiatore non è in riscaldamento \\ \hline
-    incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\ \hline
-    decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\ \hline
-\end{tabular}
-\end{center}
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline
+        abbinare un radiatore e portarlo in modo funzionamento \textit{manuale} con set-point inferiore alla temperatura ambiente & il radiatore non è in riscaldamento \\ \hline
+        incrementare premendo il tasto \textbf{+} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera diventano rossi & il radiatore inizia a scaldare. Su cloud viene inviato un messaggio indicante lo stato \textit{in chiamata} \\ \hline
+        decrementare premendo il tasto \textbf{-} ripetutamente il set-point manuale fino che i \acrshort{led} della pulsantiera non diventano blu & il radiatore smette di scaldare. Su cloud arriva uno stato con il bit \textit{in chiamata} settato a \textit{false} \\ \hline
+    \end{tabular}
+    \caption{test di termoregolazione base}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1834,16 +1894,19 @@ modalità stand-by imponendo anche un limite massimo di consumo in questa modali
 (e più di recente 0.5W).
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline 
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline
-    prendere un radiatore dotato di \acrshort{led} \acrshort{rgbw} \textit{connesso} ed in modo \textit{manuale} che sta chiamando e con i \acrshort{led} accesi & \\ \hline
-    tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore smette di riscaldare ed i \acrshort{led} \acrshort{rgbw} si spengono \\ \hline
-    toccare la pulsantiera del radiatore & i \acrshort{led} della pulsantiera si illuminano di viola \\ \hline
-    tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore riprende a riscaldare ed i \acrshort{led} \acrshort{rgbw} si riaccendono con lo stesso colore che avevano in precedenza \\ \hline
-\end{tabular}
-\end{center}
+
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline 
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline
+        prendere un radiatore dotato di \acrshort{led} \acrshort{rgbw} \textit{connesso} ed in modo \textit{manuale} che sta chiamando e con i \acrshort{led} accesi & \\ \hline
+        tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore smette di riscaldare ed i \acrshort{led} \acrshort{rgbw} si spengono \\ \hline
+        toccare la pulsantiera del radiatore & i \acrshort{led} della pulsantiera si illuminano di viola \\ \hline
+        tenere premuto per almeno 5 secondi il tasto \textbf{-} & il radiatore riprende a riscaldare ed i \acrshort{led} \acrshort{rgbw} si riaccendono con lo stesso colore che avevano in precedenza \\ \hline
+    \end{tabular}
+    \caption{test modalità standb-by}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1886,16 +1949,18 @@ Lo scopo di questo test è verificare che in assenza di connessione ad internet 
 dispositivo continui a funzionare per quanto previsto dalla modalità \textit{degradata}.
 
 \subsubsection{Caso di test}
-\begin{center}
-\begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
-    \hline
-    \textbf{azione} & \textbf{risultato atteso} \\ \hline 
-    prendere un dispositivo abbinato ad un impianto in modo \textit{programmato} spento & \\ \hline 
-    spegnere l'access point \Gls{wifi} configurato nel dispositivo & \\ \hline 
-    accendere il dispositivo & i \acrshort{led} della pulsantiera entro 30 secondi si illuminano di giallo \\ \hline 
-    riconnettere l'access point & entro 30 secondi i \acrshort{led} del dispositivo si spengono. Su cloud arriva una richiesta GET dal dispositivo \\ \hline
-\end{tabular}
-\end{center}
+\begin{table}
+    \centering
+    \begin{tabular}{| p{0.45\textwidth} | p{0.45\textwidth} |}
+        \hline
+        \textbf{azione} & \textbf{risultato atteso} \\ \hline 
+        prendere un dispositivo abbinato ad un impianto in modo \textit{programmato} spento & \\ \hline 
+        spegnere l'access point \Gls{wifi} configurato nel dispositivo & \\ \hline 
+        accendere il dispositivo & i \acrshort{led} della pulsantiera entro 30 secondi si illuminano di giallo \\ \hline 
+        riconnettere l'access point & entro 30 secondi i \acrshort{led} del dispositivo si spengono. Su cloud arriva una richiesta GET dal dispositivo \\ \hline
+    \end{tabular}
+    \caption{test funzionamento disconnesso}
+\end{table}
 
 \subsubsection{Implementazione}
 Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del sistema di test. 
@@ -1931,41 +1996,70 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
 \end{enumerate}
 \section{Prestazioni}
 
-Vediamo ora la differenza in termini di tempo fra l'esecuzione del test in maniera automatica
-e l'esecuzione manuale:
+Analizziamo le prestazioni di questo approccio. Per farlo possiamo confrontare il tempo di esecuzione 
+dei test effettuati dallo strumento automatico con i tempi di esecuzione ottenuti con l'approccio manuale. 
 
-\begin{center}
-\begin{tabular}{| l | c | c |}
-    \hline
-    \textbf{Test} & \textbf{Automatico} & \textbf{Manuale}\footnotemark \\ \hline
-    \textbf{Tempo di setup}\footnotemark & 0m 5s & circa 10 minuti \\\hline
-    \fullref{section:test_pairing} & 0m 18s & 3m 56s \\ \hline
-    \fullref{section:test_downgrade} & 0m 28s & 3m 47s \\ \hline
-    \fullref{section:test_ota} & 0m 48s & 5m 12s \\ \hline
-    \fullref{section:test_factory_reset} & 0m 27s & 3m 34s \\ \hline
-    \fullref{section:test_factory_reset_offline} & 0m 32s & 3m 50s \\ \hline 
-    \fullref{section:test_thermoregulation} & 0m 41s & 3m 58s \\ \hline 
-    \fullref{section:test_standby} & 0m 40s & 4m 9s \\ \hline 
-    \fullref{section:test_offline_working} & 1m 20s & 5m 30s \\ \hline 
-    \textbf{Totale} & 4m 52s\footnotemark & 33m 56s \\ \hline
-\end{tabular}
-\end{center}
+Per misurare i tempi di esecuzione manuale ho cronometrato l'esecuzione dei test, considerando che 
+per ogni test l'esecutore deve:
+\begin{itemize}
+    \item predisporre il dispositivo alle condizioni iniziali prima del test
+    \item leggere la descrizione di ogni passo da eseguire
+    \item eseguire il passaggio indicato nella tabella 
+    \item verificare attentamente che l'esito effettivo sia identico a quello atteso 
+    \item aggiornare il documento con l'esito del test di successo/fallimento. In caso di fallimento dettagliare 
+        l'esito che realmente il test ha avuto. 
+\end{itemize}
 
-\footnotetext[1]{Include oltre al tempo per svolgere il test il tempo necessario per leggere 
-    i passi da svolgere, assicurarsi che il RE sia alle condizioni iniziali, ed alla fine del 
-    test aggiornare il documento con l'esito}
-\footnotetext[2]{Tempo necessario per predisporre l'ambiente ed il materiale per poter iniziare
-    a svolgere i test}
-\footnotetext[3]{Tempo di esecuzione lanciando assieme tutti i test, potrebbe non corrispondere
+Vi è anche una fase iniziale di setup, dove l'operatore deve predisporre tutto il materiale necessario, 
+prendere il dispositivo, avviare sul PC i tool necessari (client HTTP REST, client MQTT), aprire il documento 
+di test. 
+
+Per la misurazione dei tempi automatizzata invece ho lanciato prima i test singolarmente, dopo di che ho lanciato 
+la test suite completa, facendola eseguire in automatico su tutti i test. Il tempo di setup indicato per il test 
+automatizzato è il tempo necessario ad inizializzare il programma di test. 
+
+In \autoref{table:time_compare} i risultati dei testi effettuati.
+
+\begin{table}
+    \centering
+    \begin{tabular}{| l | c | c |}
+        \hline
+        \textbf{Test} & \textbf{Automatico} & \textbf{Manuale} \\ \hline
+        \textbf{Tempo di setup} & 0m 5s & circa 10 minuti \\\hline
+        \fullref{section:test_pairing} & 0m 18s & 3m 56s \\ \hline
+        \fullref{section:test_downgrade} & 0m 28s & 3m 47s \\ \hline
+        \fullref{section:test_ota} & 0m 48s & 5m 12s \\ \hline
+        \fullref{section:test_factory_reset} & 0m 27s & 3m 34s \\ \hline
+        \fullref{section:test_factory_reset_offline} & 0m 32s & 3m 50s \\ \hline 
+        \fullref{section:test_thermoregulation} & 0m 41s & 3m 58s \\ \hline 
+        \fullref{section:test_standby} & 0m 40s & 4m 9s \\ \hline 
+        \fullref{section:test_offline_working} & 1m 20s & 5m 30s \\ \hline 
+        \textbf{Totale} & 4m 52s\footnotemark & 33m 56s \\ \hline
+    \end{tabular}
+    \caption{confronto fra tempi di esecuzione}
+    \label{table:time_compare}
+\end{table}
+
+\footnotetext{Tempo di esecuzione lanciando assieme tutti i test, potrebbe non corrispondere
     esattamente alla somma dei tempi di esecuzione dei singoli test}
 
-Come vediamo si passa da un tempo di esecuzione manuale di circa mezz'ora ad un tempo di esecuzione automatica 
-di poco meno di 5 minuti. Ovviamente il vero risparmio non è il tempo in sè, ma il fatto che non vi è più la necessità 
-di un operatore che supervisioni le operazioni, e che possa commettere errori nello svolgerle. 
+Come si può vedere per ogni test il tempo di esecuzione manuale è circa 4 volte superiore a quello di esecuzione 
+dato dal tool automatico. Questo è comprensibile dal fatto che il tool riduce al massimo i tempi morti, andando ad 
+eseguire i controlli in maniera automatizzata. 
 
-Ho voluto testare l'infrastruttura con varie versioni del software, inclusa una che non è ancora stata rilasciata. 
-Grazie ai test automatizzati, e questo non è stato fatto apposta, mi sono potuto rendere conto di un bug nella gestione 
-dei LED di illuminazione della pulsantiera che facevano sì che in certe casistiche non venissero spente. 
+Vi è da considerare anche che la misurazione dei tempi manuali è stata effettuata tenendo conto di 
+quanto ci impiega una persona che abitualmente lavora sul progetto ad effettuarli. Infatti prima di diventare 
+produttivi è necessario conoscere il contesto e gli strumenti, e questo richiede un tempo di circa un'ora. 
+
+Ma il risultato più importante non è solo il tempo, ma la precisione dei risultati ottenuti. I test automatici 
+sono riproducibili, e si è sicuri che ogni volta vengono eseguiti nelle medesime condizioni. Al contrario il 
+test manuale è meno affidabile e potrebbe non andare ad identificare tutti i problemi possibili, perché l'operatore 
+dimentica un controllo. 
+
+Infine durante la validazione della procedura di test ho riscontrato un bug all'interno del firmware. 
+Infatti ho provato a lanciarla con un firmware che non è ancora stato rilasciato. La procedura mi ha permesso di 
+individuare un problema nella gestione dei LED di stato che non si comportavano come da specifica, rimanendo 
+accesi in certe casistiche anche quando in realtà dovevano essere spenti. 
 
 \chapter{Conclusioni}
 
