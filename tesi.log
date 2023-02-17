@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.31)  17 FEB 2023 11:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.31)  17 FEB 2023 15:19
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1295,22 +1295,25 @@ Underfull \hbox (badness 1189) in paragraph at lines 1755--1756
  []
 
 [54] [55] [56] [57] [58] [59] [60] [61]
-Overfull \hbox (2.89845pt too wide) in paragraph at lines 2039--2053
+Overfull \hbox (2.89845pt too wide) in paragraph at lines 2043--2057
  [][] 
  []
 
-[62] [63] [64
+[62]
+Underfull \vbox (badness 1226) has occurred while \output is active []
+
+ [63] [64]
+Capitolo 6.
+[65
 
 ]
-Capitolo 6.
-[65]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [66]
-<img/now.jpeg, id=1358, 1927.2pt x 1490.56876pt>
+<img/now.jpeg, id=1356, 1927.2pt x 1490.56876pt>
 File: img/now.jpeg Graphic file (type jpg)
 <use img/now.jpeg>
-Package pdftex.def Info: img/now.jpeg  used on input line 2151.
+Package pdftex.def Info: img/now.jpeg  used on input line 2160.
 (pdftex.def)             Requested size: 312.9803pt x 242.06671pt.
 
 Underfull \vbox (badness 1122) has occurred while \output is active []
@@ -1356,18 +1359,18 @@ Package rerunfilecheck Info: File `tesi.out' has not changed.
 (rerunfilecheck)             Checksum: 679CB2B7870E2EF6056D8E33988B005A;10925.
  ) 
 Here is how much of TeX's memory you used:
- 35760 strings out of 476065
- 706173 string characters out of 5795020
+ 35759 strings out of 476065
+ 706162 string characters out of 5795020
  1909299 words of memory out of 5000000
  55175 multiletter control sequences out of 15000+600000
  523769 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,13n,104p,2297b,1008s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,11n,104p,2297b,1008s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{c:/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on tesi.pdf (96 pages, 13684276 bytes).
+Output written on tesi.pdf (96 pages, 13685061 bytes).
 PDF statistics:
- 1893 PDF objects out of 2073 (max. 8388607)
- 1713 compressed objects within 18 object streams
- 341 named destinations out of 1000 (max. 500000)
+ 1891 PDF objects out of 2073 (max. 8388607)
+ 1711 compressed objects within 18 object streams
+ 340 named destinations out of 1000 (max. 500000)
  619 words of extra memory for PDF output out of 10000 (max. 10000000)
 

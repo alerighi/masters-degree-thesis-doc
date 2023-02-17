@@ -2026,11 +2026,15 @@ per ogni test l'esecutore deve:
 
 Vi è anche una fase iniziale di setup, dove l'operatore deve predisporre tutto il materiale necessario, 
 prendere il dispositivo, avviare sul PC i tool necessari (client HTTP REST, client MQTT), aprire il documento 
-di test. 
+di test. Per i test di tipo \textit{manuale} il totale è quindi la somma del tempo di esecuzione dei singoli 
+test, più il tempo di setup. 
 
 Per la misurazione dei tempi automatizzata invece ho lanciato prima i test singolarmente, dopo di che ho lanciato 
 la test suite completa, facendola eseguire in automatico su tutti i test. Il tempo di setup indicato per il test 
-automatizzato è il tempo necessario ad inizializzare il programma di test. 
+automatizzato è il tempo necessario ad avviare il programma di test. Il tempo \textit{totale} di esecuzione è ottenuto
+lanciando la suite di test nella sua interezza, che può non corrispondere (ossia essere inferiore) alla somma dei 
+tempi di esecuzione dei singoli test case, in quanto il tempo di setup è speso una volta sola all'avvio dell'intera 
+suite di test.  
 
 In \autoref{table:time_compare} i risultati dei testi effettuati.
 
@@ -2048,14 +2052,11 @@ In \autoref{table:time_compare} i risultati dei testi effettuati.
         \fullref{section:test_thermoregulation} & 0m 41s & 3m 58s \\ \hline 
         \fullref{section:test_standby} & 0m 40s & 4m 9s \\ \hline 
         \fullref{section:test_offline_working} & 1m 20s & 5m 30s \\ \hline 
-        \textbf{Totale} & 4m 52s\footnotemark & 33m 56s \\ \hline
+        \textbf{Totale} & 4m 52s & 33m 56s \\ \hline
     \end{tabular}
     \caption{confronto fra tempi di esecuzione}
     \label{table:time_compare}
 \end{table}
-
-\footnotetext{Tempo di esecuzione lanciando assieme tutti i test, potrebbe non corrispondere
-    esattamente alla somma dei tempi di esecuzione dei singoli test}
 
 Come si può vedere per ogni test il tempo di esecuzione manuale è circa 4 volte superiore a quello di esecuzione 
 dato dal tool automatico. Questo è comprensibile dal fatto che il tool riduce al massimo i tempi morti, andando ad 
@@ -2065,6 +2066,12 @@ Vi è da considerare anche che la misurazione dei tempi manuali è stata effettu
 quanto ci impiega una persona che abitualmente lavora sul progetto ad effettuarli. Infatti prima di diventare 
 produttivi è necessario conoscere il contesto e gli strumenti, e questo richiede un tempo di circa un'ora. 
 
+Con questi tempi di esecuzione con i test manuali si riuscirebbero, in una giornata lavorativa di 8 ore, ad eseguire 
+circa 16 volte la suite di test attuale, mentre con l'approccio automatico 96. Ma non solo, l'approccio automatico 
+è molto più scalabile, infatti l'hardware per eseguire i test è molto economico (utilizzando un Raspberry Pi dal costo 
+di circa 50 euro più un devkit dal costo di un centinaio) quindi è possibile aumentarlo a piacere in base alle necessità 
+di testare più build. 
+
 Ma il risultato più importante non è solo il tempo, ma la precisione dei risultati ottenuti. I test automatici 
 sono riproducibili, e si è sicuri che ogni volta vengono eseguiti nelle medesime condizioni. Al contrario il 
 test manuale è meno affidabile e potrebbe non andare ad identificare tutti i problemi possibili, perché l'operatore 
@@ -2073,7 +2080,9 @@ dimentica un controllo.
 Infine durante la validazione della procedura di test ho riscontrato un bug all'interno del firmware. 
 Infatti ho provato a lanciarla con un firmware che non è ancora stato rilasciato. La procedura mi ha permesso di 
 individuare un problema nella gestione dei LED di stato che non si comportavano come da specifica, rimanendo 
-accesi in certe casistiche anche quando in realtà dovevano essere spenti. 
+accesi in certe casistiche anche quando in realtà dovevano essere spenti. Con un test manuale questo bug non è 
+emerso, in quanto l'operatore avrebbe dovuto prestare particolare attenzione allo stato del LED, e conoscere 
+anche nei dettagli il funzionamento del dispositivo per capire che quel comportamento era anomalo. 
 
 \chapter{Conclusioni}
 
