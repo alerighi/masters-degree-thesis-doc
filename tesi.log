@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.31)  17 FEB 2023 10:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.31)  17 FEB 2023 11:03
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -838,7 +838,7 @@ Package hyperref Info: Link coloring OFF on input line 209.
 \@outlinefile=\write10
 \openout10 = `tesi.out'.
 
-<tesi-frn.pdf, id=268, 597.50829pt x 845.0471pt>
+<tesi-frn.pdf, id=272, 597.50829pt x 845.0471pt>
 File: tesi-frn.pdf Graphic file (type pdf)
 <use tesi-frn.pdf>
 Package pdftex.def Info: tesi-frn.pdf  used on input line 216.
@@ -869,318 +869,318 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 ) [1
 
 ]
-<img/polygon.jpeg, id=412, 1505.625pt x 847.165pt>
+<img/polygon.jpeg, id=417, 1505.625pt x 847.165pt>
 File: img/polygon.jpeg Graphic file (type jpg)
 <use img/polygon.jpeg>
 Package pdftex.def Info: img/polygon.jpeg  used on input line 285.
 (pdftex.def)             Requested size: 341.43306pt x 192.11632pt.
  [2 <./img/polygon.jpeg>]
-<img/ces.jpeg, id=429, 1606.0pt x 1204.5pt>
+<img/ces.jpeg, id=434, 1606.0pt x 1204.5pt>
 File: img/ces.jpeg Graphic file (type jpg)
 <use img/ces.jpeg>
 Package pdftex.def Info: img/ces.jpeg  used on input line 305.
 (pdftex.def)             Requested size: 341.43306pt x 256.07692pt.
- [3 <./img/ces.jpeg>] [4
+ [3 <./img/ces.jpeg>] [4]
+Capitolo 2.
+[5
 
 ]
-Capitolo 2.
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 364--364
+Underfull \hbox (badness 10000) in paragraph at lines 377--377
 [][][][]$\OT1/cmtt/m/n/10 https : / / eur-[]lex . europa . eu / legal-[]content / IT / TXT / PDF / ?uri = CELEX :
  []
 
 [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 []|\OT1/cmr/m/n/10.95 Definizione
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 []|\OT1/cmr/m/n/10.95 Formale (de-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 scri-zio-ne
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 strut-tu-ra-ta
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 e det-ta-glia-ta
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 dei com-por-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 ta-men-ti in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 lin-guag-gio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 []|\OT1/cmr/m/n/10.95 Semi-Formale
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 (de-scri-zio-ne
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 strut-tu-ra-ta
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 e det-ta-glia-ta
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 dei com-por-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 ta-men-ti in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 lin-guag-gio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 []|\OT1/cmr/m/n/10.95 Informale
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 (de-scri-zio-ne
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 in lin-guag-gio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 []|\OT1/cmr/m/n/10.95 Informale
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 (de-scri-zio-ne
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--410
+Underfull \hbox (badness 10000) in paragraph at lines 423--423
 \OT1/cmr/m/n/10.95 in lin-guag-gio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 411--411
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
 []|\OT1/cmr/m/n/10.95 Configuration-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 411--411
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
 []|\OT1/cmr/m/n/10.95 Completa
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 411--411
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
 \OT1/cmr/m/n/10.95 (au-to-ma-ti-ca
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 411--411
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
 []|\OT1/cmr/m/n/10.95 Completa
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 411--411
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
 \OT1/cmr/m/n/10.95 (au-to-ma-ti-ca
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--413
+Underfull \hbox (badness 10000) in paragraph at lines 426--426
 []|\OT1/cmr/m/n/10.95 Progettazione
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--413
+Underfull \hbox (badness 10000) in paragraph at lines 426--426
 \OT1/cmr/m/n/10.95 strut-tu-ra-ta
  []
 
 
-Underfull \hbox (badness 2600) in paragraph at lines 413--413
+Underfull \hbox (badness 2600) in paragraph at lines 426--426
 \OT1/cmr/m/n/10.95 (uso di flow-
  []
 
 
-Underfull \hbox (badness 2689) in paragraph at lines 413--413
+Underfull \hbox (badness 2689) in paragraph at lines 426--426
 \OT1/cmr/m/n/10.95 chart, sche-mi
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--413
+Underfull \hbox (badness 10000) in paragraph at lines 426--426
 \OT1/cmr/m/n/10.95 re-la-zio-na-li o
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--414
+Underfull \hbox (badness 10000) in paragraph at lines 427--427
 []|\OT1/cmr/m/n/10.95 Verifica del-la
  []
 
 
-Underfull \hbox (badness 4492) in paragraph at lines 414--414
+Underfull \hbox (badness 4492) in paragraph at lines 427--427
 []|\OT1/cmr/m/n/10.95 Si (da par-te
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--414
+Underfull \hbox (badness 10000) in paragraph at lines 427--427
 \OT1/cmr/m/n/10.95 del team di
  []
 
 
-Underfull \hbox (badness 4492) in paragraph at lines 414--414
+Underfull \hbox (badness 4492) in paragraph at lines 427--427
 []|\OT1/cmr/m/n/10.95 Si (da par-te
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--414
+Underfull \hbox (badness 10000) in paragraph at lines 427--427
 \OT1/cmr/m/n/10.95 del team di
  []
 
 
-Underfull \hbox (badness 4492) in paragraph at lines 414--414
+Underfull \hbox (badness 4492) in paragraph at lines 427--427
 []|\OT1/cmr/m/n/10.95 Si (da par-te
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--414
+Underfull \hbox (badness 10000) in paragraph at lines 427--427
 \OT1/cmr/m/n/10.95 del team di
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--414
+Underfull \hbox (badness 10000) in paragraph at lines 427--427
 []|\OT1/cmr/m/n/10.95 Si (esper-ti
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 415--415
+Underfull \hbox (badness 10000) in paragraph at lines 428--428
 []|\OT1/cmr/m/n/10.95 Project-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 416--416
+Underfull \hbox (badness 10000) in paragraph at lines 429--429
 []|\OT1/cmr/m/n/10.95 Valutazione
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 416--416
+Underfull \hbox (badness 10000) in paragraph at lines 429--429
 \OT1/cmr/m/n/10.95 tec-ni-ca in-di-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 417--417
+Underfull \hbox (badness 10000) in paragraph at lines 430--430
 []|\OT1/cmr/m/n/10.95 Analisi del-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 417--417
+Underfull \hbox (badness 10000) in paragraph at lines 430--430
 \OT1/cmr/m/n/10.95 la ge-stio-ne
  []
 
 
-Underfull \hbox (badness 2875) in paragraph at lines 417--417
+Underfull \hbox (badness 2875) in paragraph at lines 430--430
 \OT1/cmr/m/n/10.95 dei da-ti (ne-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 417--417
+Underfull \hbox (badness 10000) in paragraph at lines 430--430
 \OT1/cmr/m/n/10.95 ces-sa-ria per
  []
 
 
-Underfull \hbox (badness 4647) in paragraph at lines 418--418
+Underfull \hbox (badness 4647) in paragraph at lines 431--431
 []|\OT1/cmr/m/n/10.95 Analisi Sta-ti-
  []
 
 
-Underfull \hbox (badness 4981) in paragraph at lines 419--419
+Underfull \hbox (badness 4981) in paragraph at lines 432--432
 []|\OT1/cmr/m/n/10.95 Analisi Di-na-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 420--420
+Underfull \hbox (badness 10000) in paragraph at lines 433--433
 []|\OT1/cmr/m/n/10.95 Testing in-di-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 420--420
+Underfull \hbox (badness 10000) in paragraph at lines 433--433
 []|\OT1/cmr/m/n/10.95 Si (da org.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 420--420
+Underfull \hbox (badness 10000) in paragraph at lines 433--433
 []|\OT1/cmr/m/n/10.95 Si (da org.
  []
 
 
-Underfull \hbox (badness 3364) in paragraph at lines 420--420
+Underfull \hbox (badness 3364) in paragraph at lines 433--433
 []|\OT1/cmr/m/n/10.95 Si (da Com-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--421
+Underfull \hbox (badness 10000) in paragraph at lines 434--434
 []|\OT1/cmr/m/n/10.95 Monitoraggio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--421
+Underfull \hbox (badness 10000) in paragraph at lines 434--434
 \OT1/cmr/m/n/10.95 in-di-pen-den-te
  []
 
 
-Underfull \hbox (badness 6792) in paragraph at lines 421--421
+Underfull \hbox (badness 6792) in paragraph at lines 434--434
 \OT1/cmr/m/n/10.95 (te-st pe-rio-di-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--421
+Underfull \hbox (badness 10000) in paragraph at lines 434--434
 []|\OT1/cmr/m/n/10.95 Si (da org.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--421
+Underfull \hbox (badness 10000) in paragraph at lines 434--434
 []|\OT1/cmr/m/n/10.95 Si (da org.
  []
 
 
-Underfull \hbox (badness 3364) in paragraph at lines 421--421
+Underfull \hbox (badness 3364) in paragraph at lines 434--434
 []|\OT1/cmr/m/n/10.95 Si (da Com-
  []
 
 
-Overfull \hbox (20.98572pt too wide) in alignment at lines 407--424
+Overfull \hbox (20.98572pt too wide) in alignment at lines 420--437
  [] [] [] [] [] 
  []
 
@@ -1192,40 +1192,40 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 ]
 Capitolo 3.
 [17] [18]
-<img/scheda-design.jpg, id=557, 1127.21124pt x 740.7675pt>
+<img/scheda-design.jpg, id=566, 1127.21124pt x 740.7675pt>
 File: img/scheda-design.jpg Graphic file (type jpg)
 <use img/scheda-design.jpg>
-Package pdftex.def Info: img/scheda-design.jpg  used on input line 683.
+Package pdftex.def Info: img/scheda-design.jpg  used on input line 696.
 (pdftex.def)             Requested size: 390.0pt x 256.29976pt.
  [19] [20 <./img/scheda-design.jpg>] [21] [22] [23] [24] [25] [26]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 937.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 950.
  (c:/texlive/2022/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2022/07/10 v2.5l Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 937.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 950.
 
-Overfull \hbox (12.80023pt too wide) in paragraph at lines 938--940
+Overfull \hbox (12.80023pt too wide) in paragraph at lines 951--953
 \OT1/cmr/m/n/12 ai to-pic a lui de-di-ca-ti, ov-ve-ro i [][]to-pic MQTT[] con pre-fis-so re/things/\OMS/cmsy/m/n/12 f\OT1/cmr/m/n/12 MAC\OMS/cmsy/m/n/12 g 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 945--945
+Underfull \hbox (badness 10000) in paragraph at lines 958--958
 [][][][]$\OT1/cmtt/m/n/10 https : / / docs . aws . amazon . com / it _ it / iot / latest / developerguide /
  []
 
 [27] [28]
-Overfull \hbox (39.51083pt too wide) in alignment at lines 1013--1026
+Overfull \hbox (39.51083pt too wide) in alignment at lines 1026--1039
  [] [] [] 
  []
 
 [29]
-Underfull \hbox (badness 10000) in paragraph at lines 1072--1072
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1085
 []|\OT1/cmr/m/n/12 modalit^^Ra led am-bien-te (ma-nua-
  []
 
 
-Overfull \hbox (56.03125pt too wide) in alignment at lines 1033--1089
+Overfull \hbox (56.03125pt too wide) in alignment at lines 1046--1102
  [] [] [] 
  []
 
@@ -1237,10 +1237,10 @@ Capitolo 4.
 [39
 
 ]
-<img/devkit.png, id=890, 3340.48pt x 2533.465pt>
+<img/devkit.png, id=899, 3340.48pt x 2533.465pt>
 File: img/devkit.png Graphic file (type png)
 <use img/devkit.png>
-Package pdftex.def Info: img/devkit.png  used on input line 1294.
+Package pdftex.def Info: img/devkit.png  used on input line 1307.
 (pdftex.def)             Requested size: 390.0pt x 295.76863pt.
  [40 <./img/devkit.png>] [41] [42]
 Underfull \vbox (badness 1052) has occurred while \output is active []
@@ -1251,36 +1251,36 @@ Underfull \vbox (badness 1052) has occurred while \output is active []
 \pgf@layerbox@umlsd@threadlayer=\box105
 \pgf@layerboxsaved@umlsd@threadlayer=\box106
 
-Overfull \hbox (5.3032pt too wide) in paragraph at lines 1559--1561
+Overfull \hbox (5.3032pt too wide) in paragraph at lines 1572--1574
  [][] 
  []
 
 [47] [48]
 Capitolo 5.
 
-Underfull \hbox (badness 3701) in paragraph at lines 1594--1594
+Underfull \hbox (badness 3701) in paragraph at lines 1607--1607
 []\OT1/cmr/m/n/12 effettuare una ri-chie-sta HTTP
  []
 
 
-Underfull \hbox (badness 3701) in paragraph at lines 1595--1595
+Underfull \hbox (badness 3701) in paragraph at lines 1608--1608
 []\OT1/cmr/m/n/12 effettuare una ri-chie-sta HTTP
  []
 
 [49
 
 ] [50]
-Overfull \hbox (10.57288pt too wide) in paragraph at lines 1630--1631
+Overfull \hbox (10.57288pt too wide) in paragraph at lines 1643--1644
 []\OT1/cmr/bx/n/12 verifica\OT1/cmr/m/n/12 : il me-to-do in-di-ca-to nel-la ri-chie-sta ^^Re \OT1/cmr/m/it/12 RE-POR-TED[]UPDATE 
  []
 
 
-Underfull \hbox (badness 1590) in paragraph at lines 1652--1652
+Underfull \hbox (badness 1590) in paragraph at lines 1665--1665
 []\OT1/cmr/m/n/12 prendere un di-spo-si-ti-vo ap-pe-na
  []
 
 [51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61]
-Overfull \hbox (2.89845pt too wide) in paragraph at lines 2025--2039
+Overfull \hbox (2.89845pt too wide) in paragraph at lines 2038--2052
  [][] 
  []
 
@@ -1292,10 +1292,10 @@ Capitolo 6.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [66]
-<img/now.jpeg, id=1349, 1927.2pt x 1490.56876pt>
+<img/now.jpeg, id=1358, 1927.2pt x 1490.56876pt>
 File: img/now.jpeg Graphic file (type jpg)
 <use img/now.jpeg>
-Package pdftex.def Info: img/now.jpeg  used on input line 2137.
+Package pdftex.def Info: img/now.jpeg  used on input line 2150.
 (pdftex.def)             Requested size: 312.9803pt x 242.06671pt.
 
 Underfull \vbox (badness 1122) has occurred while \output is active []
@@ -1338,21 +1338,21 @@ Underfull \vbox (badness 6141) has occurred while \output is active []
 
 ]) [90] (./tesi.aux)
 Package rerunfilecheck Info: File `tesi.out' has not changed.
-(rerunfilecheck)             Checksum: 4BD10A37BD27D3747207173EDC0BF17C;10792.
+(rerunfilecheck)             Checksum: 679CB2B7870E2EF6056D8E33988B005A;10925.
  ) 
 Here is how much of TeX's memory you used:
- 35757 strings out of 476065
- 706134 string characters out of 5795020
+ 35760 strings out of 476065
+ 706173 string characters out of 5795020
  1909299 words of memory out of 5000000
- 55174 multiletter control sequences out of 15000+600000
+ 55175 multiletter control sequences out of 15000+600000
  523769 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,13n,104p,2297b,1008s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{c:/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on tesi.pdf (96 pages, 13682523 bytes).
+Output written on tesi.pdf (96 pages, 13684003 bytes).
 PDF statistics:
- 1881 PDF objects out of 2073 (max. 8388607)
- 1701 compressed objects within 18 object streams
- 339 named destinations out of 1000 (max. 500000)
- 611 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1892 PDF objects out of 2073 (max. 8388607)
+ 1712 compressed objects within 18 object streams
+ 341 named destinations out of 1000 (max. 500000)
+ 619 words of extra memory for PDF output out of 10000 (max. 10000000)
 
