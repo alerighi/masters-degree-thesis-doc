@@ -1752,7 +1752,7 @@ Deve essere sempre garantito che un dispositivo possa essere riportato alle impo
         \hline \textbf{azione} & \textbf{risultato atteso} \\
         \hline portare un dispositivo in stato \textit{connesso} & i \acrshort{led} della pulsantiera sono spenti \\
         \hline tenere premuti i tasti \textbf{+} e \textbf{-} per 5 secondi & nel mentre si premono i tasti la pulsantiera lampeggia di giallo ed emette beep. Infine i \acrshort{led} rimangono accesi colore giallo fisso e la frequenza dei beep aumenta \\
-        \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{DELETE} \\
+        \hline rilasciare i pulsanti quindi premere il tasto \textbf{+} & entro 5 secondi il colore della tastiera diventa rosso. Su cloud arriva un messaggio \textit{REPORTED\_UPDATE} indicante un \textit{envId} tutto a zero \\
         \hline
     \end{tabular}
     \caption{test ripristino di fabbrica}
@@ -1781,7 +1781,8 @@ Vediamo l'implementazione del test realizzata ponendoci dal punto di vista del s
     \item esegui la procedura \textit{reset di fabbrica}
     \item attendi un messaggio su cloud
     \begin{itemize}
-        \item \textbf{verifica}: il metodo indicato è \textit{DELETE}
+        \item \textbf{verifica}: il metodo indicato è \textit{REPORTED\_UPDATE}
+        \item nel messaggio indicante un \textit{envId} tutto a zero
     \end{itemize}
     \item attendi un secondo affinché il \acrshort{re} si possa riavviare
     \begin{itemize}
