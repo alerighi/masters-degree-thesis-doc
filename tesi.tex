@@ -1,9 +1,17 @@
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+    \Title{Automazione di test di accettazione per dispositivi IoT embedded integrati nel cloud}
+    \Author{Alessandro Righi}
+    \Language{it-IT}
+\end{filecontents*}
+
+%\documentclass[12pt,a4paper,twoside,titlepage]{book}
 \documentclass[12pt,a4paper,twoside,titlepage]{book}
 
 % inclusione librerie
 % NB: il pacchetto hyperref va caricato per ultimo ma prima del pacchetto 
 % glossaries altrimenti l'indice del PDF non viene generato correttamente!
 \usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{frontespizio}
@@ -11,8 +19,9 @@
 \usepackage{longtable}
 \usepackage{minted}
 \usepackage{pgf-umlsd}
-\usepackage[bookmarks]{hyperref}
+\usepackage[bookmarks,pdfa]{hyperref}
 \usepackage[acronyms]{glossaries}
+\usepackage[a-2b,mathxmp]{pdfx}[2018/12/22]
 
 % impostazione interlinea
 \linespread{1.2}
@@ -205,7 +214,7 @@
 \newcommand*{\fullref}[1]{\hyperref[{#1}]{\nameref*{#1} (\ref*{#1})}}
 
 % fine preambolo
-
+\hypersetup{pdfstartview=}
 \begin{document}
 
 % inizio parte iniziale (numeri romani)
